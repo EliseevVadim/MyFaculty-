@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MyFaculty.Application\MyFaculty.Application.csproj" />
     <ProjectReference Include="..\MyFaculty.Persistence\MyFaculty.Persistence.csproj" />
   </ItemGroup>
