@@ -14,7 +14,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<SecondaryObjectType> builder)
         {
             builder.HasKey(type => type.Id);
-            builder.HasIndex(type => type.Id).IsUnique();
+            builder.Property(type => type.Id).ValueGeneratedOnAdd();
             builder.HasIndex(type => type.ObjectTypeName).IsUnique();
             builder.HasIndex(type => type.TypePath).IsUnique();
             builder.HasMany(type => type.SecondaryObjects)

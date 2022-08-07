@@ -14,7 +14,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<TeacherDiscipline> builder)
         {
             builder.HasKey(teacherDiscipline => teacherDiscipline.Id);
-            builder.HasIndex(teacherDiscipline => teacherDiscipline.Id).IsUnique();
+            builder.Property(teacherDiscipline => teacherDiscipline.Id).ValueGeneratedOnAdd();
             builder.HasOne(teacherDiscipline => teacherDiscipline.Teacher)
                 .WithMany(teacher => teacher.TeacherDisciplines)
                 .HasForeignKey(teacherDiscipline => teacherDiscipline.TeacherId);

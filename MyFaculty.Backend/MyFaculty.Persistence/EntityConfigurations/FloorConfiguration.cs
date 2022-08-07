@@ -14,7 +14,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<Floor> builder)
         {
             builder.HasKey(floor => floor.Id);
-            builder.HasIndex(floor => floor.Id).IsUnique();
+            builder.Property(floor => floor.Id).ValueGeneratedOnAdd();
             builder.Property(floor => floor.Name).IsRequired();
             builder.Property(floor => floor.Bounds).IsRequired();
             builder.HasMany(floor => floor.Auditoriums)

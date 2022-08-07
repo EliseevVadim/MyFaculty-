@@ -14,7 +14,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<ScienceRank> builder)
         {
             builder.HasKey(rank => rank.Id);
-            builder.HasIndex(rank => rank.Id).IsUnique();
+            builder.Property(rank => rank.Id).ValueGeneratedOnAdd();
             builder.HasMany(rank => rank.Teachers)
                 .WithOne(teacher => teacher.ScienceRank)
                 .HasForeignKey(teacher => teacher.ScienceRankId);

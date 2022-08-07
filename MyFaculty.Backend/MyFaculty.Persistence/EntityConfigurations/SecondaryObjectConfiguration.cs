@@ -14,7 +14,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<SecondaryObject> builder)
         {
             builder.HasKey(secondaryObject => secondaryObject.Id);
-            builder.HasIndex(secondaryObject => secondaryObject.Id).IsUnique();
+            builder.Property(secondaryObject => secondaryObject.Id).ValueGeneratedOnAdd();
             builder.HasOne(secondaryObject => secondaryObject.Floor)
                 .WithMany(floor => floor.SecondaryObjects)
                 .HasForeignKey(secondaryObject => secondaryObject.FloorId);

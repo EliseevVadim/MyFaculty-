@@ -14,10 +14,31 @@ namespace MyFaculty.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<PairRepeating> builder)
         {
             builder.HasKey(repeating => repeating.Id);
-            builder.HasIndex(repeating => repeating.Id).IsUnique();
+            builder.Property(repeating => repeating.Id).ValueGeneratedOnAdd();
             builder.HasMany(repeating => repeating.Pairs)
                 .WithOne(pair => pair.PairRepeating)
                 .HasForeignKey(pair => pair.PairRepeatingId);
+            builder.HasData(new PairRepeating[]
+            {
+                new PairRepeating
+                {
+                    Id = 1,
+                    RepeatingName = "Каждую неделю",
+                    Created = DateTime.Now
+                },
+                new PairRepeating
+                {
+                    Id = 2,
+                    RepeatingName = "По верхней неделе",
+                    Created = DateTime.Now
+                },
+                new PairRepeating
+                {
+                    Id = 3,
+                    RepeatingName = "По нижней неделе",
+                    Created = DateTime.Now
+                }
+            });
         }
     }
 }
