@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MyFaculty.Application.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace MyFaculty.Persistence
             {
                 options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 11)));
             });
+            services.AddScoped<IMFDbContext>(provider => provider.GetService<MFDbContext>());
             return services;
         }
     }

@@ -23,7 +23,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
                 .HasForeignKey(pair => pair.PairInfoId);
             builder.HasOne(pair => pair.Auditorium)
                 .WithMany(auditorium => auditorium.Pairs)
-                .HasForeignKey(pair => pair.AuditriumId);
+                .HasForeignKey(pair => pair.AuditoriumId);
             builder.HasOne(pair => pair.Discipline)
                 .WithMany(discipline => discipline.Pairs)
                 .HasForeignKey(pair => pair.DisciplineId);

@@ -16,7 +16,7 @@ namespace MyFaculty.Domain.Entities
         public string PairName { get; set; }
         public int TeacherId { get; set; }
         public Teacher Teacher { get; set; }
-        public int AuditriumId { get; set; }
+        public int AuditoriumId { get; set; }
         public Auditorium Auditorium { get; set; }
         public int GroupId { get; set; }
         public Group Group { get; set; }

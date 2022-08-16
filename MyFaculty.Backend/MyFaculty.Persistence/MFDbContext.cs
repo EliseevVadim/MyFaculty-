@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Persistence
 {
-    public class MFDbContext : DbContext
+    public class MFDbContext : DbContext, IMFDbContext
     {
         public MFDbContext(DbContextOptions<MFDbContext> options):
             base(options)
