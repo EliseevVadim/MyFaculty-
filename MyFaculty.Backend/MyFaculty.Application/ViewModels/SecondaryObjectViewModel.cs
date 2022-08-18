@@ -17,7 +17,7 @@ namespace MyFaculty.Application.ViewModels
         public int SecondaryObjectTypeId { get; set; }
         public int FloorId { get; set; }
         public SecondaryObjectTypeViewModel SecondaryObjectType { get; set; }
-        public FloorViewModel Floor { get; set; }
+        public string FloorName { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
 
@@ -30,7 +30,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.SecondaryObjectTypeId, options => options.MapFrom(secondaryObject => secondaryObject.SecondaryObjectTypeId))
                 .ForMember(vm => vm.FloorId, options => options.MapFrom(secondaryObject => secondaryObject.FloorId))
                 .ForMember(vm => vm.SecondaryObjectType, options => options.MapFrom(secondaryObject => secondaryObject.SecondaryObjectType))
-                .ForMember(vm => vm.Floor, options => options.MapFrom(secondaryObject => secondaryObject.Floor))
+                .ForMember(vm => vm.FloorName, options => options.MapFrom(secondaryObject => secondaryObject.Floor.Name))
                 .ForMember(vm => vm.Created, options => options.MapFrom(secondaryObject => secondaryObject.Created))
                 .ForMember(vm => vm.Updated, options => options.MapFrom(secondaryObject => secondaryObject.Updated));
         }

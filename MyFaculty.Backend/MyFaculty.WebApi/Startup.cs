@@ -34,6 +34,16 @@ namespace MyFaculty.WebApi
             });
             services.AddApplication();
             services.AddPersistence(_configuration);
+            services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("InintalPolicy", policy =>
+                {
+                    policy.AllowAnyHeader();
+                    policy.AllowAnyMethod();
+                    policy.AllowAnyOrigin();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,13 +55,12 @@ namespace MyFaculty.WebApi
             }
 
             app.UseRouting();
+            app.UseHttpsRedirection();
+            app.UseCors("InintalPolicy");
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
         }
     }

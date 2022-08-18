@@ -17,15 +17,15 @@ namespace MyFaculty.Application.ViewModels
         public int TeacherId { get; set; }
         public string TeachersFIO { get; set; }
         public int AuditoriumId { get; set; }
-        public Auditorium Auditorium { get; set; }
+        public AuditoriumLookupDto Auditorium { get; set; }
         public int GroupId { get; set; }
         public string GroupName { get; set; }
         public int DisciplineId { get; set; }
-        public Discipline Discipline { get; set; }
+        public string DisciplineName { get; set; }
         public int DayOfWeekId { get; set; }
-        public WorkDayOfWeekLookupDto DayOfWeek { get; set; }
+        public string DayOfWeek { get; set; }
         public int PairRepeatingId { get; set; }
-        public PairRepeatingLookupDto PairRepeating { get; set; }
+        public string PairRepeatingName { get; set; }
         public int PairInfoId { get; set; }
         public PairInfoViewModel PairInfo { get; set; }
         public DateTime Created { get; set; }
@@ -43,11 +43,11 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.GroupId, options => options.MapFrom(pair => pair.GroupId))
                 .ForMember(vm => vm.GroupName, options => options.MapFrom(pair => pair.Group.GroupName))
                 .ForMember(vm => vm.DisciplineId, options => options.MapFrom(pair => pair.DisciplineId))
-                .ForMember(vm => vm.Discipline, options => options.MapFrom(pair => pair.Discipline))
+                .ForMember(vm => vm.DisciplineName, options => options.MapFrom(pair => pair.Discipline.DisciplineName))
                 .ForMember(vm => vm.DayOfWeekId, options => options.MapFrom(pair => pair.DayOfWeekId))
-                .ForMember(vm => vm.DayOfWeek, options => options.MapFrom(pair => pair.DayOfWeek))
+                .ForMember(vm => vm.DayOfWeek, options => options.MapFrom(pair => pair.DayOfWeek.DaysName))
                 .ForMember(vm => vm.PairRepeatingId, options => options.MapFrom(pair => pair.PairRepeatingId))
-                .ForMember(vm => vm.PairRepeating, options => options.MapFrom(pair => pair.PairRepeating))
+                .ForMember(vm => vm.PairRepeatingName, options => options.MapFrom(pair => pair.PairRepeating.RepeatingName))
                 .ForMember(vm => vm.PairInfoId, options => options.MapFrom(pair => pair.PairInfoId))
                 .ForMember(vm => vm.PairInfo, options => options.MapFrom(pair => pair.PairInfo))
                 .ForMember(vm => vm.Created, options => options.MapFrom(pair => pair.Created))

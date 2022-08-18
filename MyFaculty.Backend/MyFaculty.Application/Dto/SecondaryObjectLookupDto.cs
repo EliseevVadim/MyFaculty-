@@ -17,8 +17,8 @@ namespace MyFaculty.Application.Dto
         public string PositionInfo { get; set; }
         public int SecondaryObjectTypeId { get; set; }
         public int FloorId { get; set; }
-        public SecondaryObjectTypeViewModel SecondaryObjectType { get; set; }
-        public FloorViewModel Floor { get; set; }
+        public SecondaryObjectTypeLookupDto SecondaryObjectType { get; set; }
+        public string FloorName { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -29,7 +29,7 @@ namespace MyFaculty.Application.Dto
                 .ForMember(dto => dto.SecondaryObjectTypeId, options => options.MapFrom(secondaryObject => secondaryObject.SecondaryObjectTypeId))
                 .ForMember(dto => dto.FloorId, options => options.MapFrom(secondaryObject => secondaryObject.FloorId))
                 .ForMember(dto => dto.SecondaryObjectType, options => options.MapFrom(secondaryObject => secondaryObject.SecondaryObjectType))
-                .ForMember(dto => dto.Floor, options => options.MapFrom(secondaryObject => secondaryObject.Floor));
+                .ForMember(dto => dto.FloorName, options => options.MapFrom(secondaryObject => secondaryObject.Floor.Name));
         }
     }
 }

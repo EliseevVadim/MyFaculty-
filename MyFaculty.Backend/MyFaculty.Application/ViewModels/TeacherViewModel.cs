@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyFaculty.Application.Common.Mappings;
+using MyFaculty.Application.Dto;
 using MyFaculty.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace MyFaculty.Application.ViewModels
         public DateTime BirthDate { get; set; }
         public int ScienceRankId { get; set; }
         public string ScienceRankName { get; set; }
+        public List<TeacherDisciplineLookupDto> TeacherDisciplines { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
 
@@ -31,6 +33,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.BirthDate, options => options.MapFrom(teacher => teacher.BirthDate))
                 .ForMember(vm => vm.ScienceRankId, options => options.MapFrom(teacher => teacher.ScienceRankId))
                 .ForMember(vm => vm.ScienceRankName, options => options.MapFrom(teacher => teacher.ScienceRank.RankName))
+                .ForMember(vm => vm.TeacherDisciplines, options => options.MapFrom(teacher => teacher.TeacherDisciplines))
                 .ForMember(vm => vm.Created, options => options.MapFrom(teacher => teacher.Created))
                 .ForMember(vm => vm.Updated, options => options.MapFrom(teacher => teacher.Updated));
         }
