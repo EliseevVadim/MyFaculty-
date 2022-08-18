@@ -4,22 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using MyFaculty.Application.Common.Interfaces;
+using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Application.Features.ScienceRanks.Commands.CreateScienceRank
 {
-    public class CreateScienceRankCommandHandler : IRequestHandler<CreateScienceRankCommand, ScienceRank>
+    public class CreateScienceRankCommandHandler : IRequestHandler<CreateScienceRankCommand, ScienceRankViewModel>
     {
         private IMFDbContext _context;
+        private IMapper _mapper;
 
-        public CreateScienceRankCommandHandler(IMFDbContext context)
+        public CreateScienceRankCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<ScienceRank> Handle(CreateScienceRankCommand request, CancellationToken cancellationToken)
+        public async Task<ScienceRankViewModel> Handle(CreateScienceRankCommand request, CancellationToken cancellationToken)
         {
             ScienceRank rank = new ScienceRank
             {
@@ -28,7 +32,7 @@ namespace MyFaculty.Application.Features.ScienceRanks.Commands.CreateScienceRank
             };
             await _context.ScienceRanks.AddAsync(rank);
             await _context.SaveChangesAsync(cancellationToken);
-            return rank;
+            return _mapper.Map<ScienceRankViewModel>(rank);
         }
     }
 }

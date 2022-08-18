@@ -4,22 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using MyFaculty.Application.Common.Interfaces;
+using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Application.Features.Auditoriums.Commands.CreateAuditorium
 {
-    public class CreateAuditoriumCommandHandler : IRequestHandler<CreateAuditoriumCommand, Auditorium>
+    public class CreateAuditoriumCommandHandler : IRequestHandler<CreateAuditoriumCommand, AuditoriumViewModel>
     {
         private IMFDbContext _context;
+        private IMapper _mapper;
 
-        public CreateAuditoriumCommandHandler(IMFDbContext context)
+        public CreateAuditoriumCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Auditorium> Handle(CreateAuditoriumCommand request, CancellationToken cancellationToken)
+        public async Task<AuditoriumViewModel> Handle(CreateAuditoriumCommand request, CancellationToken cancellationToken)
         {
             Auditorium auditorium = new Auditorium()
             {
@@ -31,7 +35,7 @@ namespace MyFaculty.Application.Features.Auditoriums.Commands.CreateAuditorium
             };
             await _context.Auditoriums.AddAsync(auditorium, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return auditorium;
+            return _mapper.Map<AuditoriumViewModel>(auditorium);
         }
     }
 }

@@ -4,22 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using MyFaculty.Application.Common.Interfaces;
+using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Application.Features.Courses.Commands.CreateCourse
 {
-    public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand, Course>
+    public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand, CourseViewModel>
     {
         private IMFDbContext _context;
+        private IMapper _mapper;
 
-        public CreateCourseCommandHandler(IMFDbContext context)
+        public CreateCourseCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Course> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
+        public async Task<CourseViewModel> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
             Course course = new Course()
             {
@@ -29,7 +33,7 @@ namespace MyFaculty.Application.Features.Courses.Commands.CreateCourse
             };
             await _context.Courses.AddAsync(course);
             await _context.SaveChangesAsync(cancellationToken);
-            return course;
+            return _mapper.Map<CourseViewModel>(course);
         }
     }
 }

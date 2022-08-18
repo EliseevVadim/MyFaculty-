@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
+using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Application.Features.Teachers.Commands.UpdateTeacher
 {
-    public class UpdateTeacherCommand : IRequest<Teacher>
+    public class UpdateTeacherCommand : IRequest<TeacherViewModel>
     {
         public int Id { get; set; }
         public string FIO { get; set; }

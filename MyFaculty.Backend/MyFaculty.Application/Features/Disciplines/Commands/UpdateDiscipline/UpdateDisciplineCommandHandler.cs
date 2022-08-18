@@ -9,19 +9,23 @@ using MyFaculty.Domain.Entities;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
+using MyFaculty.Application.ViewModels;
+using AutoMapper;
 
 namespace MyFaculty.Application.Features.Disciplines.Commands.UpdateDiscipline
 {
-    public class UpdateDisciplineCommandHandler : IRequestHandler<UpdateDisciplineCommand, Discipline>
+    public class UpdateDisciplineCommandHandler : IRequestHandler<UpdateDisciplineCommand, DisciplineViewModel>
     {
         private IMFDbContext _context;
+        private IMapper _mapper;
 
-        public UpdateDisciplineCommandHandler(IMFDbContext context)
+        public UpdateDisciplineCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Discipline> Handle(UpdateDisciplineCommand request, CancellationToken cancellationToken)
+        public async Task<DisciplineViewModel> Handle(UpdateDisciplineCommand request, CancellationToken cancellationToken)
         {
             Discipline discipline = await _context.Disciplines.FirstOrDefaultAsync(discipline => discipline.Id == request.Id, cancellationToken);
             if (discipline == null)
@@ -29,7 +33,7 @@ namespace MyFaculty.Application.Features.Disciplines.Commands.UpdateDiscipline
             discipline.DisciplineName = request.DisciplineName;
             discipline.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
-            return discipline;
+            return _mapper.Map<DisciplineViewModel>(discipline);
         }
     }
 }

@@ -42,18 +42,18 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PairInfo>> Create([FromBody] CreatePairInfoDto createPairInfoDto)
+        public async Task<ActionResult<PairInfoViewModel>> Create([FromBody] CreatePairInfoDto createPairInfoDto)
         {
             CreatePairInfoCommand command = _mapper.Map<CreatePairInfoCommand>(createPairInfoDto);
-            PairInfo pairInfo = await Mediator.Send(command);
+            PairInfoViewModel pairInfo = await Mediator.Send(command);
             return Created(nameof(PairInfosController), pairInfo);
         }
 
         [HttpPut]
-        public async Task<ActionResult<PairInfo>> Update([FromBody] UpdatePairInfoDto updatePairInfoDto)
+        public async Task<ActionResult<PairInfoViewModel>> Update([FromBody] UpdatePairInfoDto updatePairInfoDto)
         {
             UpdatePairInfoCommand command = _mapper.Map<UpdatePairInfoCommand>(updatePairInfoDto);
-            PairInfo pairInfo = await Mediator.Send(command);
+            PairInfoViewModel pairInfo = await Mediator.Send(command);
             return Ok(pairInfo);
         }
 

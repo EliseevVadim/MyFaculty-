@@ -4,22 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using MyFaculty.Application.Common.Interfaces;
+using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Application.Features.Pairs.Commands.CreatePair
 {
-    public class CreatePairCommandHandler : IRequestHandler<CreatePairCommand, Pair>
+    public class CreatePairCommandHandler : IRequestHandler<CreatePairCommand, PairViewModel>
     {
         private IMFDbContext _context;
+        private IMapper _mapper;
 
-        public CreatePairCommandHandler(IMFDbContext context)
+        public CreatePairCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Pair> Handle(CreatePairCommand request, CancellationToken cancellationToken)
+        public async Task<PairViewModel> Handle(CreatePairCommand request, CancellationToken cancellationToken)
         {
             Pair pair = new Pair()
             {
@@ -35,7 +39,7 @@ namespace MyFaculty.Application.Features.Pairs.Commands.CreatePair
             };
             await _context.Pairs.AddAsync(pair, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return pair;
+            return _mapper.Map<PairViewModel>(pair);
         }
     }
 }

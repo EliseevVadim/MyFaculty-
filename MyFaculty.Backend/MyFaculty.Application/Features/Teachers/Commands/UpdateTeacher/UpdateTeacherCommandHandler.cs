@@ -4,24 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
+using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Application.Features.Teachers.Commands.UpdateTeacher
 {
-    public class UpdateTeacherCommandHandler : IRequestHandler<UpdateTeacherCommand, Teacher>
+    public class UpdateTeacherCommandHandler : IRequestHandler<UpdateTeacherCommand, TeacherViewModel>
     {
         private IMFDbContext _context;
+        private IMapper _mapper;
 
-        public UpdateTeacherCommandHandler(IMFDbContext context)
+        public UpdateTeacherCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Teacher> Handle(UpdateTeacherCommand request, CancellationToken cancellationToken)
+        public async Task<TeacherViewModel> Handle(UpdateTeacherCommand request, CancellationToken cancellationToken)
         {
             Teacher teacher = await _context.Teachers.FirstOrDefaultAsync(teacher => teacher.Id == request.Id, cancellationToken);
             if (teacher == null)
@@ -33,7 +37,7 @@ namespace MyFaculty.Application.Features.Teachers.Commands.UpdateTeacher
             teacher.ScienceRankId = request.ScienceRankId;
             teacher.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
-            return teacher;
+            return _mapper.Map<TeacherViewModel>(teacher);
         }
     }
 }

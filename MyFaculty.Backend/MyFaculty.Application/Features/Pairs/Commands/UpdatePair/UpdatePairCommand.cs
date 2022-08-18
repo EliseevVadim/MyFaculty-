@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
+using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Application.Features.Pairs.Commands.UpdatePair
 {
-    public class UpdatePairCommand : IRequest<Pair>
+    public class UpdatePairCommand : IRequest<PairViewModel>
     {
         public int Id { get; set; }
         public string PairName { get; set; }

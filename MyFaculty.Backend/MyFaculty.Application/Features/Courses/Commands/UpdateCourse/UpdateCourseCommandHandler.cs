@@ -9,19 +9,23 @@ using MyFaculty.Domain.Entities;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
+using MyFaculty.Application.ViewModels;
+using AutoMapper;
 
 namespace MyFaculty.Application.Features.Courses.Commands.UpdateCourse
 {
-    public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand, Course>
+    public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand, CourseViewModel>
     {
         private IMFDbContext _context;
+        private IMapper _mapper;
 
-        public UpdateCourseCommandHandler(IMFDbContext context)
+        public UpdateCourseCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Course> Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
+        public async Task<CourseViewModel> Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
         {
             Course course = await _context.Courses.FirstOrDefaultAsync(course => course.Id == request.Id, cancellationToken);
             if (course == null)
@@ -30,7 +34,7 @@ namespace MyFaculty.Application.Features.Courses.Commands.UpdateCourse
             course.CourseNumber = request.CourseNumber;
             course.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
-            return course;
+            return _mapper.Map<CourseViewModel>(course);
         }
     }
 }

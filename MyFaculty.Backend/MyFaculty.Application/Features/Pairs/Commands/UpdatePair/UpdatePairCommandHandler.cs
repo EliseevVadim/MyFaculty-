@@ -4,24 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
+using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Application.Features.Pairs.Commands.UpdatePair
 {
-    public class UpdatePairCommandHandler : IRequestHandler<UpdatePairCommand, Pair>
+    public class UpdatePairCommandHandler : IRequestHandler<UpdatePairCommand, PairViewModel>
     {
         private IMFDbContext _context;
+        private IMapper _mapper;
 
-        public UpdatePairCommandHandler(IMFDbContext context)
+        public UpdatePairCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<Pair> Handle(UpdatePairCommand request, CancellationToken cancellationToken)
+        public async Task<PairViewModel> Handle(UpdatePairCommand request, CancellationToken cancellationToken)
         {
             Pair pair = await _context.Pairs.FirstOrDefaultAsync(pair => pair.Id == request.Id, cancellationToken);
             if (pair == null)
@@ -36,7 +40,7 @@ namespace MyFaculty.Application.Features.Pairs.Commands.UpdatePair
             pair.GroupId = request.GroupId;
             pair.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
-            return pair;
+            return _mapper.Map<PairViewModel>(pair);
         }
     }
 }

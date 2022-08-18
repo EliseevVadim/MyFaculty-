@@ -4,24 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
+using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 
 namespace MyFaculty.Application.Features.PairInfos.Commands.UpdatePairInfo
 {
-    public class UpdatePairInfoCommandHandler : IRequestHandler<UpdatePairInfoCommand, PairInfo>
+    public class UpdatePairInfoCommandHandler : IRequestHandler<UpdatePairInfoCommand, PairInfoViewModel>
     {
         private IMFDbContext _context;
+        private IMapper _mapper;
 
-        public UpdatePairInfoCommandHandler(IMFDbContext context)
+        public UpdatePairInfoCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<PairInfo> Handle(UpdatePairInfoCommand request, CancellationToken cancellationToken)
+        public async Task<PairInfoViewModel> Handle(UpdatePairInfoCommand request, CancellationToken cancellationToken)
         {
             PairInfo pairInfo = await _context.PairInfos.FirstOrDefaultAsync(pairInfo => pairInfo.Id == request.Id, cancellationToken);
             if (pairInfo == null)
@@ -31,7 +35,7 @@ namespace MyFaculty.Application.Features.PairInfos.Commands.UpdatePairInfo
             pairInfo.EndTime = request.EndTime;
             pairInfo.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
-            return pairInfo;
+            return _mapper.Map<PairInfoViewModel>(pairInfo);
         }
     }
 }

@@ -42,18 +42,18 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ScienceRank>> Create([FromBody] CreateScienceRankDto createScienceRankDto)
+        public async Task<ActionResult<ScienceRankViewModel>> Create([FromBody] CreateScienceRankDto createScienceRankDto)
         {
             CreateScienceRankCommand command = _mapper.Map<CreateScienceRankCommand>(createScienceRankDto);
-            ScienceRank rank = await Mediator.Send(command);
+            ScienceRankViewModel rank = await Mediator.Send(command);
             return Created(nameof(ScienceRanksController), rank);
         }
 
         [HttpPut]
-        public async Task<ActionResult<ScienceRank>> Update([FromBody] UpdateScienceRankDto updateScienceRankDto)
+        public async Task<ActionResult<ScienceRankViewModel>> Update([FromBody] UpdateScienceRankDto updateScienceRankDto)
         {
             UpdateScienceRankCommand command = _mapper.Map<UpdateScienceRankCommand>(updateScienceRankDto);
-            ScienceRank rank = await Mediator.Send(command);
+            ScienceRankViewModel rank = await Mediator.Send(command);
             return Ok(rank);
         }
 
