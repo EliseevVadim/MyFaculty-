@@ -32,7 +32,7 @@ namespace MyFaculty.Application.Features.Pairs.Commands.CreatePair
                 DayOfWeekId = request.DayOfWeekId,
                 DisciplineId = request.DisciplineId,
                 TeacherId = request.TeacherId,
-                AuditoriumId = request.AuditriumId,
+                AuditoriumId = request.AuditoriumId,
                 PairRepeatingId = request.PairRepeatingId,
                 GroupId = request.GroupId,
                 Created = DateTime.Now

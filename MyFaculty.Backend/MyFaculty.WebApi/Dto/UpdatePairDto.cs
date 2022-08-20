@@ -22,7 +22,7 @@ namespace MyFaculty.WebApi.Dto
                 .ForMember(command => command.Id, options => options.MapFrom(dto => dto.Id))
                 .ForMember(command => command.PairName, options => options.MapFrom(dto => dto.PairName))
                 .ForMember(command => command.TeacherId, options => options.MapFrom(dto => dto.TeacherId))
-                .ForMember(command => command.AuditriumId, options => options.MapFrom(dto => dto.AuditriumId))
+                .ForMember(command => command.AuditoriumId, options => options.MapFrom(dto => dto.AuditriumId))
                 .ForMember(command => command.GroupId, options => options.MapFrom(dto => dto.GroupId))
                 .ForMember(command => command.DisciplineId, options => options.MapFrom(dto => dto.DisciplineId))
                 .ForMember(command => command.DayOfWeekId, options => options.MapFrom(dto => dto.DayOfWeekId))

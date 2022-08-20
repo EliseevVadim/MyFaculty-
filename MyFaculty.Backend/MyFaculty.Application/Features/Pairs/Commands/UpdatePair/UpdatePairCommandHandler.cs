@@ -35,7 +35,7 @@ namespace MyFaculty.Application.Features.Pairs.Commands.UpdatePair
             pair.DayOfWeekId = request.DayOfWeekId;
             pair.DisciplineId = request.DisciplineId;
             pair.TeacherId = request.TeacherId;
-            pair.AuditoriumId = request.AuditriumId;
+            pair.AuditoriumId = request.AuditoriumId;
             pair.PairRepeatingId = request.PairRepeatingId;
             pair.GroupId = request.GroupId;
             pair.Updated = DateTime.Now;

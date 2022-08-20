@@ -13,7 +13,7 @@ namespace MyFaculty.Application.Features.Pairs.Commands.CreatePair
     {
         public string PairName { get; set; }
         public int TeacherId { get; set; }
-        public int AuditriumId { get; set; }
+        public int AuditoriumId { get; set; }
         public int GroupId { get; set; }
         public int DisciplineId { get; set; }
         public int DayOfWeekId { get; set; }
