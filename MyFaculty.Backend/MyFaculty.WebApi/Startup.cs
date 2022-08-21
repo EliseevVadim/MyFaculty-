@@ -8,6 +8,7 @@ using MyFaculty.Application;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.Common.Mappings;
 using MyFaculty.Persistence;
+using MyFaculty.WebApi.Middleware;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,7 @@ namespace MyFaculty.WebApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCustomExceptionHandler();
             app.UseRouting();
             app.UseHttpsRedirection();
             app.UseCors("InintalPolicy");
