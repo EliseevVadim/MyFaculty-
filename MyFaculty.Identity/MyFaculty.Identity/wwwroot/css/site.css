@@ -1,0 +1,33 @@
+﻿.background-area {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url("https://www.donnu.ru/public/новое3.jpg");
+}
+
+.form-row {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.main-title {
+    font-weight: bold;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 30px;
+}
+
+.form-title, .form-link {
+    font-weight: 600;
+}
+
+
+/*.container {
+    margin: 100px auto;
+}*/

@@ -1,0 +1,41 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Авторизация";
+}
+
+<div class="background-area">
+    <div class="container">
+        <div class="row card hoverable">
+            <div class="card-content ">
+                <h4 class="center blue-text form-title">Авторизация</h4>
+                <h6 class="center red-text">@Model.ErrorMessage</h6>
+                <form asp-controller="Auth" asp-action="Login" method="post" class="row s12">
+                     <input type="hidden" asp-for="ReturnUrl" />
+                    <div class="col s12">
+                        <div class="input-field">
+                            <label>Email</label>
+                            <input type="email" asp-for="Email" placeholder="Введите ваш email*" required>
+                            <span class="red-text" asp-validation-for="Email"></span>
+                        </div>
+                    </div>
+                    <div class="col s12">
+                        <div class="input-field">
+                            <label>Пароль</label>
+                            <input type="password" asp-for="Password" placeholder="Введите ваш пароль*" required>
+                            <span class="red-text" asp-validation-for="Password"></span>
+                        </div>
+                    </div>
+                    <div class="col s12 center">
+                        <button type="submit" class="btn btn-large waves-effect waves-light green">
+                            Войти
+                        </button>
+                    </div>
+                    <div class="col s12 center">
+                        <a class="form-link" href="/auth/register">Еще не зарегистрированы? Создайте аккаунт!</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
