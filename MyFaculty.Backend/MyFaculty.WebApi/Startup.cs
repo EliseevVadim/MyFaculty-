@@ -11,6 +11,7 @@ using MyFaculty.Persistence;
 using MyFaculty.WebApi.Middleware;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -45,6 +46,12 @@ namespace MyFaculty.WebApi
                     policy.AllowAnyOrigin();
                 });
             });
+            services.AddSwaggerGen(config =>
+            {
+                string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                string xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                config.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +61,12 @@ namespace MyFaculty.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(config =>
+            {
+                config.RoutePrefix = string.Empty;
+                config.SwaggerEndpoint("swagger/v1/swagger.json", "MyFaculty API");
+            });
 
             app.UseCustomExceptionHandler();
             app.UseRouting();

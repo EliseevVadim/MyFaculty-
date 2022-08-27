@@ -11,7 +11,7 @@ namespace MyFaculty.WebApi.Dto
         public string PhotoPath { get; set; }
         public string Email { get; set; }
         public DateTime BirthDate { get; set; }
-        public string ScienceRankId { get; set; }
+        public int ScienceRankId { get; set; }
 
         public void Mapping(Profile profile)
         {

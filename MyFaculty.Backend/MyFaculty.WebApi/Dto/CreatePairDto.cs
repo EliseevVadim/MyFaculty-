@@ -8,7 +8,7 @@ namespace MyFaculty.WebApi.Dto
     {
         public string PairName { get; set; }
         public int TeacherId { get; set; }
-        public int AuditriumId { get; set; }
+        public int AuditoriumId { get; set; }
         public int GroupId { get; set; }
         public int DisciplineId { get; set; }
         public int DayOfWeekId { get; set; }
@@ -20,7 +20,7 @@ namespace MyFaculty.WebApi.Dto
             profile.CreateMap<CreatePairDto, CreatePairCommand>()
                 .ForMember(command => command.PairName, options => options.MapFrom(dto => dto.PairName))
                 .ForMember(command => command.TeacherId, options => options.MapFrom(dto => dto.TeacherId))
-                .ForMember(command => command.AuditoriumId, options => options.MapFrom(dto => dto.AuditriumId))
+                .ForMember(command => command.AuditoriumId, options => options.MapFrom(dto => dto.AuditoriumId))
                 .ForMember(command => command.GroupId, options => options.MapFrom(dto => dto.GroupId))
                 .ForMember(command => command.DisciplineId, options => options.MapFrom(dto => dto.DisciplineId))
                 .ForMember(command => command.DayOfWeekId, options => options.MapFrom(dto => dto.DayOfWeekId))
