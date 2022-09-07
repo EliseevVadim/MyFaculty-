@@ -27,7 +27,21 @@ namespace MyFaculty.Application.Features.Auditoriums.Queries.GetAuditoriumInfo
 
         public async Task<AuditoriumViewModel> Handle(GetAuditoriumInfoQuery request, CancellationToken cancellationToken)
         {
-            Auditorium auditorium = await _context.Auditoriums.FirstOrDefaultAsync(auditorium => auditorium.Id == request.Id, cancellationToken);
+            Auditorium auditorium = await _context
+                .Auditoriums
+                .Include(auditorium => auditorium.Teacher)
+                .Include(auditorium => auditorium.Pairs)
+                    .ThenInclude(pair => pair.PairInfo)
+                .Include(auditorium => auditorium.Pairs)
+                    .ThenInclude(pair => pair.Group)
+                    .ThenInclude(group => group.Course)
+                .Include(auditorium => auditorium.Pairs)
+                    .ThenInclude(pair => pair.DayOfWeek)
+                .Include(auditorium => auditorium.Pairs)
+                    .ThenInclude(pair => pair.Discipline)
+                .Include(auditorium => auditorium.Pairs)
+                    .ThenInclude(pair => pair.PairRepeating)
+                .FirstOrDefaultAsync(auditorium => auditorium.Id == request.Id, cancellationToken);
             if (auditorium == null)
                 throw new EntityNotFoundException(nameof(Auditorium), request.Id);
             return _mapper.Map<AuditoriumViewModel>(auditorium);

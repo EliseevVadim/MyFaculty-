@@ -28,7 +28,10 @@ namespace MyFaculty.Application.Features.Courses.Queries.GetCourseInfo
 
         public async Task<CourseViewModel> Handle(GetCourseInfoQuery request, CancellationToken cancellationToken)
         {
-            Course course = await _context.Courses.FirstOrDefaultAsync(course => course.Id == request.Id, cancellationToken);
+            Course course = await _context
+                .Courses
+                .Include(course => course.Groups)
+                .FirstOrDefaultAsync(course => course.Id == request.Id, cancellationToken);
             if (course == null)
                 throw new EntityNotFoundException(nameof(Course), request.Id);
             return _mapper.Map<CourseViewModel>(course);

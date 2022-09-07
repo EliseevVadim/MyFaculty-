@@ -17,4 +17,8 @@
     <ProjectReference Include="..\MyFaculty.Persistence\MyFaculty.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="uploads\images\teachers\" />
+  </ItemGroup>
+
 </Project>

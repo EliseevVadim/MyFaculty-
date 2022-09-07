@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyFaculty.Identity.Models;
 using MyFaculty.Identity.ViewModels;
 using System.Threading.Tasks;
+using Unidecode.NET;
 
 namespace MyFaculty.Identity.Controllers
 {
@@ -73,6 +74,7 @@ namespace MyFaculty.Identity.Controllers
             }
             AppUser user = new AppUser()
             {
+                UserName = (viewModel.FirstName + viewModel.LastName).Unidecode(),
                 FirstName = viewModel.FirstName,
                 LastName = viewModel.LastName,
                 Email = viewModel.Email

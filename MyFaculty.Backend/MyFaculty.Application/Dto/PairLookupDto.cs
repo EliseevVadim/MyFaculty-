@@ -19,7 +19,7 @@ namespace MyFaculty.Application.Dto
         public int AuditoriumId { get; set; }
         public AuditoriumLookupDto Auditorium { get; set; }
         public int GroupId { get; set; }
-        public string GroupName { get; set; }
+        public GroupLookupDto Group { get; set; }
         public int DisciplineId { get; set; }
         public string DisciplineName { get; set; }
         public int DayOfWeekId { get; set; }
@@ -39,7 +39,7 @@ namespace MyFaculty.Application.Dto
                 .ForMember(dto => dto.AuditoriumId, options => options.MapFrom(pair => pair.AuditoriumId))
                 .ForMember(dto => dto.Auditorium, options => options.MapFrom(pair => pair.Auditorium))
                 .ForMember(dto => dto.GroupId, options => options.MapFrom(pair => pair.GroupId))
-                .ForMember(dto => dto.GroupName, options => options.MapFrom(pair => pair.Group.GroupName))
+                .ForMember(dto => dto.Group, options => options.MapFrom(pair => pair.Group))
                 .ForMember(dto => dto.DisciplineId, options => options.MapFrom(pair => pair.DisciplineId))
                 .ForMember(dto => dto.DisciplineName, options => options.MapFrom(pair => pair.Discipline.DisciplineName))
                 .ForMember(dto => dto.DayOfWeekId, options => options.MapFrom(pair => pair.DayOfWeekId))

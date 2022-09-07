@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyFaculty.Application.Features.SecondaryObjects.Commands.DeleteSecondaryObject;
+using Microsoft.Extensions.Configuration;
 using MyFaculty.Application.Features.Teachers.Commands.CreateTeacher;
 using MyFaculty.Application.Features.Teachers.Commands.DeleteTeacher;
 using MyFaculty.Application.Features.Teachers.Commands.UpdateTeacher;
@@ -9,6 +10,8 @@ using MyFaculty.Application.Features.Teachers.Queries.GetTeacherInfo;
 using MyFaculty.Application.Features.Teachers.Queries.GetTeachers;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MyFaculty.WebApi.Controllers
@@ -18,10 +21,16 @@ namespace MyFaculty.WebApi.Controllers
     public class TeachersController : BaseController
     {
         private IMapper _mapper;
+        private IWebHostEnvironment _webHostEnvironment;
+        private IConfiguration _configuration;
+        private string _appDomain;
 
-        public TeachersController(IMapper mapper)
+        public TeachersController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
+            _configuration = configuration;
+            _appDomain = configuration["AppDomain"];
         }
 
         /// <summary>
@@ -74,7 +83,7 @@ namespace MyFaculty.WebApi.Controllers
         /// POST /teachers
         /// {
         ///     "fio": "string",
-        ///     "photoPath": "string",
+        ///     "photo": "file",
         ///     "email": "string",
         ///     "birthDate": "2022-08-27T16:35:47.735Z",
         ///     "scienceRankId": 1
@@ -87,9 +96,21 @@ namespace MyFaculty.WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<TeacherViewModel>> Create([FromBody] CreateTeacherDto createTeacherDto)
+        public async Task<ActionResult<TeacherViewModel>> Create([FromForm] CreateTeacherDto createTeacherDto)
         {
+            string photoPath = string.Empty;
+            string savePath = string.Empty;
+            if (createTeacherDto.Photo != null)
+            {
+                photoPath = Guid.NewGuid().ToString() + "_" + createTeacherDto.Photo.FileName;
+                savePath = Path.Combine(_webHostEnvironment.ContentRootPath, "uploads/images/teachers", photoPath);
+                using (FileStream stream = new FileStream(savePath, FileMode.Create))
+                {
+                    createTeacherDto.Photo.CopyTo(stream);
+                }
+            }                    
             CreateTeacherCommand command = _mapper.Map<CreateTeacherCommand>(createTeacherDto);
+            command.PhotoPath = String.IsNullOrEmpty(photoPath) ? string.Empty : _appDomain + "uploads/images/teachers/" + photoPath;
             TeacherViewModel teacher = await Mediator.Send(command);
             return Created(nameof(TeachersController), teacher);
         }
@@ -103,7 +124,7 @@ namespace MyFaculty.WebApi.Controllers
         /// {
         ///     "id": 1,
         ///     "fio": "string",
-        ///     "photoPath": "string",
+        ///     "photo": "file",
         ///     "email": "string",
         ///     "birthDate": "2022-08-27T16:35:47.735Z",
         ///     "scienceRankId": 1
@@ -118,9 +139,21 @@ namespace MyFaculty.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<TeacherViewModel>> Update([FromBody] UpdateTeacherDto updateTeacherDto)
+        public async Task<ActionResult<TeacherViewModel>> Update([FromForm] UpdateTeacherDto updateTeacherDto)
         {
+            string photoPath = string.Empty;
+            string savePath = string.Empty;
+            if (updateTeacherDto.Photo != null)
+            {
+                photoPath = Guid.NewGuid().ToString() + "_" + updateTeacherDto.Photo.FileName;
+                savePath = Path.Combine(_webHostEnvironment.ContentRootPath, "uploads/images/teachers", photoPath);
+                using (FileStream stream = new FileStream(savePath, FileMode.Create))
+                {
+                    updateTeacherDto.Photo.CopyTo(stream);
+                }
+            }
             UpdateTeacherCommand command = _mapper.Map<UpdateTeacherCommand>(updateTeacherDto);
+            command.PhotoPath = String.IsNullOrEmpty(photoPath) ? string.Empty : _appDomain + "uploads/images/teachers/" + photoPath;
             TeacherViewModel teacher = await Mediator.Send(command);
             return Ok(teacher);
         }

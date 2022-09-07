@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using MyFaculty.Application;
 using MyFaculty.Application.Common.Interfaces;
@@ -61,6 +62,11 @@ namespace MyFaculty.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "uploads")), 
+                RequestPath = "/uploads"
+            });
             app.UseSwagger();
             app.UseSwaggerUI(config =>
             {

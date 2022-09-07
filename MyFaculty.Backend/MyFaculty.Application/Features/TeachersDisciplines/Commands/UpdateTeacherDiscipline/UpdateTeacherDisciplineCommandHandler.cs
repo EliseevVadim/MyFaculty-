@@ -19,9 +19,10 @@ namespace MyFaculty.Application.Features.TeachersDisciplines.Commands.UpdateTeac
         private IMFDbContext _context;
         private IMapper _mapper;
 
-        public UpdateTeacherDisciplineCommandHandler(IMFDbContext context)
+        public UpdateTeacherDisciplineCommandHandler(IMFDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<TeacherDisciplineViewModel> Handle(UpdateTeacherDisciplineCommand request, CancellationToken cancellationToken)

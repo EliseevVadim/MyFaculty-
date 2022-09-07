@@ -6,6 +6,7 @@ using MyFaculty.Application.Features.Pairs.Commands.DeletePair;
 using MyFaculty.Application.Features.Pairs.Commands.UpdatePair;
 using MyFaculty.Application.Features.Pairs.Queries.GetPairInfo;
 using MyFaculty.Application.Features.Pairs.Queries.GetPairs;
+using MyFaculty.Application.Features.Pairs.Queries.GetPairsForGroup;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
@@ -62,6 +63,28 @@ namespace MyFaculty.WebApi.Controllers
                 Id = id
             };
             PairViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the list of pairs for a specific group
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /pairs/group/1
+        /// </remarks>
+        /// <param name="id">Specific group's id (integer)</param>
+        /// <returns>PairsListViewModel</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("group/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<PairsListViewModel>> GetByGroupId(int id)
+        {
+            GetPairsForGroupQuery query = new GetPairsForGroupQuery()
+            {
+                GroupId = id
+            };
+            PairsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 

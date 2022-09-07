@@ -27,7 +27,12 @@ namespace MyFaculty.Application.Features.Floors.Queries.GetFloorInfo
 
         public async Task<FloorViewModel> Handle(GetFloorInfoQuery request, CancellationToken cancellationToken)
         {
-            Floor floor = await _context.Floors.FirstOrDefaultAsync(floor => floor.Id == request.Id, cancellationToken);
+            Floor floor = await _context
+                .Floors
+                .Include(floor => floor.Auditoriums)
+                .Include(floor => floor.SecondaryObjects)
+                .ThenInclude(secondaryObject => secondaryObject.SecondaryObjectType)
+                .FirstOrDefaultAsync(floor => floor.Id == request.Id, cancellationToken);
             if (floor == null)
                 throw new EntityNotFoundException(nameof(Floor), request.Id);
             return _mapper.Map<FloorViewModel>(floor);

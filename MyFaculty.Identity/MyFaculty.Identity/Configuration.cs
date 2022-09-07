@@ -48,15 +48,15 @@ namespace MyFaculty.Identity
                     RequirePkce = true,
                     RedirectUris =
                     {
-                        "http://.../signin-oidc"
+                        "http://localhost:8080/signin-oidc"
                     },
                     AllowedCorsOrigins =
                     {
-                        "http://..."
+                        "http://localhost:8080"
                     },
                     PostLogoutRedirectUris =
                     {
-                        "http:/.../signout-oidc"
+                        "http://localhost:8080/signout-oidc"
                     },
                     AllowedScopes =
                     {

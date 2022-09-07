@@ -31,7 +31,7 @@ namespace MyFaculty.Application.Features.Teachers.Commands.UpdateTeacher
             if (teacher == null)
                 throw new EntityNotFoundException(nameof(Teacher), request.Id);
             teacher.FIO = request.FIO;
-            teacher.PhotoPath = request.PhotoPath;
+            teacher.PhotoPath = String.IsNullOrEmpty(request.PhotoPath) ? teacher.PhotoPath : request.PhotoPath;
             teacher.BirthDate = request.BirthDate;
             teacher.Email = request.Email;
             teacher.ScienceRankId = request.ScienceRankId;

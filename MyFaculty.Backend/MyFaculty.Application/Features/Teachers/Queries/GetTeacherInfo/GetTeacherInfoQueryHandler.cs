@@ -27,7 +27,12 @@ namespace MyFaculty.Application.Features.Teachers.Queries.GetTeacherInfo
 
         public async Task<TeacherViewModel> Handle(GetTeacherInfoQuery request, CancellationToken cancellationToken)
         {
-            Teacher teacher = await _context.Teachers.FirstOrDefaultAsync(teacher => teacher.Id == request.Id, cancellationToken);
+            Teacher teacher = await _context
+                .Teachers
+                .Include(teacher => teacher.ScienceRank)
+                .Include(teacher => teacher.TeacherDisciplines)
+                    .ThenInclude(td => td.Discipline)
+                .FirstOrDefaultAsync(teacher => teacher.Id == request.Id, cancellationToken);
             if (teacher == null)
                 throw new EntityNotFoundException(nameof(Teacher), request.Id);
             return _mapper.Map<TeacherViewModel>(teacher);

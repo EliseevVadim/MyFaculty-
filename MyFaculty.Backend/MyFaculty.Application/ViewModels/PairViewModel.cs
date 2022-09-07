@@ -19,7 +19,8 @@ namespace MyFaculty.Application.ViewModels
         public int AuditoriumId { get; set; }
         public AuditoriumLookupDto Auditorium { get; set; }
         public int GroupId { get; set; }
-        public string GroupName { get; set; }
+        public GroupLookupDto Group { get; set; }
+        public string CourseName { get; set; }
         public int DisciplineId { get; set; }
         public string DisciplineName { get; set; }
         public int DayOfWeekId { get; set; }
@@ -41,7 +42,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.AuditoriumId, options => options.MapFrom(pair => pair.AuditoriumId))
                 .ForMember(vm => vm.Auditorium, options => options.MapFrom(pair => pair.Auditorium))
                 .ForMember(vm => vm.GroupId, options => options.MapFrom(pair => pair.GroupId))
-                .ForMember(vm => vm.GroupName, options => options.MapFrom(pair => pair.Group.GroupName))
+                .ForMember(dto => dto.Group, options => options.MapFrom(pair => pair.Group))
                 .ForMember(vm => vm.DisciplineId, options => options.MapFrom(pair => pair.DisciplineId))
                 .ForMember(vm => vm.DisciplineName, options => options.MapFrom(pair => pair.Discipline.DisciplineName))
                 .ForMember(vm => vm.DayOfWeekId, options => options.MapFrom(pair => pair.DayOfWeekId))
