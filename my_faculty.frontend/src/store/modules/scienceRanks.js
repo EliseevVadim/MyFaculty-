@@ -28,6 +28,8 @@ const actions = {
 		return new Promise(async (resolve, reject) => {
 			await axios.post(config.apiUrl + '/api/scienceRanks', {
 				'rankName' : payload.rank_name
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -53,6 +55,8 @@ const actions = {
 			await axios.put(config.apiUrl + '/api/scienceRanks/', {
 				'id': payload.id,
 				'rankName': payload.rank_name
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -64,7 +68,9 @@ const actions = {
 	},
 	deleteScienceRank: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/scienceRanks/' + id)
+			await axios.delete(config.apiUrl + '/api/scienceRanks/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

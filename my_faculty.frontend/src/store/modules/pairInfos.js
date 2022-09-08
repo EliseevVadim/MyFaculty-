@@ -30,6 +30,8 @@ const actions = {
 				'pairNumber': payload.pair_number,
 				'startTime': payload.start_time,
 				'endTime': payload.end_time
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -57,6 +59,8 @@ const actions = {
 				'pairNumber': payload.pair_number,
 				'startTime': payload.start_time,
 				'endTime': payload.end_time
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -68,7 +72,9 @@ const actions = {
 	},
 	deletePairInfo: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/pairInfos/' + id)
+			await axios.delete(config.apiUrl + '/api/pairInfos/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

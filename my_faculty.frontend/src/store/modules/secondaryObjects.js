@@ -31,6 +31,8 @@ const actions = {
 				'positionInfo': JSON.stringify(payload.position_info),
 				'secondaryObjectTypeId': payload.object_type_id,
 				'floorId': payload.floor_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -59,6 +61,8 @@ const actions = {
 				'positionInfo': JSON.stringify(payload.position_info),
 				'secondaryObjectTypeId': payload.object_type_id,
 				'floorId': payload.floor_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -70,7 +74,9 @@ const actions = {
 	},
 	deleteSecondaryObject: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/secondaryObjects/' + id)
+			await axios.delete(config.apiUrl + '/api/secondaryObjects/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

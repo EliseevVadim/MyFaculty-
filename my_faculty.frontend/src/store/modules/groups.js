@@ -29,6 +29,8 @@ const actions = {
 			await axios.post(config.apiUrl + '/api/groups', {
 				'groupName': payload.group_name,
 				'courseId': payload.course_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -55,6 +57,8 @@ const actions = {
 				'id': payload.id,
 				'groupName': payload.group_name,
 				'courseId': payload.course_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -66,7 +70,9 @@ const actions = {
 	},
 	deleteGroup: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/groups/' + id)
+			await axios.delete(config.apiUrl + '/api/groups/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

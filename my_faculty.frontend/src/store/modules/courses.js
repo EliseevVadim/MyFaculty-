@@ -29,6 +29,8 @@ const actions = {
 			await axios.post(config.apiUrl + '/api/courses', {
 				'courseName': payload.course_name,
 				'courseNumber': payload.course_number
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -55,6 +57,8 @@ const actions = {
 				'id': payload.id,
 				'courseName': payload.course_name,
 				'courseNumber': payload.course_number
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -66,7 +70,9 @@ const actions = {
 	},
 	deleteCourse: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/courses/' + id)
+			await axios.delete(config.apiUrl + '/api/courses/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

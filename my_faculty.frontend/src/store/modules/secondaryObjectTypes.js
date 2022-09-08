@@ -29,6 +29,8 @@ const actions = {
 			await axios.post(config.apiUrl + '/api/secondaryObjectTypes', {
 				'objectTypeName': payload.object_type_name,
 				'typePath': payload.type_path
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -55,6 +57,8 @@ const actions = {
 				'id': payload.id,
 				'objectTypeName': payload.object_type_name,
 				'typePath': payload.type_path
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -66,7 +70,9 @@ const actions = {
 	},
 	deleteObjectType: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/secondaryObjectTypes/' + id)
+			await axios.delete(config.apiUrl + '/api/secondaryObjectTypes/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

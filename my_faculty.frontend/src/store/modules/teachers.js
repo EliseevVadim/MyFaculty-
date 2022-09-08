@@ -39,7 +39,9 @@ const actions = {
 			formData.append('email', payload.email);
 			formData.append('scienceRankId', payload.science_rank_id);
 			formData.append('photo', payload.photo);
-			await axios.post(config.apiUrl + '/api/teachers', formData)
+			await axios.post(config.apiUrl + '/api/teachers', formData, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})
@@ -68,7 +70,9 @@ const actions = {
 			formData.append('email', payload.email);
 			formData.append('scienceRankId', payload.science_rank_id);
 			formData.append('photo', payload.photo);
-			await axios.put(config.apiUrl + '/api/teachers', formData)
+			await axios.put(config.apiUrl + '/api/teachers', formData, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})
@@ -79,7 +83,9 @@ const actions = {
 	},
 	deleteTeacher: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/teachers/' + id)
+			await axios.delete(config.apiUrl + '/api/teachers/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

@@ -19,6 +19,7 @@ Oidc.Log.level = Oidc.Log.INFO;
 oidcClient.events.addUserLoaded((user) => {
     console.log('user loaded: ', arguments);
     console.log('token: ', user.access_token);
+    localStorage.setItem('apiKey', user.access_token);
 });
 
 oidcClient.events.addAccessTokenExpiring(() => {

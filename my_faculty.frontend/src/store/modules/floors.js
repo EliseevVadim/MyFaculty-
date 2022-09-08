@@ -29,6 +29,8 @@ const actions = {
 			await axios.post(config.apiUrl + '/api/floors', {
 				'name': payload.name,
 				'bounds': payload.bounds
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -55,6 +57,8 @@ const actions = {
 				'id': payload.id,
 				'name': payload.name,
 				'bounds': payload.bounds
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -66,7 +70,9 @@ const actions = {
 	},
 	deleteFloor: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/floors/' + id)
+			await axios.delete(config.apiUrl + '/api/floors/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

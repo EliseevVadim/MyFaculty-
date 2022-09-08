@@ -29,6 +29,8 @@ const actions = {
 			await axios.post(config.apiUrl + '/api/teachersDisciplines', {
 				'teacherId': payload.teacher_id,
 				'disciplineId': payload.discipline_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -55,6 +57,8 @@ const actions = {
 				'id': payload.id,
 				'teacherId': payload.teacher_id,
 				'disciplineId': payload.discipline_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -66,7 +70,9 @@ const actions = {
 	},
 	deleteTeacherDiscipline: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/teachersDisciplines/' + id)
+			await axios.delete(config.apiUrl + '/api/teachersDisciplines/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

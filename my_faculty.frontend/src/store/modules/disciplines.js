@@ -28,6 +28,8 @@ const actions = {
 		return new Promise(async (resolve, reject) => {
 			await axios.post(config.apiUrl + '/api/disciplines', {
 				'disciplineName': payload.discipline_name
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -53,6 +55,8 @@ const actions = {
 			await axios.put(config.apiUrl + '/api/disciplines', {
 				'id': payload.id,
 				'disciplineName': payload.discipline_name
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -64,7 +68,9 @@ const actions = {
 	},
 	deleteDiscipline: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/disciplines/' + id)
+			await axios.delete(config.apiUrl + '/api/disciplines/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

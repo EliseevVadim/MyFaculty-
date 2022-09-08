@@ -35,6 +35,8 @@ const actions = {
 				'dayOfWeekId': payload.day_of_week_id,
 				'pairRepeatingId': payload.repeating_id,
 				'pairInfoId': payload.pair_info_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -67,6 +69,8 @@ const actions = {
 				'dayOfWeekId': payload.day_of_week_id,
 				'pairRepeatingId': payload.repeating_id,
 				'pairInfoId': payload.pair_info_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -78,7 +82,9 @@ const actions = {
 	},
 	deletePair: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/pairs/' + id)
+			await axios.delete(config.apiUrl + '/api/pairs/' + id, {
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})

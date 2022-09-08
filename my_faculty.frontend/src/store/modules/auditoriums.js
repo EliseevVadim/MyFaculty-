@@ -31,6 +31,8 @@ const actions = {
 				'positionInfo': JSON.stringify(payload.position_info),
 				'floorId': payload.floor_id,
 				'teacherId': payload.holder_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -59,6 +61,8 @@ const actions = {
 				'positionInfo': JSON.stringify(payload.position_info),
 				'floorId': payload.floor_id,
 				'teacherId': payload.holder_id
+			}, {
+				headers: config.headers
 			})
 				.then((response) => {
 					resolve(response);
@@ -70,7 +74,9 @@ const actions = {
 	},
 	deleteAuditorium: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/auditoriums/' + id)
+			await axios.delete(config.apiUrl + '/api/auditoriums/' + id,{
+				headers: config.headers
+			})
 				.then((response) => {
 					resolve(response);
 				})
