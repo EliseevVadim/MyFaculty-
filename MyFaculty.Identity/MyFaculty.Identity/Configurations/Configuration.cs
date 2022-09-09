@@ -3,7 +3,7 @@ using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
 
-namespace MyFaculty.Identity
+namespace MyFaculty.Identity.Configurations
 {
     public static class Configuration
     {
@@ -17,13 +17,19 @@ namespace MyFaculty.Identity
             new List<IdentityResource>()
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResource
+                {
+                    Name = "roles",
+                    DisplayName = "Roles",
+                    UserClaims = { JwtClaimTypes.Role }
+                }
             };
 
         public static IEnumerable<ApiResource> ApiResources =>
             new List<ApiResource>()
             {
-                new ApiResource("MyFacultyWebAPI", "WebAPI", new [] { JwtClaimTypes.Name })
+                new ApiResource("MyFacultyWebAPI", "WebAPI", new [] { JwtClaimTypes.Name, JwtClaimTypes.Role })
                 {
                     Scopes =
                     {
@@ -62,6 +68,7 @@ namespace MyFaculty.Identity
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        "roles",
                         "MyFacultyWebAPI"
                     },
                     AllowAccessTokensViaBrowser = true

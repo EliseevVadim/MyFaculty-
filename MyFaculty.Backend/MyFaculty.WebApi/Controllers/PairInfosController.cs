@@ -84,7 +84,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="201">Created</response>
         /// <response code="500">Server error</response>
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PairInfoViewModel>> Create([FromBody] CreatePairInfoDto createPairInfoDto)
@@ -113,7 +113,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="404">Not found</response>
         /// <response code="500">Server error</response>
         [HttpPut]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

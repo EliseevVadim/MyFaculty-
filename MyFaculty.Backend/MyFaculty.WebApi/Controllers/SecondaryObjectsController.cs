@@ -114,7 +114,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="404">Not found</response>
         /// <response code="500">Server error</response>
         [HttpPut]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -138,7 +138,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="404">Not found</response>
         /// <response code="500">Server error</response>
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

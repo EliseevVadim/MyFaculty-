@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MyFaculty.Identity.Configurations;
 using MyFaculty.Identity.Data;
 using MyFaculty.Identity.Models;
 using System;
@@ -41,7 +42,8 @@ namespace MyFaculty.Identity
                 config.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+";
             })
                 .AddEntityFrameworkStores<AuthDbContext>()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders()
+                .AddRoles<IdentityRole<int>>();
             services.AddIdentityServer()
                 .AddAspNetIdentity<AppUser>()
                 .AddInMemoryApiResources(Configuration.ApiResources)
@@ -55,6 +57,7 @@ namespace MyFaculty.Identity
                 config.LoginPath = "/auth/login";
                 config.LogoutPath = "/auth/logout";
             });
+            services.AddRolesManager();
             services.AddControllersWithViews();
         }
 
