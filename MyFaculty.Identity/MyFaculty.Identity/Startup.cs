@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using MyFaculty.Identity.Configurations;
 using MyFaculty.Identity.Data;
 using MyFaculty.Identity.Models;
+using MyFaculty.Identity.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,7 @@ namespace MyFaculty.Identity
                 .AddInMemoryIdentityResources(Configuration.IdentityResources)
                 .AddInMemoryApiScopes(Configuration.ApiScopes)
                 .AddInMemoryClients(Configuration.Clients)
+                .AddProfileService<ProfileService>()
                 .AddDeveloperSigningCredential();
             services.ConfigureApplicationCookie(config =>
             {
@@ -58,6 +60,15 @@ namespace MyFaculty.Identity
                 config.LogoutPath = "/auth/logout";
             });
             services.AddRolesManager();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("InitialPolicy", policy =>
+                {
+                    policy.AllowAnyHeader();
+                    policy.AllowAnyMethod();
+                    policy.AllowAnyOrigin();
+                });
+            });
             services.AddControllersWithViews();
         }
 
@@ -67,11 +78,10 @@ namespace MyFaculty.Identity
             {
                 app.UseDeveloperExceptionPage();
             }
-            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors("InitialPolicy");
             app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>

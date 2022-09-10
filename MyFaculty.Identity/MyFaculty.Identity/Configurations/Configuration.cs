@@ -68,7 +68,6 @@ namespace MyFaculty.Identity.Configurations
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "roles",
                         "MyFacultyWebAPI"
                     },
                     AllowAccessTokensViaBrowser = true

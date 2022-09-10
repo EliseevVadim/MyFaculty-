@@ -142,7 +142,7 @@ export default {
         }
     },
     async mounted() {
-        this.userAuthorized = await this.$oidc.isAuthenticated();
+        this.userAuthorized = await this.$oidc.isAdmin();
 		if (!this.userAuthorized) {
 			this.mouse = {
 				x: this.DISPLAY_WIDTH / 2,
@@ -152,7 +152,7 @@ export default {
 		}
     },
     async updated() {
-        this.userAuthorized = await this.$oidc.isAuthenticated();
+        this.userAuthorized = await this.$oidc.isAdmin();
     },
     methods: {
         logout() {

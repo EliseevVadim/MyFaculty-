@@ -17,8 +17,6 @@ Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.INFO;
 
 oidcClient.events.addUserLoaded((user) => {
-    console.log('user loaded: ', arguments);
-    console.log('token: ', user.access_token);
     localStorage.setItem('apiKey', user.access_token);
 });
 
@@ -56,6 +54,11 @@ export default new class SecurityService {
     async isAuthenticated() {
         let user = await oidcClient.getUser();
         return !!user && !user.expired;
+    }
+
+    async isAdmin() {
+        let user = await oidcClient.getUser();
+        return !!user && !user.expired && user.profile.role.includes('Admin');
     }
 
     async completeLogin() {

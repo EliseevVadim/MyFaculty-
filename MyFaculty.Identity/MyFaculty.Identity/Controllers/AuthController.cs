@@ -82,6 +82,7 @@ namespace MyFaculty.Identity.Controllers
             var result = await _userManager.CreateAsync(user, viewModel.Password);
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "User");
                 await _signInManager.SignInAsync(user, false);
                 return Redirect(viewModel.ReturnUrl);
             }
