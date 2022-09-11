@@ -142,6 +142,7 @@ export default {
         }
     },
     async mounted() {
+		document.title = "Страница администратора";
         this.userAuthorized = await this.$oidc.isAdmin();
 		if (!this.userAuthorized) {
 			this.mouse = {
@@ -332,7 +333,7 @@ export default {
 			this.context.clearRect( 0, 0, this.DISPLAY_WIDTH, this.DISPLAY_HEIGHT);
 			for (let i = 0; i < this.eyes.length; i++) {
 				let eye = this.eyes[i];
-				if (seconds > eye.activationTime * this.DISPLAY_DURATION) {
+				if (seconds > this.eyes[i].activationTime * this.DISPLAY_DURATION) {
 					eye.activate();
 				}
 				eye.update(this.mouse);

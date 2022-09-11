@@ -143,6 +143,7 @@ export default {
         this.userAuthenticated = await this.$oidc.isAuthenticated();
     },
     async mounted() {
+		document.title = "Главная";
         this.userAuthenticated = await this.$oidc.isAuthenticated();
     }
 }

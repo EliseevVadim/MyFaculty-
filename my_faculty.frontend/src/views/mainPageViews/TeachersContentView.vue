@@ -199,7 +199,9 @@ export default {
 		}
 	},
 	mounted() {
-		this.$store.dispatch('loadAllTeachers');
+		if (this.TEACHERS.length === 0)
+			this.$loading(true);
+		this.$store.dispatch('loadAllTeachers').then(() => this.$loading(false));
 	},
 	methods: {
 		openAddingForm() {
@@ -218,11 +220,13 @@ export default {
 			this.teacher.teacherDisciplines = [];
 		},
 		showDetailsAboutTeacher(id) {
+			this.$loading(true);
 			this.$store.dispatch('loadTeacherById', id)
 				.then((response) => {
 					this.teacher = response.data;
+					this.$loading(false);
+					this.showDetailsForm = true;
 				})
-			this.showDetailsForm = true;
 		},
 		closeModal() {
 			this.resetTeacher();

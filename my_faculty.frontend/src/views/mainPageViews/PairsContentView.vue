@@ -357,6 +357,7 @@ export default {
 			this.formValid = this.$refs.searchForm.validate();
 			if(!this.formValid)
 				return;
+			this.$loading(true);
 			axios.get(config.apiUrl + '/api/pairs/group/' + this.searchParams.group_id)
 				.then((response) => {
 					let resultPairs = response.data.pairs;
@@ -382,6 +383,9 @@ export default {
 				})
 				.catch((error) => {
 					console.log(error);
+				})
+				.finally(() => {
+					this.$loading(false);
 				})
 		}
 	},

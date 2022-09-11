@@ -137,9 +137,11 @@ export default {
 				.on('zoom', (e) => {
 					this.$d3.select('#floor-container>g[main=true]').attr('transform', e.transform)
 				});
+			this.$loading(true);
 			this.$d3.select('#floor-container').call(zoom);
 			this.$store.dispatch('loadFloorById', this.currentFloorId)
 				.then((response) => {
+					this.$loading(false);
 					this.drawBounds(JSON.parse(response.data.bounds));
 					this.drawFloorObjects(JSON.parse(JSON.stringify(response.data.auditoriums)), JSON.parse(JSON.stringify(response.data.secondaryObjects)));
 				})
