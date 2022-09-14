@@ -10,7 +10,11 @@ let oidcClient = new Oidc.UserManager({
     redirect_uri: "http://localhost:8080/signin-oidc",
     post_logout_redirect_uri: "http://localhost:8080/signout-oidc",
     filterProtocolClaims: true,
-    loadUserInfo: true
+    loadUserInfo: true,
+    automaticSilentRenew: true,
+    silent_redirect_uri: "http://localhost:8080/silent-renew.html",
+    monitorSession: false,
+    silentRequestTimeout: 10000000000
 });
 
 Oidc.Log.logger = console;
@@ -24,16 +28,15 @@ oidcClient.events.addAccessTokenExpiring(() => {
     console.log('token expiring: ', arguments);
 });
 
-oidcClient.events.addAccessTokenExpired(() => {
-    alert('Session expired. Going out!');
-    oidcClient.signoutRedirect()
-        .then((response) => {
-            console.log(response);
+/*oidcClient.events.addAccessTokenExpired(() => {
+    oidcClient.signinSilent()
+        .then((user) => {
+            console.log(user);
         })
         .catch((error) => {
             console.log(error);
         });
-});
+});*/
 
 oidcClient.events.addUserSignedOut(() => {
     alert('Going out!');
@@ -71,6 +74,10 @@ export default new class SecurityService {
 
     completeLogout() {
         return oidcClient.signoutRedirectCallback();
+    }
+
+    async handleSilentCallback() {
+        return oidcClient.signinSilentCallback();
     }
 
     async getToken() {

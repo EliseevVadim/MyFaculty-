@@ -4,6 +4,7 @@ import MainAppPageView from "@/views/MainAppPageView";
 import AdminPageView from "@/views/AdminPageView";
 import SignInCallback from "@/components/SignInCallback";
 import SignOutCallback from "@/components/SignOutCallback";
+import RedirectSilentRenew from "@/components/RedirectSilentRenew";
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,11 @@ const routes = [
                 component: () => import('../views/mainPageViews/InfoContentView')
             }
         ]
+    },
+    {
+        path: '/silent-renew',
+        name: 'silentRenew',
+        component: RedirectSilentRenew
     },
     {
         path: '/adminPanel',
