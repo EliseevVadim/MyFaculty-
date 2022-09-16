@@ -17,12 +17,18 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.Property(floor => floor.Id).ValueGeneratedOnAdd();
             builder.Property(floor => floor.Name).IsRequired();
             builder.Property(floor => floor.Bounds).IsRequired();
+            builder.Property(floor => floor.FacultyId)
+                .IsRequired(false)
+                .HasDefaultValue(null);
             builder.HasMany(floor => floor.Auditoriums)
                 .WithOne(auditorium => auditorium.Floor)
                 .HasForeignKey(auditorium => auditorium.FloorId);
             builder.HasMany(floor => floor.SecondaryObjects)
                 .WithOne(secondaryObject => secondaryObject.Floor)
                 .HasForeignKey(secondaryObject => secondaryObject.FloorId);
+            builder.HasOne(floor => floor.Faculty)
+                .WithMany(faculty => faculty.Floors)
+                .HasForeignKey(floor => floor.FacultyId);
         }
     }
 }

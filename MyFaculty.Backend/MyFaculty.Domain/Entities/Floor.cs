@@ -15,6 +15,8 @@ namespace MyFaculty.Domain.Entities
         public int Id { get; set; }
         public string Name { get; set; }
         public string Bounds { get; set; }
+        public int? FacultyId { get; set; }
+        public Faculty Faculty { get; set; }
         public List<Auditorium> Auditoriums { get; set; } = new();
         public List<SecondaryObject> SecondaryObjects { get; set; } = new();
         public DateTime Created { get; set; }
