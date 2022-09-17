@@ -14,6 +14,7 @@ import teachers from "@/store/modules/teachers";
 import auditoriums from "@/store/modules/auditoriums";
 import teachersDisciplines from "@/store/modules/teachersDisciplines";
 import pairs from "@/store/modules/pairs";
+import faculties from "@/store/modules/faculties";
 
 Vue.use(Vuex)
 
@@ -36,6 +37,7 @@ export default new Vuex.Store({
       teachers,
       auditoriums,
       teachersDisciplines,
-      pairs
+      pairs,
+      faculties
   }
 })

@@ -32,6 +32,7 @@ namespace MyFaculty.Application.Features.Floors.Commands.UpdateFloor
                 throw new EntityNotFoundException(nameof(Floor), request.Id);
             floor.Name = request.Name;
             floor.Bounds = request.Bounds;
+            floor.FacultyId = request.FacultyId;
             floor.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<FloorViewModel>(floor);

@@ -111,6 +111,7 @@ export default {
             userAuthorized: false,
             drawer: false,
             items: [
+				{text : "Факультеты", icon : "mdi-floor-plan", path: '/adminPanel/faculties'},
                 {text : "Этажи", icon : "mdi-floor-plan", path: '/adminPanel/floors'},
                 {text : "Преподаватели", icon : "mdi-account-school", path: '/adminPanel/teachers'},
                 {text : "Аудитории", icon : "mdi-cellphone-link", path: '/adminPanel/auditoriums'},

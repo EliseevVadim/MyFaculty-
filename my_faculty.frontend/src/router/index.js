@@ -52,6 +52,11 @@ const routes = [
         component: AdminPageView,
         children: [
             {
+                path: '/adminPanel/faculties',
+                name: 'faculties',
+                component: () => import('../views/adminPageViews/FacultiesView')
+            },
+            {
                 path: '/adminPanel/floors',
                 name: 'floors',
                 component: () => import('../views/adminPageViews/FloorsView')

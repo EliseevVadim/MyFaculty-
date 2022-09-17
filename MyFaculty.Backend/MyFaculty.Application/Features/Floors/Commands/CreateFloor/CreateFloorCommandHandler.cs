@@ -29,6 +29,7 @@ namespace MyFaculty.Application.Features.Floors.Commands.CreateFloor
             {
                 Name = request.Name,
                 Bounds = request.Bounds,
+                FacultyId = request.FacultyId,
                 Created = DateTime.Now
             };
             await _context.Floors.AddAsync(floor);

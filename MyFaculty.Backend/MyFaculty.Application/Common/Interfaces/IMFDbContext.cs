@@ -25,6 +25,7 @@ namespace MyFaculty.Application.Common.Interfaces
         public DbSet<SecondaryObjectType> SecondaryObjectTypes { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<TeacherDiscipline> TeacherDisciplines { get; set; }
+        public DbSet<Faculty> Faculties { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

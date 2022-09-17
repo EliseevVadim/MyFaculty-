@@ -47,12 +47,24 @@
 							v-model="formValid">
 							<v-col cols="12">
 								<v-text-field
-									label="Имя этажа*"
+									label="Название этажа*"
 									required
 									:rules="commonRules"
 									hide-details="auto"
 									v-model="floor.name"
 								></v-text-field>
+							</v-col>
+							<v-col cols="12">
+								<v-autocomplete
+									label="Название факультета*"
+									required
+									:rules="commonRules"
+									:items="this.FACULTIES.faculties"
+									item-text="facultyName"
+									item-value="id"
+									hide-details="auto"
+									v-model="floor.faculty_id"
+								></v-autocomplete>
 							</v-col>
 							<p>Нарисуйте границы этажа (в последствии, Вы сможете изменить координаты нарисованных ранее точек)</p>
 							<FloorDrawer ref="drawingElement" v-bind:floor="floor"></FloorDrawer>
@@ -103,6 +115,9 @@
 					<tr v-for="(item,index) in items" :key="index">
 						<td>
 							{{item.name}}
+						</td>
+						<td>
+							{{item.facultyName}}
 						</td>
 						<td>
 							{{item.bounds}}
@@ -184,7 +199,8 @@ export default {
 			errorText: "",
 			floor: {
 				name: "",
-				bounds: null
+				bounds: null,
+				faculty_id: null
 			},
 			commonRules: [
 				v => !!v || 'Поле является обязательным для заполнения'
@@ -195,6 +211,7 @@ export default {
 					align: 'start',
 					value: 'name',
 				},
+				{ text: 'Факультет', value: 'facultyName' },
 				{ text: 'Границы', value: 'bounds' },
 				{ text: 'Действия', value: 'actions', sortable: false }
 			],
@@ -202,6 +219,7 @@ export default {
 	},
 	mounted() {
 		this.$store.dispatch('loadAllFloors');
+		this.$store.dispatch('loadAllFaculties');
 	},
 	methods: {
 		openAddingForm() {
@@ -253,6 +271,7 @@ export default {
 		resetFloor() {
 			this.floor.name = "";
 			this.floor.bounds = null;
+			this.floor.faculty_id = null;
 		},
 		deleteFloor(id) {
 			if (confirm("Вы действительно хотите удалить данную запись")) {
@@ -272,8 +291,10 @@ export default {
 			this.floor.id = id;
 			this.$store.dispatch('loadFloorById', id)
 				.then((response) => {
+					this.floor = response.data;
 					this.floor.name = response.data.name;
 					this.floor.bounds = JSON.parse(response.data.bounds);
+					this.floor.faculty_id = response.data.facultyId;
 					this.updating = true;
 					try {
 						this.$refs.drawingElement.clearDrawingArea();
@@ -308,7 +329,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['FLOORS'])
+		...mapGetters(['FLOORS']),
+		...mapGetters(['FACULTIES'])
 	}
 }
 </script>

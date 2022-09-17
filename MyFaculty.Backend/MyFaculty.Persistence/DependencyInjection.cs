@@ -19,7 +19,7 @@ namespace MyFaculty.Persistence
             {
                 options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 11)));
             });
-            services.AddSingleton<IMFDbContext>(provider => provider.GetService<MFDbContext>());
+            services.AddScoped<IMFDbContext>(provider => provider.GetService<MFDbContext>());
             return services;
         }
     }

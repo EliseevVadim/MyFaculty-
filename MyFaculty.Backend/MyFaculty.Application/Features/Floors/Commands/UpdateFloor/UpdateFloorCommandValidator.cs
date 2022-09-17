@@ -14,6 +14,7 @@ namespace MyFaculty.Application.Features.Floors.Commands.UpdateFloor
             RuleFor(command => command.Id).NotEmpty();
             RuleFor(command => command.Name).NotEmpty().MaximumLength(250);
             RuleFor(command => command.Bounds).NotEmpty();
+            RuleFor(command => command.FacultyId).NotEmpty();
         }
     }
 }

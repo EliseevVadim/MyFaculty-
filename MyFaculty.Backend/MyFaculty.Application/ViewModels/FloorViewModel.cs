@@ -15,6 +15,8 @@ namespace MyFaculty.Application.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Bounds { get; set; }
+        public int FacultyId { get; set; }
+        public string FacultyName { get; set; }
         public List<AuditoriumLookupDto> Auditoriums { get; set; }
         public List<SecondaryObjectLookupDto> SecondaryObjects { get; set; }
         public DateTime Created { get; set; }
@@ -29,7 +31,9 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.Auditoriums, options => options.MapFrom(floor => floor.Auditoriums))
                 .ForMember(vm => vm.SecondaryObjects, options => options.MapFrom(floor => floor.SecondaryObjects))
                 .ForMember(vm => vm.Created, options => options.MapFrom(floor => floor.Created))
-                .ForMember(vm => vm.Updated, options => options.MapFrom(floor => floor.Updated));
+                .ForMember(vm => vm.Updated, options => options.MapFrom(floor => floor.Updated))
+                .ForMember(vm => vm.FacultyId, options => options.MapFrom(floor => floor.FacultyId))
+                .ForMember(vm => vm.FacultyName, options => options.MapFrom(floor => floor.Faculty.FacultyName));
         }
     }
 }

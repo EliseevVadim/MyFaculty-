@@ -8,12 +8,14 @@ namespace MyFaculty.WebApi.Dto
     {
         public string Name { get; set; }
         public string Bounds { get; set; }
+        public int FacultyId { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateFloorDto, CreateFloorCommand>()
                 .ForMember(command => command.Name, options => options.MapFrom(dto => dto.Name))
-                .ForMember(command => command.Bounds, options => options.MapFrom(dto => dto.Bounds));
+                .ForMember(command => command.Bounds, options => options.MapFrom(dto => dto.Bounds))
+                .ForMember(command => command.FacultyId, options => options.MapFrom(dto => dto.FacultyId));
         }
     }
 }

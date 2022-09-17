@@ -2,34 +2,33 @@ import axios from "axios";
 import {config} from "@/config/config";
 
 const state = {
-	floors : []
+	faculties: []
 };
 
 const getters = {
-	FLOORS: state => {
-		return state.floors;
+	FACULTIES: state => {
+		return state.faculties;
 	}
 };
 
 const mutations = {
-	setFloors(state, payload) {
-		state.floors = payload;
+	setFaculties(state, payload) {
+		state.faculties = payload;
 	}
 };
 
 const actions = {
-	loadAllFloors: async (context) => {
-		await axios.get(config.apiUrl + '/api/floors')
+	loadAllFaculties: async(context) => {
+		await axios.get(config.apiUrl + '/api/faculties')
 			.then((response) => {
-				context.commit('setFloors', response.data);
+				context.commit('setFaculties', response.data);
 			})
 	},
-	addFloor: (context, payload) => {
+	addFaculty: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.post(config.apiUrl + '/api/floors', {
-				'name': payload.name,
-				'bounds': payload.bounds,
-				'facultyId': payload.faculty_id
+			await axios.post(config.apiUrl + '/api/faculties', {
+				'facultyName' : payload.faculty_name,
+				'officialWebsite': payload.official_website
 			}, {
 				headers: config.headers
 			})
@@ -41,9 +40,9 @@ const actions = {
 				})
 		})
 	},
-	loadFloorById: (context, id) => {
+	loadFacultyById: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.get(config.apiUrl + '/api/floors/' + id)
+			await axios.get(config.apiUrl + '/api/faculties/' + id)
 				.then((response) => {
 					resolve(response);
 				})
@@ -52,13 +51,12 @@ const actions = {
 				})
 		});
 	},
-	updateFloor: (context, payload) => {
+	updateFaculty: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.put(config.apiUrl + '/api/floors', {
+			await axios.put(config.apiUrl + '/api/faculties/', {
 				'id': payload.id,
-				'name': payload.name,
-				'bounds': payload.bounds,
-				'facultyId': payload.faculty_id
+				'facultyName' : payload.faculty_name,
+				'officialWebsite': payload.official_website
 			}, {
 				headers: config.headers
 			})
@@ -70,9 +68,9 @@ const actions = {
 				})
 		})
 	},
-	deleteFloor: (context, id) => {
+	deleteFaculty: (context, id) => {
 		return new Promise(async (resolve, reject) => {
-			await axios.delete(config.apiUrl + '/api/floors/' + id, {
+			await axios.delete(config.apiUrl + '/api/faculties/' + id, {
 				headers: config.headers
 			})
 				.then((response) => {

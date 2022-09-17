@@ -14,5 +14,6 @@ namespace MyFaculty.Application.Features.Floors.Commands.UpdateFloor
         public int Id { get; set; }
         public string Name { get; set; }
         public string Bounds { get; set; }
+        public int FacultyId { get; set; }
     }
 }
