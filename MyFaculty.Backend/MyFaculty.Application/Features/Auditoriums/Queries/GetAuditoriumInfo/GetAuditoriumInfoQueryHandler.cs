@@ -29,6 +29,8 @@ namespace MyFaculty.Application.Features.Auditoriums.Queries.GetAuditoriumInfo
         {
             Auditorium auditorium = await _context
                 .Auditoriums
+                .Include(auditorium => auditorium.Floor)
+                    .ThenInclude(floor => floor.Faculty)
                 .Include(auditorium => auditorium.Teacher)
                 .Include(auditorium => auditorium.Pairs)
                     .ThenInclude(pair => pair.PairInfo)

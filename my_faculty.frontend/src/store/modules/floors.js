@@ -52,6 +52,12 @@ const actions = {
 				})
 		});
 	},
+	loadFloorsByFacultyId: async (context, id) => {
+		await axios.get(config.apiUrl + '/api/floors/faculty/' + id)
+			.then((response) => {
+				context.commit('setFloors', response.data);
+			})
+	},
 	updateFloor: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.put(config.apiUrl + '/api/floors', {

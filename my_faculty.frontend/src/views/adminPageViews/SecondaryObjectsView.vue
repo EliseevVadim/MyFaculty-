@@ -58,6 +58,20 @@
 								cols="12"
 							>
 								<v-select
+									:items="this.FACULTIES.faculties"
+									item-text="facultyName"
+									item-value="id"
+									:rules="commonRules"
+									label="Выберите факультет*"
+									@change="loadFloorsList"
+									v-model="selectedFacultyId"
+								></v-select>
+							</v-col>
+							<v-col
+								v-if="floorsAreLoaded"
+								cols="12"
+							>
+								<v-select
 									:items="this.FLOORS.floors"
 									item-text="name"
 									item-value="id"
@@ -67,6 +81,10 @@
 									v-model="secondary_object.floor_id"
 								></v-select>
 							</v-col>
+							<h1 v-else-if="floorsAreLoaded === false" class="red--text">
+								Для данного факультета информация об этажах отсутствует.
+								Дальнейшее заполнение невозможно.
+							</h1>
 							<v-col
 								cols="12"
 							>
@@ -196,6 +214,9 @@
 							{{item.positionInfo}}
 						</td>
 						<td>
+							{{item.facultyName}}
+						</td>
+						<td>
 							{{item.floorName}}
 						</td>
 						<td>
@@ -240,6 +261,8 @@ export default {
     name: "SecondaryObjectsView",
 	data () {
 		return {
+			selectedFacultyId: null,
+			floorsAreLoaded: null,
 			showAddingForm: false,
 			search: '',
 			formValid: true,
@@ -271,6 +294,7 @@ export default {
 					value: 'objectName',
 				},
 				{ text: 'Информация о расположении', value: 'positionInfo' },
+				{ text: 'Факультет', value: 'facultyName' },
 				{ text: 'Этаж', value: 'floorName' },
 				{ text: 'Тип', value: 'secondaryObjectType.objectTypeName' },
 				{ text: 'Действия', value: 'actions', sortable: false }
@@ -278,7 +302,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.$store.dispatch('loadAllFloors');
+		this.$store.dispatch('loadAllFaculties');
 		this.$store.dispatch('loadAllSecondaryObjects');
 		this.$store.dispatch('loadAllObjectTypes');
 	},
@@ -288,6 +312,14 @@ export default {
 			this.resetSecondaryObject();
 			this.updating = false;
 			this.showAddingForm = true;
+		},
+		loadFloorsList() {
+			this.$loading(true);
+			this.$store.dispatch('loadFloorsByFacultyId', this.selectedFacultyId)
+				.then(() => {
+					this.$loading(false);
+					this.floorsAreLoaded = this.FLOORS.floors.length > 0;
+				})
 		},
 		sendData() {
 			this.formValid = this.$refs.submitForm.validate();
@@ -321,6 +353,8 @@ export default {
 			this.secondary_object.object_name = "";
 			this.secondary_object.floor_id = null;
 			this.secondary_object.object_type_id = null;
+			this.selectedFacultyId = null;
+			this.floorsAreLoaded = null;
 			this.secondary_object.position_info = {
 				x: "",
 				y: "",
@@ -346,9 +380,11 @@ export default {
 			this.secondary_object.id = id;
 			this.$store.dispatch('loadSecondaryObjectById', id)
 				.then((response) => {
+					this.selectedFacultyId = response.data.floor.facultyId;
 					this.secondary_object.object_name = response.data.objectName;
 					this.secondary_object.object_type_id = response.data.secondaryObjectTypeId;
-					this.secondary_object.floor_id = response.data.floorId;
+					this.secondary_object.floor_id = response.data.floor.id;
+					this.loadFloorsList();
 					this.secondary_object.position_info = JSON.parse(response.data.positionInfo);
 					this.updating = true;
 					this.showAddingForm = true;
@@ -492,7 +528,8 @@ export default {
 	computed: {
 		...mapGetters(['SECONDARY_OBJECTS']),
 		...mapGetters(['OBJECT_TYPES']),
-		...mapGetters(['FLOORS'])
+		...mapGetters(['FLOORS']),
+		...mapGetters(['FACULTIES'])
 	}
 }
 </script>

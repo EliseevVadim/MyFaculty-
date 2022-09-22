@@ -58,6 +58,20 @@
 								cols="12"
 							>
 								<v-select
+									:items="this.FACULTIES.faculties"
+									item-text="facultyName"
+									item-value="id"
+									:rules="commonRules"
+									label="Выберите факультет*"
+									@change="loadFloorsList"
+									v-model="selectedFacultyId"
+								></v-select>
+							</v-col>
+							<v-col
+								v-if="floorsAreLoaded"
+								cols="12"
+							>
+								<v-select
 									:items="this.FLOORS.floors"
 									item-text="name"
 									item-value="id"
@@ -67,6 +81,10 @@
 									v-model="auditorium.floor_id"
 								></v-select>
 							</v-col>
+							<h1 v-else-if="floorsAreLoaded === false" class="red--text">
+								Для данного факультета информация об этажах отсутствует.
+								Дальнейшее заполнение невозможно.
+							</h1>
 							<v-col
 								cols="12"
 							>
@@ -193,6 +211,9 @@
 							{{item.auditoriumName}}
 						</td>
 						<td>
+							{{item.facultyName}}
+						</td>
+						<td>
 							{{item.positionInfo}}
 						</td>
 						<td>
@@ -240,6 +261,8 @@ export default {
     name: "AuditoriumsView",
 	data () {
 		return {
+			selectedFacultyId: null,
+			floorsAreLoaded: null,
 			showAddingForm: false,
 			search: '',
 			formValid: true,
@@ -270,6 +293,7 @@ export default {
 					align: 'start',
 					value: 'auditoriumName',
 				},
+				{ text: 'Факультет', value: 'facultyName' },
 				{ text: 'Информация о расположении', value: 'positionInfo' },
 				{ text: 'Этаж', value: 'floorName' },
 				{ text: 'Ответственный', value: 'teachersFIO' },
@@ -278,7 +302,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.$store.dispatch('loadAllFloors');
+		this.$store.dispatch('loadAllFaculties');
 		this.$store.dispatch('loadAllAuditoriums');
 		this.$store.dispatch('loadAllTeachers');
 	},
@@ -288,6 +312,14 @@ export default {
 			this.resetAuditorium();
 			this.updating = false;
 			this.showAddingForm = true;
+		},
+		loadFloorsList() {
+			this.$loading(true);
+			this.$store.dispatch('loadFloorsByFacultyId', this.selectedFacultyId)
+				.then(() => {
+					this.$loading(false);
+					this.floorsAreLoaded = this.FLOORS.floors.length > 0;
+				})
 		},
 		sendData() {
 			this.formValid = this.$refs.submitForm.validate();
@@ -321,6 +353,8 @@ export default {
 			this.auditorium.auditorium_name = "";
 			this.auditorium.floor_id = null;
 			this.auditorium.holder_id = null;
+			this.selectedFacultyId = null;
+			this.floorsAreLoaded = null;
 			this.auditorium.position_info = {
 				x: "",
 				y: "",
@@ -346,9 +380,11 @@ export default {
 			this.auditorium.id = id;
 			this.$store.dispatch('loadAuditoriumById', id)
 				.then((response) => {
+					this.selectedFacultyId = response.data.floor.facultyId;
 					this.auditorium.auditorium_name = response.data.auditoriumName;
 					this.auditorium.holder_id = response.data.teacherId;
-					this.auditorium.floor_id = response.data.floorId;
+					this.auditorium.floor_id = response.data.floor.id;
+					this.loadFloorsList();
 					this.auditorium.position_info = JSON.parse(response.data.positionInfo);
 					this.updating = true;
 					this.showAddingForm = true;
@@ -492,7 +528,8 @@ export default {
 	computed: {
 		...mapGetters(['AUDITORIUMS']),
 		...mapGetters(['TEACHERS']),
-		...mapGetters(['FLOORS'])
+		...mapGetters(['FLOORS']),
+		...mapGetters(['FACULTIES'])
 	}
 }
 </script>

@@ -15,8 +15,7 @@ namespace MyFaculty.Application.ViewModels
         public int Id { get; set; }
         public string AuditoriumName { get; set; }
         public string PositionInfo { get; set; }
-        public int FloorId { get; set; }
-        public string FloorName { get; set; }
+        public FloorLookupDto Floor { get; set; }
         public int TeacherId { get; set; }
         public string TeachersFIO { get; set; }
         public List<PairLookupDto> Pairs { get; set; }
@@ -29,8 +28,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.Id, options => options.MapFrom(auditorium => auditorium.Id))
                 .ForMember(vm => vm.AuditoriumName, options => options.MapFrom(auditorium => auditorium.AuditoriumName))
                 .ForMember(vm => vm.PositionInfo, options => options.MapFrom(auditorium => auditorium.PositionInfo))
-                .ForMember(vm => vm.FloorId, options => options.MapFrom(auditorium => auditorium.FloorId))
-                .ForMember(vm => vm.FloorName, options => options.MapFrom(auditorium => auditorium.Floor.Name))
+                .ForMember(vm => vm.Floor, options => options.MapFrom(auditorium => auditorium.Floor))
                 .ForMember(vm => vm.TeacherId, options => options.MapFrom(auditorium => auditorium.TeacherId))
                 .ForMember(vm => vm.TeachersFIO, options => options.MapFrom(auditorium => auditorium.Teacher.FIO))
                 .ForMember(vm => vm.Pairs, options => options.MapFrom(auditorium => auditorium.Pairs))

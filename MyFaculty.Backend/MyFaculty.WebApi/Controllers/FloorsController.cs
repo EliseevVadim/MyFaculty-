@@ -7,6 +7,7 @@ using MyFaculty.Application.Features.Floors.Commands.DeleteFloor;
 using MyFaculty.Application.Features.Floors.Commands.UpdateFloor;
 using MyFaculty.Application.Features.Floors.Queries.GetFloorInfo;
 using MyFaculty.Application.Features.Floors.Queries.GetFloors;
+using MyFaculty.Application.Features.Floors.Queries.GetFloorsForFaculty;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
@@ -63,6 +64,28 @@ namespace MyFaculty.WebApi.Controllers
                 Id = id
             };
             FloorViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the list of floors for a specific faculty
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /floors/faculty/1
+        /// </remarks>
+        /// <param name="id">Specific faculty id (integer)</param>
+        /// <returns>FloorsListViewModel</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("faculty/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<FloorsListViewModel>> GetByFacultyId(int id)
+        {
+            GetFloorsForFacultyQuery query = new GetFloorsForFacultyQuery()
+            {
+                FacultyId = id
+            };
+            FloorsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 

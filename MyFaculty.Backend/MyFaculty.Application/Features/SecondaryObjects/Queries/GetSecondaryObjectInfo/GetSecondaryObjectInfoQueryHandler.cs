@@ -27,7 +27,10 @@ namespace MyFaculty.Application.Features.SecondaryObjects.Queries.GetSecondaryOb
 
         public async Task<SecondaryObjectViewModel> Handle(GetSecondaryObjectInfoQuery request, CancellationToken cancellationToken)
         {
-            SecondaryObject secondaryObject = await _context.SecondaryObjects.FirstOrDefaultAsync(secondaryObject => secondaryObject.Id == request.Id, cancellationToken);
+            SecondaryObject secondaryObject = await _context.SecondaryObjects
+                .Include(secondaryObject => secondaryObject.Floor)
+                    .ThenInclude(floor => floor.Faculty)
+                .FirstOrDefaultAsync(secondaryObject => secondaryObject.Id == request.Id, cancellationToken);
             if (secondaryObject == null)
                 throw new EntityNotFoundException(nameof(SecondaryObject), request.Id);
             return _mapper.Map<SecondaryObjectViewModel>(secondaryObject);

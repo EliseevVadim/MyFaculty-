@@ -16,6 +16,8 @@ namespace MyFaculty.Application.Dto
         public string PositionInfo { get; set; }
         public int FloorId { get; set; }
         public string FloorName { get; set; }
+        public int FacultyId { get; set; }
+        public string FacultyName { get; set; }
         public int TeacherId { get; set; }
         public string TeachersFIO { get; set; }
 
@@ -27,6 +29,8 @@ namespace MyFaculty.Application.Dto
                 .ForMember(dto => dto.PositionInfo, options => options.MapFrom(auditorium => auditorium.PositionInfo))
                 .ForMember(dto => dto.FloorId, options => options.MapFrom(auditorium => auditorium.FloorId))
                 .ForMember(dto => dto.FloorName, options => options.MapFrom(auditorium => auditorium.Floor.Name))
+                .ForMember(dto => dto.FacultyId, options => options.MapFrom(auditorium => auditorium.Floor.FacultyId))
+                .ForMember(dto => dto.FacultyName, options => options.MapFrom(auditorium => auditorium.Floor.Faculty.FacultyName))
                 .ForMember(dto => dto.TeacherId, options => options.MapFrom(auditorium => auditorium.TeacherId))
                 .ForMember(dto => dto.TeachersFIO, options => options.MapFrom(auditorium => auditorium.Teacher.FIO));
         }

@@ -1,8 +1,17 @@
 <template>
 	<div>
-		<h1 class="text-center">Карта нашего факультета</h1>
+		<h1 class="text-center">Посмотрите на карту интересующего Вас факультета</h1>
 		<v-container>
 			<v-select
+				:items="this.FACULTIES.faculties"
+				item-text="facultyName"
+				item-value="id"
+				label="Выберите интересующий факультет*"
+				@change="loadFloorsList"
+				v-model="facultyId"
+			></v-select>
+			<v-select
+				v-if="floorsAreLoaded"
 				:items="this.FLOORS.floors"
 				item-text="name"
 				item-value="id"
@@ -115,7 +124,9 @@ export default {
     name: "MainContentView",
 	data() {
 		return {
+			facultyId: null,
 			currentFloorId: null,
+			floorsAreLoaded: false,
 			showAuditoriumDetails: false,
 			selectedAuditorium: {
 				auditorium_name: "",
@@ -125,9 +136,17 @@ export default {
 		}
 	},
 	mounted() {
-		this.$store.dispatch('loadAllFloors');
+		this.$store.dispatch('loadAllFaculties');
 	},
 	methods: {
+		loadFloorsList() {
+			this.$loading(true);
+			this.$store.dispatch('loadFloorsByFacultyId', this.facultyId)
+				.then(() => {
+					this.$loading(false);
+					this.floorsAreLoaded = this.FLOORS.floors.length > 0;
+				})
+		},
 		drawFloor() {
 			this.clearFloorArea();
 			let svg = this.$d3.select('#floor-container');
@@ -236,7 +255,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters(['FLOORS'])
+		...mapGetters(['FLOORS']),
+		...mapGetters(['FACULTIES'])
 	}
 }
 </script>

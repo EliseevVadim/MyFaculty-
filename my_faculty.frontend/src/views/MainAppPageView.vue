@@ -13,7 +13,7 @@
             <a href="/">
                 <img :src="'img/icons/logo.ico'" alt="#" width="50" height="50">
             </a>
-            <v-toolbar-title class="ml-2">Интерактивная карта факультета</v-toolbar-title>
+            <v-toolbar-title class="ml-2">MyFaculty</v-toolbar-title>
             <v-spacer></v-spacer>
             <div v-if="userAuthenticated" class="mt-5 d-none d-sm-flex">
                 <v-btn outlined>В личный кабинет</v-btn>

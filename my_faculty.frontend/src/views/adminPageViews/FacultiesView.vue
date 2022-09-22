@@ -43,8 +43,6 @@
 							<v-col cols="12">
 								<v-text-field
 									label="Официальный сайт"
-									required
-									:rules="commonRules"
 									hide-details="auto"
 									v-model="faculty.official_website"
 								></v-text-field>
