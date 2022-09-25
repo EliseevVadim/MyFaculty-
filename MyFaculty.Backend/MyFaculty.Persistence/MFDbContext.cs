@@ -36,6 +36,9 @@ namespace MyFaculty.Persistence
         public DbSet<Teacher> Teachers { get; set; } = null!;
         public DbSet<TeacherDiscipline> TeacherDisciplines { get; set; } = null!;
         public DbSet<Faculty> Faculties { get; set; } = null!;
+        public DbSet<ExpertSystemState> ExpertSystemStates { get; set; } = null!;
+        public DbSet<ExpertSystemStateTransition> ExpertSystemStateTransitions { get; set; } = null!;
+        public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

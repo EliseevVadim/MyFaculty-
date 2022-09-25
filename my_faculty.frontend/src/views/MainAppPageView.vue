@@ -122,6 +122,7 @@ export default {
                 { "text" : "Пары", "link" : '/pairs' },
                 { "text" : "О факульете", "link" : '/about' },
                 { "text" : "Полезная информация", "link" : '/info' },
+				{ "text" : "Куда поступать?", "link" : '/choose-your-faculty'}
             ],
             socials: [
                 { "icon" : 'mdi-facebook', "link" : "#" },

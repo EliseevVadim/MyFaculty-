@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyFaculty.Persistence;
 
 namespace MyFaculty.Persistence.Migrations
 {
     [DbContext(typeof(MFDbContext))]
-    partial class MFDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220923161122_AddExpertSystemTables")]
+    partial class AddExpertSystemTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,12 +157,10 @@ namespace MyFaculty.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AnswerId")
-                        .IsUnique();
-
                     b.HasIndex("FinalStateId");
 
-                    b.HasIndex("InitialStateId");
+                    b.HasIndex("InitialStateId")
+                        .IsUnique();
 
                     b.ToTable("ExpertSystemStateTransitions");
                 });
@@ -348,19 +348,19 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 9, 23, 20, 30, 40, 229, DateTimeKind.Local).AddTicks(7800),
+                            Created = new DateTime(2022, 9, 23, 19, 11, 21, 729, DateTimeKind.Local).AddTicks(5271),
                             RepeatingName = "Каждую неделю"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 9, 23, 20, 30, 40, 229, DateTimeKind.Local).AddTicks(8398),
+                            Created = new DateTime(2022, 9, 23, 19, 11, 21, 729, DateTimeKind.Local).AddTicks(5852),
                             RepeatingName = "По верхней неделе"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2022, 9, 23, 20, 30, 40, 229, DateTimeKind.Local).AddTicks(8407),
+                            Created = new DateTime(2022, 9, 23, 19, 11, 21, 729, DateTimeKind.Local).AddTicks(5861),
                             RepeatingName = "По нижней неделе"
                         });
                 });
@@ -531,37 +531,37 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 9, 23, 20, 30, 40, 161, DateTimeKind.Local).AddTicks(5334),
+                            Created = new DateTime(2022, 9, 23, 19, 11, 21, 652, DateTimeKind.Local).AddTicks(9858),
                             DaysName = "Понедельник"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 9, 23, 20, 30, 40, 162, DateTimeKind.Local).AddTicks(9466),
+                            Created = new DateTime(2022, 9, 23, 19, 11, 21, 654, DateTimeKind.Local).AddTicks(3605),
                             DaysName = "Вторник"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2022, 9, 23, 20, 30, 40, 162, DateTimeKind.Local).AddTicks(9507),
+                            Created = new DateTime(2022, 9, 23, 19, 11, 21, 654, DateTimeKind.Local).AddTicks(3635),
                             DaysName = "Среда"
                         },
                         new
                         {
                             Id = 4,
-                            Created = new DateTime(2022, 9, 23, 20, 30, 40, 162, DateTimeKind.Local).AddTicks(9510),
+                            Created = new DateTime(2022, 9, 23, 19, 11, 21, 654, DateTimeKind.Local).AddTicks(3639),
                             DaysName = "Четверг"
                         },
                         new
                         {
                             Id = 5,
-                            Created = new DateTime(2022, 9, 23, 20, 30, 40, 162, DateTimeKind.Local).AddTicks(9512),
+                            Created = new DateTime(2022, 9, 23, 19, 11, 21, 654, DateTimeKind.Local).AddTicks(3640),
                             DaysName = "Пятница"
                         },
                         new
                         {
                             Id = 6,
-                            Created = new DateTime(2022, 9, 23, 20, 30, 40, 162, DateTimeKind.Local).AddTicks(9514),
+                            Created = new DateTime(2022, 9, 23, 19, 11, 21, 654, DateTimeKind.Local).AddTicks(3643),
                             DaysName = "Суббота"
                         });
                 });
@@ -598,15 +598,15 @@ namespace MyFaculty.Persistence.Migrations
 
             modelBuilder.Entity("MyFaculty.Domain.Entities.ExpertSystemStateTransition", b =>
                 {
-                    b.HasOne("MyFaculty.Domain.Entities.ExpertSystemAnswer", "Answer")
-                        .WithOne("ExpertSystemStateTransition")
-                        .HasForeignKey("MyFaculty.Domain.Entities.ExpertSystemStateTransition", "AnswerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("MyFaculty.Domain.Entities.ExpertSystemState", "FinalState")
                         .WithMany("ExpertSystemFinalStateTransitions")
                         .HasForeignKey("FinalStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyFaculty.Domain.Entities.ExpertSystemAnswer", "Answer")
+                        .WithOne("ExpertSystemStateTransition")
+                        .HasForeignKey("MyFaculty.Domain.Entities.ExpertSystemStateTransition", "InitialStateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

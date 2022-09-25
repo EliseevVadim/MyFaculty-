@@ -1,4 +1,4 @@
-2022-09-19 10:01:28.257 +03:00 [FTL] An error occurred while app initialization
+2022-09-25 10:27:31.857 +03:00 [FTL] An error occurred while app initialization
 System.InvalidOperationException: An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure()' to the 'UseMySql' call.
  ---> MySqlConnector.MySqlException (0x80004005): Unable to connect to any of the specified MySQL hosts.
    at MySqlConnector.Core.ServerSession.ConnectAsync(ConnectionSettings cs, Int32 startTickCount, ILoadBalancer loadBalancer, IOBehavior ioBehavior, CancellationToken cancellationToken) in /_/src/MySqlConnector/Core/ServerSession.cs:line 417

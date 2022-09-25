@@ -26,6 +26,9 @@ namespace MyFaculty.Application.Common.Interfaces
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<TeacherDiscipline> TeacherDisciplines { get; set; }
         public DbSet<Faculty> Faculties { get; set; }
+        public DbSet<ExpertSystemState> ExpertSystemStates { get; set; }
+        public DbSet<ExpertSystemStateTransition> ExpertSystemStateTransitions { get; set; }
+        public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
