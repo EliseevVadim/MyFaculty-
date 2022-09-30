@@ -27,7 +27,6 @@
     font-weight: 600;
 }
 
-
-/*.container {
-    margin: 100px auto;
-}*/
+.first-nav-link {
+    margin-top: 1em;
+}

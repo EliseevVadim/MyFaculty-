@@ -1,7 +1,9 @@
 ﻿using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using MyFaculty.Identity.Models;
+using MyFaculty.Identity.Services;
 using MyFaculty.Identity.ViewModels;
 using System.Threading.Tasks;
 using Unidecode.NET;
@@ -13,12 +15,14 @@ namespace MyFaculty.Identity.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
         private readonly IIdentityServerInteractionService _interactionService;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IIdentityServerInteractionService interactionService)
+        public AuthController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IIdentityServerInteractionService interactionService, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _interactionService = interactionService;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -96,6 +100,64 @@ namespace MyFaculty.Identity.Controllers
             await _signInManager.SignOutAsync();
             var logoutRequest = await _interactionService.GetLogoutContextAsync(logoutId);
             return Redirect(logoutRequest.PostLogoutRedirectUri);
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordViewModel());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await _userManager.FindByEmailAsync(viewModel.Email);
+                if (user == null)
+                {
+                    viewModel.ErrorMessage = "Произошла ошибка. Действие невозможно.";
+                    return View(viewModel);
+                }
+                string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                string callbackUri = Url.Action("ResetPassword", "Auth", new
+                {
+                    userId= user.Id,
+                    code = code
+                });
+                EmailService emailService = new EmailService(_configuration);
+                await emailService.SendEmailAsync(viewModel.Email, "Восстановление пароля", $"Для сброса пароля пройдите по <a href='{_configuration["BaseUrl"] + callbackUri}'>ссылке</a>.");
+                return View("ForgotPasswordConfirmation");
+            }
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult ResetPassword(string code)
+        {
+            return code == null ? View("Error") : View(new ResetPasswordViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+                return View(viewModel);
+            AppUser user = await _userManager.FindByEmailAsync(viewModel.Email);
+            if (user == null)
+            {
+                viewModel.ErrorMessage = "Произошла ошибка. Действие невозможно.";
+                return View(viewModel);
+            }
+            var result = await _userManager.ResetPasswordAsync(user, viewModel.Code, viewModel.Password);
+            if (result.Succeeded)
+                return View("SuccessPasswordReset");
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(viewModel);
         }
     }
 }
