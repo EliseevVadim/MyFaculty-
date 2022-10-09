@@ -32,6 +32,7 @@ namespace MyFaculty.Application.Features.Courses.Commands.UpdateCourse
                 throw new EntityNotFoundException(nameof(Course), request.Id);
             course.CourseName = request.CourseName;
             course.CourseNumber = request.CourseNumber;
+            course.FacultyId = request.FacultyId;
             course.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<CourseViewModel>(course);

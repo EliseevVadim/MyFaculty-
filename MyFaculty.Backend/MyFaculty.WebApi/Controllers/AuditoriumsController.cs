@@ -7,6 +7,7 @@ using MyFaculty.Application.Features.Auditoriums.Commands.DeleteAuditorium;
 using MyFaculty.Application.Features.Auditoriums.Commands.UpdateAuditorium;
 using MyFaculty.Application.Features.Auditoriums.Queries.GetAuditoriumInfo;
 using MyFaculty.Application.Features.Auditoriums.Queries.GetAuditoriums;
+using MyFaculty.Application.Features.Auditoriums.Queries.GetAuditoriumsForFaculty;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
@@ -63,6 +64,28 @@ namespace MyFaculty.WebApi.Controllers
                 Id = id
             };
             AuditoriumViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the list of auditoriums for a specific faculty
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /auditoriums/faculty/1
+        /// </remarks>
+        /// <param name="id">Specific faculty id (integer)</param>
+        /// <returns>AuditoriumsListViewModel</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("faculty/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<AuditoriumsListViewModel>> GetByFacultyId(int id)
+        {
+            GetAuditoriumsForFacultyQuery query = new GetAuditoriumsForFacultyQuery()
+            {
+                FacultyId = id
+            };
+            AuditoriumsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 

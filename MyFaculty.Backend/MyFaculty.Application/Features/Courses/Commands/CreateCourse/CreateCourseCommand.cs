@@ -13,5 +13,6 @@ namespace MyFaculty.Application.Features.Courses.Commands.CreateCourse
     {
         public string CourseName { get; set; }
         public int CourseNumber { get; set; }
+        public int FacultyId { get; set; }
     }
 }

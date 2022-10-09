@@ -7,6 +7,7 @@ using MyFaculty.Application.Features.Courses.Commands.DeleteCourse;
 using MyFaculty.Application.Features.Courses.Commands.UpdateCourse;
 using MyFaculty.Application.Features.Courses.Queries.GetCourseInfo;
 using MyFaculty.Application.Features.Courses.Queries.GetCourses;
+using MyFaculty.Application.Features.Courses.Queries.GetCoursesForFaculty;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
@@ -67,6 +68,28 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
+        /// Gets the list of courses for a specific faculty
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /courses/faculty/1
+        /// </remarks>
+        /// <param name="id">Specific faculty id (integer)</param>
+        /// <returns>CoursesListViewModel</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("faculty/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<CoursesListViewModel>> GetByFacultyId(int id)
+        {
+            GetCoursesForFacultyQuery query = new GetCoursesForFacultyQuery()
+            {
+                FacultyId = id
+            };
+            CoursesListViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
         /// Creates the course
         /// </summary>
         /// <remarks>
@@ -74,7 +97,8 @@ namespace MyFaculty.WebApi.Controllers
         /// POST /courses
         /// {
         ///     "courseName": "string",
-        ///     "courseNumber": 0
+        ///     "courseNumber": 0,
+        ///     "facultyId": 0
         /// }
         /// </remarks>
         /// <param name="createCourseDto">CreateCourseDto object</param>
@@ -101,7 +125,8 @@ namespace MyFaculty.WebApi.Controllers
         /// {
         ///     "id": 1,
         ///     "courseName": "string",
-        ///     "courseNumber": 0
+        ///     "courseNumber": 0,
+        ///     "facultyId": 0
         /// }
         /// </remarks>
         /// <param name="updateCourseDto">UpdateCourseDto object</param>

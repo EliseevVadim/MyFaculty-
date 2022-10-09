@@ -27,7 +27,10 @@ namespace MyFaculty.Application.Features.Groups.Queries.GetGroupInfo
 
         public async Task<GroupViewModel> Handle(GetGroupInfoQuery request, CancellationToken cancellationToken)
         {
-            Group group = await _context.Groups.FirstOrDefaultAsync(group => group.Id == request.Id, cancellationToken);
+            Group group = await _context.Groups
+                .Include(group => group.Course)
+                    .ThenInclude(course => course.Faculty)
+                .FirstOrDefaultAsync(group => group.Id == request.Id, cancellationToken);
             if (group == null)
                 throw new EntityNotFoundException(nameof(Group), request.Id);
             return _mapper.Map<GroupViewModel>(group);

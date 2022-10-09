@@ -51,6 +51,12 @@ const actions = {
 				})
 		});
 	},
+	loadGroupsByFacultyId: async (context, id) => {
+		await axios.get(config.apiUrl + '/api/groups/faculty/' + id)
+			.then((response) => {
+				context.commit('setGroups', response.data);
+			})
+	},
 	updateGroup: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.put(config.apiUrl + '/api/groups', {

@@ -7,6 +7,7 @@ using MyFaculty.Application.Features.Groups.Commands.DeleteGroup;
 using MyFaculty.Application.Features.Groups.Commands.UpdateGroup;
 using MyFaculty.Application.Features.Groups.Queries.GetGroupInfo;
 using MyFaculty.Application.Features.Groups.Queries.GetGroups;
+using MyFaculty.Application.Features.Groups.Queries.GetGroupsForFaculty;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
@@ -63,6 +64,28 @@ namespace MyFaculty.WebApi.Controllers
                 Id = id
             };
             GroupViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the list of groups for a specific faculty
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /groups/faculty/1
+        /// </remarks>
+        /// <param name="id">Specific faculty id (integer)</param>
+        /// <returns>CoursesListViewModel</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("faculty/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<CoursesListViewModel>> GetByFacultyId(int id)
+        {
+            GetGroupsForFacultyQuery query = new GetGroupsForFacultyQuery()
+            {
+                FacultyId = id
+            };
+            GroupsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 

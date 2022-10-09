@@ -14,5 +14,6 @@ namespace MyFaculty.Application.Features.Courses.Commands.UpdateCourse
         public int Id { get; set; }
         public string CourseName { get; set; }
         public int CourseNumber { get; set; }
+        public int FacultyId { get; set; }
     }
 }

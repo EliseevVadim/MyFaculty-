@@ -29,6 +29,7 @@ namespace MyFaculty.Application.Features.Courses.Commands.CreateCourse
             {
                 CourseName = request.CourseName,
                 CourseNumber = request.CourseNumber,
+                FacultyId = request.FacultyId,
                 Created = DateTime.Now
             };
             await _context.Courses.AddAsync(course);

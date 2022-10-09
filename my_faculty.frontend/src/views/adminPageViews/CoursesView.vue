@@ -48,6 +48,18 @@
                                     v-model="course.course_name"
                                 ></v-text-field>
                             </v-col>
+							<v-col cols="12">
+								<v-autocomplete
+									label="Название факультета*"
+									required
+									:rules="commonRules"
+									:items="this.FACULTIES.faculties"
+									item-text="facultyName"
+									item-value="id"
+									hide-details="auto"
+									v-model="course.faculty_id"
+								></v-autocomplete>
+							</v-col>
                         </v-form>
                     </v-container>
                     <small>Поля, помеченные * обязательны к заполнению</small>
@@ -96,6 +108,9 @@
                         <td>
                             {{item.courseNumber}}
                         </td>
+						<td>
+							{{item.facultyName}}
+						</td>
                         <td>
                             {{item.courseName}}
                         </td>
@@ -145,7 +160,8 @@ export default {
 			errorText: "",
 			course: {
 				course_number: null,
-				course_name: ""
+				course_name: "",
+				faculty_id: null
 			},
 			numberRules: [
 				v => !!v || 'Поле является обязательным для заполнения',
@@ -160,6 +176,7 @@ export default {
 					align: 'start',
 					value: 'courseNumber',
 				},
+				{ text: 'Название факультета', value: 'facultyName' },
 				{ text: 'Название курса', value: 'courseName' },
 				{ text: 'Действия', value: 'actions', sortable: false }
 			],
@@ -167,6 +184,7 @@ export default {
 	},
 	mounted() {
 		this.$store.dispatch('loadAllCourses');
+		this.$store.dispatch('loadAllFaculties');
 	},
 	methods: {
 		openAddingForm() {
@@ -206,6 +224,7 @@ export default {
 		resetCourse() {
 			this.course.course_name = "";
 			this.course.course_number = null;
+			this.course.faculty_id = null;
 		},
 		deleteCourse(id) {
 			if (confirm("Вы действительно хотите удалить данную запись")) {
@@ -228,13 +247,15 @@ export default {
 					this.course.id = response.data.id;
 					this.course.course_name = response.data.courseName;
 					this.course.course_number = response.data.courseNumber;
+					this.course.faculty_id = response.data.facultyId;
 					this.updating = true;
 					this.showAddingForm = true;
 				})
 		}
 	},
 	computed: {
-		...mapGetters(['COURSES'])
+		...mapGetters(['COURSES']),
+		...mapGetters(['FACULTIES'])
 	}
 }
 </script>

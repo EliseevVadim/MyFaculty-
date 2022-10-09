@@ -8,7 +8,18 @@
 			<v-form
 				ref="searchForm"
 				lazy-validation>
-				<v-col cols="12">
+				<v-select
+					:items="this.FACULTIES.faculties"
+					item-text="facultyName"
+					item-value="id"
+					label="Выберите интересующий факультет*"
+					@change="loadGroupsForFaculty"
+					v-model="selectedFacultyId"
+				></v-select>
+				<v-col
+					v-if="groupsAreLoaded"
+					cols="12"
+				>
 					<v-autocomplete
 						label="Курс и группа"
 						required
@@ -23,7 +34,9 @@
 				<v-btn
 					color="success"
 					dark
-					@click="searchPairs">
+					@click="searchPairs"
+					:disabled="!groupsAreLoaded"
+				>
 					Поиск
 				</v-btn>
 			</v-form>
@@ -46,6 +59,9 @@
 											</th>
 											<th class="text-left">
 												Название
+											</th>
+											<th class="text-left">
+												Факультет
 											</th>
 											<th class="text-left">
 												Аудитория
@@ -71,6 +87,7 @@
 										>
 											<td>{{ item.pairInfo.pairNumber }}</td>
 											<td>{{ item.pairName }}</td>
+											<td>{{ item.auditorium.facultyName }}</td>
 											<td>{{ item.auditorium.auditoriumName }}</td>
 											<td>{{ item.teachersFIO }}</td>
 											<td>{{ item.pairInfo.startTime }}</td>
@@ -92,6 +109,9 @@
 											</th>
 											<th class="text-left">
 												Название
+											</th>
+											<th class="text-left">
+												Факультет
 											</th>
 											<th class="text-left">
 												Аудитория
@@ -117,6 +137,7 @@
 										>
 											<td>{{ item.pairInfo.pairNumber }}</td>
 											<td>{{ item.pairName }}</td>
+											<td>{{ item.auditorium.facultyName }}</td>
 											<td>{{ item.auditorium.auditoriumName }}</td>
 											<td>{{ item.teachersFIO }}</td>
 											<td>{{ item.pairInfo.startTime }}</td>
@@ -138,6 +159,9 @@
 											</th>
 											<th class="text-left">
 												Название
+											</th>
+											<th class="text-left">
+												Факультет
 											</th>
 											<th class="text-left">
 												Аудитория
@@ -163,6 +187,7 @@
 										>
 											<td>{{ item.pairInfo.pairNumber }}</td>
 											<td>{{ item.pairName }}</td>
+											<td>{{ item.auditorium.facultyName }}</td>
 											<td>{{ item.auditorium.auditoriumName }}</td>
 											<td>{{ item.teachersFIO }}</td>
 											<td>{{ item.pairInfo.startTime }}</td>
@@ -184,6 +209,9 @@
 											</th>
 											<th class="text-left">
 												Название
+											</th>
+											<th class="text-left">
+												Факультет
 											</th>
 											<th class="text-left">
 												Аудитория
@@ -209,6 +237,7 @@
 										>
 											<td>{{ item.pairInfo.pairNumber }}</td>
 											<td>{{ item.pairName }}</td>
+											<td>{{ item.auditorium.facultyName }}</td>
 											<td>{{ item.auditorium.auditoriumName }}</td>
 											<td>{{ item.teachersFIO }}</td>
 											<td>{{ item.pairInfo.startTime }}</td>
@@ -230,6 +259,9 @@
 											</th>
 											<th class="text-left">
 												Название
+											</th>
+											<th class="text-left">
+												Факультет
 											</th>
 											<th class="text-left">
 												Аудитория
@@ -255,6 +287,7 @@
 										>
 											<td>{{ item.pairInfo.pairNumber }}</td>
 											<td>{{ item.pairName }}</td>
+											<td>{{ item.auditorium.facultyName }}</td>
 											<td>{{ item.auditorium.auditoriumName }}</td>
 											<td>{{ item.teachersFIO }}</td>
 											<td>{{ item.pairInfo.startTime }}</td>
@@ -276,6 +309,9 @@
 											</th>
 											<th class="text-left">
 												Название
+											</th>
+											<th class="text-left">
+												Факультет
 											</th>
 											<th class="text-left">
 												Аудитория
@@ -301,6 +337,7 @@
 										>
 											<td>{{ item.pairInfo.pairNumber }}</td>
 											<td>{{ item.pairName }}</td>
+											<td>{{ item.auditorium.facultyName }}</td>
 											<td>{{ item.auditorium.auditoriumName }}</td>
 											<td>{{ item.teachersFIO }}</td>
 											<td>{{ item.pairInfo.startTime }}</td>
@@ -332,6 +369,8 @@ export default {
     name: "PairsContentView",
 	data() {
 		return {
+			selectedFacultyId: null,
+			groupsAreLoaded: null,
 			formValid: true,
 			showResult: false,
 			searchParams: {
@@ -350,10 +389,20 @@ export default {
 		}
 	},
 	methods: {
+		loadGroupsForFaculty() {
+			this.clearResults();
+			this.$loading(true);
+			this.$store.dispatch('loadGroupsByFacultyId', this.selectedFacultyId)
+				.then(() => {
+					this.$loading(false);
+					this.groupsAreLoaded = this.GROUPS.groups.length > 0;
+				})
+		},
 		getFullGroupName(item) {
 			return item.groupName + ' ' + '(' + item.courseName + ')';
 		},
 		searchPairs() {
+			this.clearResults();
 			this.formValid = this.$refs.searchForm.validate();
 			if(!this.formValid)
 				return;
@@ -387,12 +436,22 @@ export default {
 				.finally(() => {
 					this.$loading(false);
 				})
+		},
+		clearResults() {
+			this.mondayPairs = [];
+			this.tuesdayPairs = [];
+			this.wednesdayPairs = [];
+			this.thursdayPairs = [];
+			this.fridayPairs = [];
+			this.saturdayPairs = [];
+			this.showResult = false;
 		}
 	},
 	mounted() {
-		this.$store.dispatch('loadAllGroups');
+		this.$store.dispatch('loadAllFaculties');
 	},
 	computed: {
+		...mapGetters(['FACULTIES']),
 		...mapGetters(['GROUPS'])
 	}
 }

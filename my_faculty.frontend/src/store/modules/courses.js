@@ -28,7 +28,8 @@ const actions = {
 		return new Promise(async (resolve, reject) => {
 			await axios.post(config.apiUrl + '/api/courses', {
 				'courseName': payload.course_name,
-				'courseNumber': payload.course_number
+				'courseNumber': payload.course_number,
+				'facultyId': payload.faculty_id
 			}, {
 				headers: config.headers
 			})
@@ -51,12 +52,19 @@ const actions = {
 				})
 		});
 	},
+	loadCoursesByFacultyId: async (context, id) => {
+		await axios.get(config.apiUrl + '/api/courses/faculty/' + id)
+			.then((response) => {
+				context.commit('setCourses', response.data);
+			})
+	},
 	updateCourse: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.put(config.apiUrl + '/api/courses', {
 				'id': payload.id,
 				'courseName': payload.course_name,
-				'courseNumber': payload.course_number
+				'courseNumber': payload.course_number,
+				'facultyId': payload.faculty_id
 			}, {
 				headers: config.headers
 			})

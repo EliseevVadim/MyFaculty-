@@ -15,9 +15,15 @@ namespace MyFaculty.Persistence.EntityConfigurations
         {
             builder.HasKey(course => course.Id);
             builder.Property(course => course.Id).ValueGeneratedOnAdd();
+            builder.Property(course => course.FacultyId)
+                .IsRequired(false)
+                .HasDefaultValue(null);
             builder.HasMany(course => course.Groups)
                 .WithOne(group => group.Course)
                 .HasForeignKey(group => group.CourseId);
+            builder.HasOne(course => course.Faculty)
+                .WithMany(faculty => faculty.Courses)
+                .HasForeignKey(course => course.FacultyId);
         }
     }
 }

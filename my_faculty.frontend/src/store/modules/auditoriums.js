@@ -53,6 +53,12 @@ const actions = {
 				})
 		});
 	},
+	loadAuditoriumsByFacultyId: async (context, id) => {
+		await axios.get(config.apiUrl + '/api/auditoriums/faculty/' + id)
+			.then((response) => {
+				context.commit('setAuditoriums', response.data);
+			})
+	},
 	updateAuditorium: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.put(config.apiUrl + '/api/auditoriums', {

@@ -29,7 +29,23 @@
 							lazy-validation
 							ref="submitForm"
 							v-model="formValid">
-							<v-col cols="12">
+							<v-col
+								cols="12"
+							>
+								<v-select
+									:items="this.FACULTIES.faculties"
+									item-text="facultyName"
+									item-value="id"
+									:rules="commonRules"
+									label="Выберите факультет*"
+									@change="loadCoursesList"
+									v-model="selectedFacultyId"
+								></v-select>
+							</v-col>
+							<v-col
+								v-if="coursesAreLoaded"
+								cols="12"
+							>
 								<v-autocomplete
 									label="Название курса*"
 									required
@@ -41,6 +57,10 @@
 									v-model="group.course_id"
 								></v-autocomplete>
 							</v-col>
+							<h1 v-else-if="coursesAreLoaded === false" class="red--text">
+								Для данного факультета информация о курсах отсутствует.
+								Дальнейшее заполнение невозможно.
+							</h1>
 							<v-col cols="12">
 								<v-text-field
 									label="Название группы*"
@@ -96,6 +116,9 @@
 					<tbody>
 					<tr v-for="(item,index) in items" :key="index">
 						<td>
+							{{item.facultyName}}
+						</td>
+						<td>
 							{{item.groupName}}
 						</td>
 						<td>
@@ -140,6 +163,8 @@ export default {
     name: "GroupsView",
 	data () {
 		return {
+			selectedFacultyId: null,
+			coursesAreLoaded: null,
 			showAddingForm: false,
 			search: '',
 			formValid: true,
@@ -154,17 +179,18 @@ export default {
 			],
 			headers: [
 				{
-					text: 'Название группы',
+					text: 'Название факультета',
 					align: 'start',
-					value: 'groupName',
+					value: 'facultyName',
 				},
+				{ text: 'Название группы', value: 'groupName' },
 				{ text: 'Название курса', value: 'courseName' },
 				{ text: 'Действия', value: 'actions', sortable: false }
 			],
 		}
 	},
 	mounted() {
-		this.$store.dispatch('loadAllCourses');
+		this.$store.dispatch('loadAllFaculties');
 		this.$store.dispatch('loadAllGroups');
 	},
 	methods: {
@@ -173,6 +199,14 @@ export default {
 			this.resetGroup();
 			this.updating = false;
 			this.showAddingForm = true;
+		},
+		loadCoursesList() {
+			this.$loading(true);
+			this.$store.dispatch('loadCoursesByFacultyId', this.selectedFacultyId)
+				.then(() => {
+					this.$loading(false);
+					this.coursesAreLoaded = this.COURSES.courses.length > 0;
+				})
 		},
 		sendData() {
 			this.formValid = this.$refs.submitForm.validate();
@@ -205,6 +239,8 @@ export default {
 		resetGroup() {
 			this.group.group_name = "";
 			this.group.course_id = null;
+			this.selectedFacultyId = null;
+			this.coursesAreLoaded = null;
 		},
 		deleteGroup(id) {
 			if (confirm("Вы действительно хотите удалить данную запись")) {
@@ -224,15 +260,18 @@ export default {
 			this.group.id = id;
 			this.$store.dispatch('loadGroupById', id)
 				.then((response) => {
+					this.selectedFacultyId = response.data.course.facultyId;
 					this.group.id = response.data.id;
 					this.group.group_name = response.data.groupName;
 					this.group.course_id = response.data.courseId;
+					this.loadCoursesList();
 					this.updating = true;
 					this.showAddingForm = true;
 				})
 		}
 	},
 	computed: {
+		...mapGetters(['FACULTIES']),
 		...mapGetters(['COURSES']),
 		...mapGetters(['GROUPS'])
 	}

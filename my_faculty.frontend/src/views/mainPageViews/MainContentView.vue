@@ -91,14 +91,14 @@
 										v-for="(item, i) in selectedAuditorium.pairs"
 										:key="i"
 									>
-										<td>{{ item.pairInfo.pairNumber }}</td>
-										<td>{{ item.pairName }}</td>
-										<td>{{ item.pairInfo.startTime }}</td>
-										<td>{{ item.pairInfo.endTime }}</td>
-										<td>{{ item.group.groupName }}</td>
-										<td>{{ item.group.courseName }}</td>
-										<td>{{ item.dayOfWeek }}</td>
-										<td>{{ item.pairRepeatingName }}</td>
+										<td class="text-left">{{ item.pairInfo.pairNumber }}</td>
+										<td class="text-left">{{ item.pairName }}</td>
+										<td class="text-left">{{ item.pairInfo.startTime }}</td>
+										<td class="text-left">{{ item.pairInfo.endTime }}</td>
+										<td class="text-left">{{ item.group.groupName }}</td>
+										<td class="text-left">{{ item.group.courseName }}</td>
+										<td class="text-left">{{ item.dayOfWeek }}</td>
+										<td class="text-left">{{ item.pairRepeatingName }}</td>
 									</tr>
 									</tbody>
 								</template>
@@ -140,6 +140,7 @@ export default {
 	},
 	methods: {
 		loadFloorsList() {
+			this.clearResults();
 			this.$loading(true);
 			this.$store.dispatch('loadFloorsByFacultyId', this.facultyId)
 				.then(() => {
@@ -243,15 +244,21 @@ export default {
 			this.$d3.selectAll('#floor-container > g').remove();
 		},
 		showAuditoriumInfo(id) {
+			this.$loading(true);
 			axios.get(config.apiUrl + '/api/auditoriums/' + id)
 				.then((response) => {
 					this.selectedAuditorium = response.data;
-					console.log(this.selectedAuditorium);
+					this.$loading(false);
 				})
 				.catch((error) => {
 					console.log(error.response.data);
 				})
 			this.showAuditoriumDetails = true;
+		},
+		clearResults() {
+			this.clearFloorArea();
+			this.showAuditoriumDetails = false;
+			this.floorsAreLoaded = false;
 		}
 	},
 	computed: {

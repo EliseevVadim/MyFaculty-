@@ -13,6 +13,7 @@ namespace MyFaculty.Application.Features.Courses.Commands.CreateCourse
         {
             RuleFor(command => command.CourseName).NotEmpty().MaximumLength(250);
             RuleFor(command => command.CourseNumber).NotEmpty();
+            RuleFor(command => command.FacultyId).NotEmpty();
         }
     }
 }

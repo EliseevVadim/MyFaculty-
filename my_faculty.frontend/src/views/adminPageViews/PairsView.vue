@@ -48,7 +48,23 @@
 									v-model="pair.pair_info_id"
 								></v-select>
 							</v-col>
-							<v-col cols="12">
+							<v-col
+								cols="12"
+							>
+								<v-select
+									:items="this.FACULTIES.faculties"
+									item-text="facultyName"
+									item-value="id"
+									:rules="commonRules"
+									label="Выберите факультет для группы*"
+									@change="loadGroupsList"
+									v-model="selectedFacultyForGroupsId"
+								></v-select>
+							</v-col>
+							<v-col
+								v-if="groupsAreLoaded"
+								cols="12"
+							>
 								<v-autocomplete
 									label="Группа*"
 									required
@@ -60,7 +76,27 @@
 									v-model="pair.group_id"
 								></v-autocomplete>
 							</v-col>
-							<v-col cols="12">
+							<h1 v-else-if="groupsAreLoaded === false" class="red--text">
+								Для данного факультета информация о группах отсутствует.
+								Дальнейшее заполнение невозможно.
+							</h1>
+							<v-col
+								cols="12"
+							>
+								<v-select
+									:items="this.FACULTIES.faculties"
+									item-text="facultyName"
+									item-value="id"
+									:rules="commonRules"
+									label="Выберите факультет для аудитории*"
+									@change="loadAuditoriumsList"
+									v-model="selectedFacultyForAuditoriumsId"
+								></v-select>
+							</v-col>
+							<v-col
+								v-if="auditoriumsAreLoaded"
+								cols="12"
+							>
 								<v-autocomplete
 									label="Аудитория*"
 									required
@@ -72,6 +108,10 @@
 									v-model="pair.auditorium_id"
 								></v-autocomplete>
 							</v-col>
+							<h1 v-else-if="auditoriumsAreLoaded === false" class="red--text">
+								Для данного факультета информация об аудиториях отсутствует.
+								Дальнейшее заполнение невозможно.
+							</h1>
 							<v-col cols="12">
 								<v-autocomplete
 									label="ФИО преподавателя*"
@@ -176,10 +216,16 @@
 							{{item.pairInfo.endTime}}
 						</td>
 						<td>
+							{{item.group.facultyName}}
+						</td>
+						<td>
 							{{item.group.groupName}}
 						</td>
 						<td>
 							{{item.group.courseName}}
+						</td>
+						<td>
+							{{item.auditorium.facultyName}}
 						</td>
 						<td>
 							{{item.auditorium.auditoriumName}}
@@ -232,6 +278,10 @@ export default {
     name: "PairsView",
 	data () {
 		return {
+			selectedFacultyForGroupsId: null,
+			groupsAreLoaded: null,
+			selectedFacultyForAuditoriumsId: null,
+			auditoriumsAreLoaded: null,
 			showAddingForm: false,
 			search: '',
 			formValid: true,
@@ -260,8 +310,10 @@ export default {
 				{ text: 'Название пары', value: 'pairName' },
 				{ text: 'Начало пары', value: 'pairInfo.startTime' },
 				{ text: 'Конец пары', value: 'pairInfo.endTime' },
+				{ text: 'Факультет (группа)', value: 'group.facultyName' },
 				{ text: 'Группа', value: 'group.groupName' },
 				{ text: 'Курс', value: 'group.courseName' },
+				{ text: 'Факультет (аудитория)', value: 'auditorium.facultyName' },
 				{ text: 'Аудитория', value: 'auditorium.auditoriumName' },
 				{ text: 'Преподаватель', value: 'teachersFIO' },
 				{ text: 'День недели', value: 'dayOfWeek' },
@@ -277,8 +329,7 @@ export default {
 		this.$store.dispatch('loadAllDaysOfWeek');
 		this.$store.dispatch('loadAllPairRepeatings');
 		this.$store.dispatch('loadAllDisciplines');
-		this.$store.dispatch('loadAllAuditoriums');
-		this.$store.dispatch('loadAllGroups');
+		this.$store.dispatch('loadAllFaculties');
 	},
 	methods: {
 		getFullGroupName(item) {
@@ -289,6 +340,22 @@ export default {
 			this.resetPair();
 			this.updating = false;
 			this.showAddingForm = true;
+		},
+		loadGroupsList() {
+			this.$loading(true);
+			this.$store.dispatch('loadGroupsByFacultyId', this.selectedFacultyForGroupsId)
+				.then(() => {
+					this.$loading(false);
+					this.groupsAreLoaded = this.GROUPS.groups.length > 0;
+				})
+		},
+		loadAuditoriumsList() {
+			this.$loading(true);
+			this.$store.dispatch('loadAuditoriumsByFacultyId', this.selectedFacultyForAuditoriumsId)
+				.then(() => {
+					this.$loading(false);
+					this.auditoriumsAreLoaded = this.AUDITORIUMS.auditoriums.length > 0;
+				})
 		},
 		sendData() {
 			this.formValid = this.$refs.submitForm.validate();
@@ -328,6 +395,10 @@ export default {
 			this.pair.day_of_week_id = null;
 			this.pair.repeating_id = null;
 			this.pair.group_id = null;
+			this.auditoriumsAreLoaded = null;
+			this.groupsAreLoaded = null;
+			this.selectedFacultyForAuditoriumsId = null;
+			this.selectedFacultyForGroupsId = null;
 		},
 		deletePair(id) {
 			if (confirm("Вы действительно хотите удалить данную запись")) {
@@ -347,6 +418,11 @@ export default {
 			this.pair.id = id;
 			this.$store.dispatch('loadPairById', id)
 				.then((response) => {
+					console.log(response.data);
+					this.selectedFacultyForAuditoriumsId = response.data.auditorium.facultyId;
+					this.loadAuditoriumsList();
+					this.selectedFacultyForGroupsId = response.data.group.facultyId;
+					this.loadGroupsList();
 					this.pair.id = response.data.id;
 					this.pair.pair_name = response.data.pairName;
 					this.pair.pair_info_id = response.data.pairInfoId;
@@ -369,7 +445,8 @@ export default {
 		...mapGetters(['PAIR_REPEATINGS']),
 		...mapGetters(['DAYS_OF_WEEK']),
 		...mapGetters(['PAIRS']),
-		...mapGetters(['GROUPS'])
+		...mapGetters(['GROUPS']),
+		...mapGetters(['FACULTIES'])
 	}
 }
 </script>

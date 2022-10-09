@@ -27,7 +27,12 @@ namespace MyFaculty.Application.Features.Pairs.Queries.GetPairInfo
 
         public async Task<PairViewModel> Handle(GetPairInfoQuery request, CancellationToken cancellationToken)
         {
-            Pair pair = await _context.Pairs.FirstOrDefaultAsync(pair => pair.Id == request.Id, cancellationToken);
+            Pair pair = await _context.Pairs
+                .Include(pair => pair.Auditorium)
+                    .ThenInclude(auditorium => auditorium.Floor.Faculty)
+                .Include(pair => pair.Group)
+                    .ThenInclude(group => group.Course.Faculty)
+                .FirstOrDefaultAsync(pair => pair.Id == request.Id, cancellationToken);
             if (pair == null)
                 throw new EntityNotFoundException(nameof(Pair), request.Id);
             return _mapper.Map<Pair, PairViewModel>(pair);

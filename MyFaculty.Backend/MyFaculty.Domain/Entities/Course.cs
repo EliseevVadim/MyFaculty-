@@ -15,6 +15,8 @@ namespace MyFaculty.Domain.Entities
         public int Id { get; set; }
         public string CourseName { get; set; }
         public int CourseNumber { get; set; }
+        public int? FacultyId { get; set; }
+        public Faculty Faculty { get; set; }
         public List<Group> Groups { get; set; } = new();
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }

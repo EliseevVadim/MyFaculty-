@@ -12,6 +12,7 @@ namespace MyFaculty.Domain.Entities
         public string FacultyName { get; set; }
         public string OfficialWebsite { get; set; }
         public List<Floor> Floors { get; set; }
+        public List<Course> Courses { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
     }
