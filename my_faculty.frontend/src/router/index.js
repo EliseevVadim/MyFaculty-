@@ -5,6 +5,7 @@ import AdminPageView from "@/views/AdminPageView";
 import SignInCallback from "@/components/SignInCallback";
 import SignOutCallback from "@/components/SignOutCallback";
 import RedirectSilentRenew from "@/components/RedirectSilentRenew";
+import AccountPageView from "@/views/AccountPageView";
 
 Vue.use(VueRouter)
 
@@ -122,6 +123,11 @@ const routes = [
                 component: () => import('../views/adminPageViews/TeachersDisciplinesView')
             }
         ]
+    },
+    {
+        path: '/personal',
+        name: 'account',
+        component: AccountPageView
     },
     {
         path: '/signin-oidc',

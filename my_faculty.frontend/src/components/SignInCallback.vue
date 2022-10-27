@@ -8,7 +8,7 @@ export default {
     created() {
         this.$oidc.completeLogin()
             .then((redirectPath) => {
-                this.$router.push('/');
+                this.$router.push('/personal');
             })
             .catch((error) => {
                 console.log(error);

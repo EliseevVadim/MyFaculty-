@@ -28,7 +28,7 @@
                             <v-icon left>
                                 mdi-account-circle
                             </v-icon>
-                            Добро пожаловать, Администратор
+                            Добро пожаловать, {{userName}}
                         </v-btn>
                     </template>
                     <v-list>
@@ -109,6 +109,7 @@ export default {
     data() {
         return {
             userAuthorized: false,
+			userName: null,
             drawer: false,
             items: [
 				{text : "Факультеты", icon : "mdi-floor-plan", path: '/adminPanel/faculties'},
@@ -145,6 +146,8 @@ export default {
     async mounted() {
 		document.title = "Страница администратора";
         this.userAuthorized = await this.$oidc.isAdmin();
+		let profile = await this.$oidc.getUserProfile();
+		this.userName = profile.FirstName;
 		if (!this.userAuthorized) {
 			this.mouse = {
 				x: this.DISPLAY_WIDTH / 2,

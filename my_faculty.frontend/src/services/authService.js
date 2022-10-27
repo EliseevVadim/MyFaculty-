@@ -28,16 +28,6 @@ oidcClient.events.addAccessTokenExpiring(() => {
     console.log('token expiring: ', arguments);
 });
 
-/*oidcClient.events.addAccessTokenExpired(() => {
-    oidcClient.signinSilent()
-        .then((user) => {
-            console.log(user);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
-});*/
-
 oidcClient.events.addUserSignedOut(() => {
     alert('Going out!');
     oidcClient.signoutRedirect()
@@ -64,6 +54,11 @@ export default new class SecurityService {
         return !!user && !user.expired && user.profile.role.includes('Admin');
     }
 
+    async isUser() {
+        let user = await oidcClient.getUser();
+        return !!user && !user.expired && user.profile.role.includes('User');
+    }
+
     async completeLogin() {
         return await oidcClient.signinRedirectCallback();
     }
@@ -83,5 +78,10 @@ export default new class SecurityService {
     async getToken() {
         let user = await oidcClient.getUser();
         return !!user && !user.expired ? user.access_token : null;
+    }
+
+    async getUserProfile() {
+        let user = await oidcClient.getUser();
+        return user.profile;
     }
 }

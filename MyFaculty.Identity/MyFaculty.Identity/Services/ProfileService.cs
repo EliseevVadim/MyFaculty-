@@ -24,7 +24,8 @@ namespace MyFaculty.Identity.Services
             AppUser user = await _userManager.GetUserAsync(context.Subject);
             List<Claim> claims = new List<Claim>()
             {
-                new Claim("FirstName", user.FirstName)
+                new Claim("FirstName", user.FirstName),
+                new Claim("LastName", user.LastName)
             };
             List<Claim> roles = context.Subject.FindAll(JwtClaimTypes.Role).ToList();
             context.IssuedClaims.AddRange(claims);
