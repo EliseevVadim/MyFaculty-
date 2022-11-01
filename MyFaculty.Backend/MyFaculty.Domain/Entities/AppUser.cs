@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MyFaculty.Identity.Models
+namespace MyFaculty.Domain.Entities
 {
-    public class AppUser : IdentityUser<int>
+    public class AppUser
     {
+        public int Id { get; set; }
+        public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string AvatarPath { get; set; }
@@ -13,5 +18,6 @@ namespace MyFaculty.Identity.Models
         public string Website { get; set; }
         public string VKLink { get; set; }
         public string TelegramLink { get; set; }
+        public City City { get; set; }
     }
 }

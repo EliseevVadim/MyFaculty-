@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyFaculty.Persistence;
 
 namespace MyFaculty.Persistence.Migrations
 {
     [DbContext(typeof(MFDbContext))]
-    partial class MFDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221101110449_AddUsersTableWithCityAndCountryRelationships")]
+    partial class AddUsersTableWithCityAndCountryRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -448,19 +450,19 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 11, 1, 14, 21, 59, 277, DateTimeKind.Local).AddTicks(7033),
+                            Created = new DateTime(2022, 11, 1, 14, 4, 48, 39, DateTimeKind.Local).AddTicks(5635),
                             RepeatingName = "Каждую неделю"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 11, 1, 14, 21, 59, 278, DateTimeKind.Local).AddTicks(110),
+                            Created = new DateTime(2022, 11, 1, 14, 4, 48, 39, DateTimeKind.Local).AddTicks(6329),
                             RepeatingName = "По верхней неделе"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2022, 11, 1, 14, 21, 59, 278, DateTimeKind.Local).AddTicks(124),
+                            Created = new DateTime(2022, 11, 1, 14, 4, 48, 39, DateTimeKind.Local).AddTicks(6341),
                             RepeatingName = "По нижней неделе"
                         });
                 });
@@ -631,37 +633,37 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2022, 11, 1, 14, 21, 59, 199, DateTimeKind.Local).AddTicks(3402),
+                            Created = new DateTime(2022, 11, 1, 14, 4, 47, 921, DateTimeKind.Local).AddTicks(6771),
                             DaysName = "Понедельник"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2022, 11, 1, 14, 21, 59, 202, DateTimeKind.Local).AddTicks(7956),
+                            Created = new DateTime(2022, 11, 1, 14, 4, 47, 925, DateTimeKind.Local).AddTicks(4864),
                             DaysName = "Вторник"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2022, 11, 1, 14, 21, 59, 202, DateTimeKind.Local).AddTicks(8001),
+                            Created = new DateTime(2022, 11, 1, 14, 4, 47, 925, DateTimeKind.Local).AddTicks(4901),
                             DaysName = "Среда"
                         },
                         new
                         {
                             Id = 4,
-                            Created = new DateTime(2022, 11, 1, 14, 21, 59, 202, DateTimeKind.Local).AddTicks(8006),
+                            Created = new DateTime(2022, 11, 1, 14, 4, 47, 925, DateTimeKind.Local).AddTicks(4905),
                             DaysName = "Четверг"
                         },
                         new
                         {
                             Id = 5,
-                            Created = new DateTime(2022, 11, 1, 14, 21, 59, 202, DateTimeKind.Local).AddTicks(8010),
+                            Created = new DateTime(2022, 11, 1, 14, 4, 47, 925, DateTimeKind.Local).AddTicks(4906),
                             DaysName = "Пятница"
                         },
                         new
                         {
                             Id = 6,
-                            Created = new DateTime(2022, 11, 1, 14, 21, 59, 202, DateTimeKind.Local).AddTicks(8013),
+                            Created = new DateTime(2022, 11, 1, 14, 4, 47, 925, DateTimeKind.Local).AddTicks(4908),
                             DaysName = "Суббота"
                         });
                 });
