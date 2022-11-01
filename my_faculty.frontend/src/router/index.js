@@ -126,8 +126,25 @@ const routes = [
     },
     {
         path: '/personal',
-        name: 'account',
-        component: AccountPageView
+        name: 'Мой профиль',
+        component: AccountPageView,
+        children: [
+            {
+                path: '/',
+                name: 'Мой профиль',
+                component: () => import('../views/accountPageViews/ProfileView')
+            },
+            {
+                path: '/news',
+                name: 'Новости',
+                component: () => import('../views/accountPageViews/NewsView')
+            },
+            {
+                path: '/clubs',
+                name: 'Сообщества курсов',
+                component: () => import('../views/accountPageViews/ClubsView')
+            }
+        ]
     },
     {
         path: '/signin-oidc',

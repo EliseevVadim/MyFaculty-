@@ -3,12 +3,12 @@
 		<h1 v-if="!userAuthorized">
 			hell off
 		</h1>
-		<v-app>
+		<v-app v-else>
 			<v-app-bar
 				id="app-bar"
 				app
 				height="75"
-				color="transparent"
+				color="white"
 			>
 				<v-btn
 					class="mr-3"
@@ -21,7 +21,6 @@
 						mdi-dots-vertical
 					</v-icon>
 				</v-btn>
-
 				<v-toolbar-title
 					class="hidden-sm-and-down font-weight-light"
 					v-text="$route.name"
@@ -36,7 +35,6 @@
 				>
 					<v-icon>mdi-home</v-icon>
 				</v-btn>
-
 				<v-menu
 					bottom
 					left
@@ -83,7 +81,7 @@
 					class="ml-2"
 					min-width="0"
 					text
-					to="/pages/user"
+					to="/personal"
 				>
 					<v-icon>mdi-account</v-icon>
 				</v-btn>
@@ -94,7 +92,6 @@
 				v-model="drawer"
 				:expand-on-hover="false"
 				:right="$vuetify.rtl"
-				absolute
 				dark
 				width="280"
 				v-bind="$attrs"
@@ -154,7 +151,12 @@
 				</template>
 			</v-navigation-drawer>
 			<v-main>
-				<router-view />
+				<v-container
+					fluid
+					class="personal-page-content"
+				>
+					<router-view />
+				</v-container>
 				<PagesFooter />
 			</v-main>
 		</v-app>
@@ -211,59 +213,26 @@ export default {
 			],
 			items: [
 				{
-					icon: 'mdi-view-dashboard',
-					title: 'dashboard',
+					icon: 'mdi-home',
+					title: 'На главную',
 					to: '/',
 				},
 				{
 					icon: 'mdi-account',
-					title: 'user',
-					to: '/pages/user',
+					title: 'Профиль',
+					to: '/personal',
 				},
 				{
-					title: 'Regular tables',
+					title: 'Новости',
 					icon: 'mdi-clipboard-outline',
-					to: '/tables/regular-tables',
+					to: '/news',
 				},
 				{
-					title: 'typography',
-					icon: 'mdi-format-font',
-					to: '/components/typography',
-				},
-				{
-					title: 'icons',
-					icon: 'mdi-chart-bubble',
-					to: '/components/icons',
-				},
-				{
-					title: 'google',
-					icon: 'mdi-map-marker',
-					to: '/maps/google-maps',
-				},
-				{
-					title: 'notifications',
-					icon: 'mdi-bell',
-					to: '/components/notifications',
-				},
-			],
-			links: [
-				{
-					href: '#',
-					text: 'Creative Tim',
-				},
-				{
-					href: '#',
-					text: 'About Us',
-				},
-				{
-					href: '#',
-					text: 'Blog',
-				},
-				{
-					href: '#',
-					text: 'Licenses',
-				},
-			],
+					title: 'Сообщества курсов',
+					icon: 'mdi-cast-education',
+					to: '/clubs',
+				}
+			]
 		}
 	},
 	methods: {
@@ -278,17 +247,26 @@ export default {
 		}
 	},
 	async mounted() {
-		document.title = "Личный кабинет";
-		this.userAuthorized = await this.$oidc.isUser();
-		let profile = await this.$oidc.getUserProfile();
-		this.userProfile.firstName = profile.FirstName;
-		this.userProfile.lastName = profile.LastName;
+		try {
+			document.title = "Личный кабинет";
+			this.userAuthorized = await this.$oidc.isUser();
+			let profile = await this.$oidc.getUserProfile();
+			this.userProfile.firstName = profile.FirstName;
+			this.userProfile.lastName = profile.LastName;
+		}
+		catch (error) {}
 	},
 }
 </script>
 
 <style lang="sass">
 @import '~vuetify/src/styles/tools/_rtl.sass'
+.v-main__wrap
+	display: flex
+	flex-direction: column
+	height: 100%
+	.personal-page-content
+		flex: 1 0 auto
 #core-navigation-drawer
 	padding: 0
 	.profile-name
