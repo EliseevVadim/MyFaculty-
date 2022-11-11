@@ -17,4 +17,8 @@
     <ProjectReference Include="..\MyFaculty.Domain\MyFaculty.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Users\" />
+  </ItemGroup>
+
 </Project>

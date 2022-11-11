@@ -1,0 +1,28 @@
+﻿using AutoMapper;
+using MyFaculty.Application.Common.Mappings;
+using MyFaculty.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyFaculty.Application.Dto
+{
+    public class CityLookupDto : IMapWith<City>
+    {
+        public int Id { get; set; }
+        public string CityName { get; set; }
+        public int CountryId { get; set; }
+        public string CountryName { get; set; }
+
+        public void Mapping(Profile profile)
+        {
+            profile.CreateMap<City, CityLookupDto>()
+                .ForMember(dto => dto.Id, options => options.MapFrom(city => city.Id))
+                .ForMember(dto => dto.CityName, options => options.MapFrom(city => city.CityName))
+                .ForMember(dto => dto.CountryId, options => options.MapFrom(city => city.CountryId))
+                .ForMember(dto => dto.CountryName, options => options.MapFrom(city => city.Country.CountryName));
+        }
+    }
+}
