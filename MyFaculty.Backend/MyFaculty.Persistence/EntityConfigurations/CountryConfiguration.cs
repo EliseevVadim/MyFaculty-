@@ -17,9 +17,9 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.Property(country => country.Id).ValueGeneratedOnAdd();
             builder.Property(country => country.CountryName).IsRequired();
             builder.HasIndex(country => country.CountryName).IsUnique();
-            builder.HasMany(country => country.Cities)
-                .WithOne(city => city.Country)
-                .HasForeignKey(city => city.CountryId);
+            builder.HasMany(country => country.Regions)
+                .WithOne(region => region.Country)
+                .HasForeignKey(region => region.CountryId);
         }
     }
 }

@@ -37,6 +37,7 @@ namespace MyFaculty.Persistence
         public DbSet<TeacherDiscipline> TeacherDisciplines { get; set; } = null!;
         public DbSet<Faculty> Faculties { get; set; } = null!;
         public DbSet<Country> Countries { get; set; } = null!;
+        public DbSet<Region> Regions { get; set; } = null!;
         public DbSet<City> Cities { get; set; } = null!;
         public DbSet<AppUser> Users { get; set; } = null!;
         public DbSet<ExpertSystemState> ExpertSystemStates { get; set; } = null!;

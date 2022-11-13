@@ -13,14 +13,14 @@ namespace MyFaculty.Application.Dto
     {
         public int Id { get; set; }
         public string CountryName { get; set; }
-        public List<CityLookupDto> Cities { get; set; }
+        public List<RegionLookupDto> Regions { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Country, CountryLookupDto>()
                 .ForMember(dto => dto.Id, options => options.MapFrom(country => country.Id))
                 .ForMember(dto => dto.CountryName, options => options.MapFrom(country => country.CountryName))
-                .ForMember(dto => dto.Cities, options => options.MapFrom(country => country.Cities));
+                .ForMember(dto => dto.Regions, options => options.MapFrom(country => country.Regions));
         }
     }
 }

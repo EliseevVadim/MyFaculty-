@@ -8,14 +8,14 @@ namespace MyFaculty.WebApi.Dto
     {
         public int Id { get; set; }
         public string CityName { get; set; }
-        public int CountryId { get; set; }
+        public int RegionId { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<UpdateCityCommand, UpdateCityCommand>()
+            profile.CreateMap<UpdateCityDto, UpdateCityCommand>()
                 .ForMember(command => command.Id, options => options.MapFrom(dto => dto.Id))
                 .ForMember(command => command.CityName, options => options.MapFrom(dto => dto.CityName))
-                .ForMember(command => command.CountryId, options => options.MapFrom(dto => dto.CountryId));
+                .ForMember(command => command.RegionId, options => options.MapFrom(dto => dto.RegionId));
         }
     }
 }

@@ -28,7 +28,7 @@ namespace MyFaculty.Application.Features.Cities.Commands.CreateCity
             City city = new City()
             {
                 CityName = request.CityName,
-                CountryId = request.CountryId,
+                RegionId = request.RegionId,
                 Created = DateTime.Now
             };
             await _context.Cities.AddAsync(city, cancellationToken);

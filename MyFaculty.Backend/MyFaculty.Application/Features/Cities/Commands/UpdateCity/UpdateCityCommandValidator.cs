@@ -13,7 +13,7 @@ namespace MyFaculty.Application.Features.Cities.Commands.UpdateCity
         {
             RuleFor(command => command.Id).NotEmpty();
             RuleFor(command => command.CityName).NotEmpty();
-            RuleFor(command => command.CountryId).NotEmpty();
+            RuleFor(command => command.RegionId).NotEmpty();
         }
     }
 }

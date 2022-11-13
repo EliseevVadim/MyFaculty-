@@ -14,8 +14,8 @@ namespace MyFaculty.Application.ViewModels
     {
         public int Id { get; set; }
         public string CityName { get; set; }
-        public int CountryId { get; set; }
-        public CountryLookupDto Country { get; set; }
+        public int RegionId { get; set; }
+        public RegionLookupDto Region { get; set; }
         // TODO: add AppUsers
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
@@ -25,8 +25,8 @@ namespace MyFaculty.Application.ViewModels
             profile.CreateMap<City, CityViewModel>()
                 .ForMember(vm => vm.Id, options => options.MapFrom(city => city.Id))
                 .ForMember(vm => vm.CityName, options => options.MapFrom(city => city.CityName))
-                .ForMember(vm => vm.CountryId, options => options.MapFrom(city => city.CountryId))
-                .ForMember(vm => vm.Country, options => options.MapFrom(city => city.Country))
+                .ForMember(vm => vm.RegionId, options => options.MapFrom(city => city.RegionId))
+                .ForMember(vm => vm.Region, options => options.MapFrom(city => city.Region))
                 .ForMember(vm => vm.Created, options => options.MapFrom(city => city.Created))
                 .ForMember(vm => vm.Updated, options => options.MapFrom(city => city.Updated));
         }

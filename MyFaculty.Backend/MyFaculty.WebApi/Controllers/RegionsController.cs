@@ -2,11 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyFaculty.Application.Features.Cities.Commands.CreateCity;
-using MyFaculty.Application.Features.Cities.Commands.DeleteCity;
-using MyFaculty.Application.Features.Cities.Commands.UpdateCity;
-using MyFaculty.Application.Features.Cities.Queries.GetCities;
-using MyFaculty.Application.Features.Cities.Queries.GetCitiesForRegion;
+using MyFaculty.Application.Features.Regions.Commands.CreateRegion;
+using MyFaculty.Application.Features.Regions.Commands.DeleteRegion;
+using MyFaculty.Application.Features.Regions.Commands.UpdateRegion;
+using MyFaculty.Application.Features.Regions.Queries.GetRegions;
+using MyFaculty.Application.Features.Regions.Queries.GetRegionsForCountry;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
@@ -15,79 +15,79 @@ namespace MyFaculty.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class CitiesController : BaseController
+    public class RegionsController : BaseController
     {
         private IMapper _mapper;
 
-        public CitiesController(IMapper mapper)
+        public RegionsController(IMapper mapper)
         {
             _mapper = mapper;
         }
 
         /// <summary>
-        /// Gets the list of cities
+        /// Gets the list of regions
         /// </summary>
         /// <remarks>
         /// Sample request: 
-        /// GET /cities
+        /// GET /regions
         /// </remarks>
-        /// <returns>Returns CitiesListViewModel</returns>
+        /// <returns>Returns RegionsListViewModel</returns>
         /// <response code="200">Success</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<CitiesListViewModel>> GetAll()
+        public async Task<ActionResult<RegionsListViewModel>> GetAll()
         {
-            GetCitiesQuery query = new GetCitiesQuery();
-            CitiesListViewModel viewModel = await Mediator.Send(query);
+            GetRegionsQuery query = new GetRegionsQuery();
+            RegionsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 
         /// <summary>
-        /// Gets the list of cities for a specific region
+        /// Gets the list of regions for a specific country
         /// </summary>
         /// <remarks>
         /// Sample request: 
-        /// GET /cities/region/1
+        /// GET /regions/country/1
         /// </remarks>
-        /// <param name="id">Specific region id (integer)</param>
-        /// <returns>Returns CitiesListViewModel</returns>
+        /// <param name="id">Specific country id (integer)</param>
+        /// <returns>Returns RegionsListViewModel</returns>
         /// <response code="200">Success</response>
-        [HttpGet("region/{id}")]
+        [HttpGet("country/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<CitiesListViewModel>> GetByRegionId(int id)
+        public async Task<ActionResult<RegionsListViewModel>> GetByCountryId(int id)
         {
-            GetCitiesForRegionQuery query = new GetCitiesForRegionQuery()
+            GetRegionsForCountryQuery query = new GetRegionsForCountryQuery()
             {
-                RegionId = id
+                CountryId = id
             };
-            CitiesListViewModel viewModel = await Mediator.Send(query);
+            RegionsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 
         /// <summary>
-        /// Creates the city
+        /// Creates the region
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// POST /cities
+        /// POST /regions
         /// {
-        ///     "cityName": "string",
-        ///     "regionId": 0
+        ///     "regionName": "string",
+        ///     "countryId": 0
         /// }
         /// </remarks>
-        /// <param name="createCityDto">CreateCityDto object</param>
-        /// <returns>Retruns CityViewModel</returns>
+        /// <param name="createRegionDto">CreateRegionDto object</param>
+        /// <returns>Retruns RegionViewModel</returns>
         /// <response code="201">Created</response>
         /// <response code="500">Server error</response>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CityViewModel>> Create([FromBody] CreateCityDto createCityDto)
+        public async Task<ActionResult<RegionViewModel>> Create([FromBody] CreateRegionDto createRegionDto)
         {
-            CreateCityCommand command = _mapper.Map<CreateCityCommand>(createCityDto);
-            CityViewModel city = await Mediator.Send(command);
-            return Created(nameof(CitiesController), city);
+            CreateRegionCommand command = _mapper.Map<CreateRegionCommand>(createRegionDto);
+            RegionViewModel region = await Mediator.Send(command);
+            return Created(nameof(RegionsController), region);
         }
 
         /// <summary>
@@ -95,14 +95,15 @@ namespace MyFaculty.WebApi.Controllers
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// PUT /cities
+        /// PUT /regions
         /// {
         ///     "id": 1,
-        ///     "cityName": "string"
+        ///     "regionName": "string",
+        ///     "countryId": 0
         /// }        
         /// </remarks>
-        /// <param name="updateCityDto">UpdateCityDto object</param>
-        /// <returns>Returns CityViewModel</returns>
+        /// <param name="updateRegionDto">UpdateRegionDto object</param>
+        /// <returns>Returns RegionViewModel</returns>
         /// <response code="200">Success</response>
         /// <response code="404">Not found</response>
         /// <response code="500">Server error</response>        
@@ -111,21 +112,21 @@ namespace MyFaculty.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CityViewModel>> Update([FromBody] UpdateCityDto updateCityDto)
+        public async Task<ActionResult<RegionViewModel>> Update([FromBody] UpdateRegionDto updateRegionDto)
         {
-            UpdateCityCommand command = _mapper.Map<UpdateCityCommand>(updateCityDto);
-            CityViewModel city = await Mediator.Send(command);
-            return Ok(city);
+            UpdateRegionCommand command = _mapper.Map<UpdateRegionCommand>(updateRegionDto);
+            RegionViewModel region = await Mediator.Send(command);
+            return Ok(region);
         }
 
         /// <summary>
-        /// Deletes the city by id
+        /// Deletes the region by id
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// DELETE /countries/1
+        /// DELETE /regions/1
         /// </remarks>
-        /// <param name="id">City id (integer)</param>
+        /// <param name="id">Region id (integer)</param>
         /// <returns>Returns NoContent</returns>
         /// <response code="204">Success</response>
         /// <response code="404">Not found</response>
@@ -137,7 +138,7 @@ namespace MyFaculty.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
-            DeleteCityCommand command = new DeleteCityCommand()
+            DeleteRegionCommand command = new DeleteRegionCommand()
             {
                 Id = id
             };

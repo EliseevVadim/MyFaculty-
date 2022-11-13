@@ -10,7 +10,7 @@ namespace MyFaculty.Domain.Entities
     {
         public int Id { get; set; }
         public string CountryName { get; set; }
-        public List<City> Cities { get; set; }
+        public List<Region> Regions { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
     }

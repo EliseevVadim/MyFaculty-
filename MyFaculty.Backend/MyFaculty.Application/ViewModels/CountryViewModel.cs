@@ -14,7 +14,7 @@ namespace MyFaculty.Application.ViewModels
     {
         public int Id { get; set; }
         public string CountryName { get; set; }
-        public List<CityLookupDto> Cities { get; set; }
+        public List<RegionLookupDto> Regions { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
 
@@ -23,7 +23,7 @@ namespace MyFaculty.Application.ViewModels
             profile.CreateMap<Country, CountryViewModel>()
                 .ForMember(vm => vm.Id, options => options.MapFrom(country => country.Id))
                 .ForMember(vm => vm.CountryName, options => options.MapFrom(country => country.CountryName))
-                .ForMember(vm => vm.Cities, options => options.MapFrom(country => country.Cities))
+                .ForMember(vm => vm.Regions, options => options.MapFrom(country => country.Regions))
                 .ForMember(vm => vm.Created, options => options.MapFrom(country => country.Created))
                 .ForMember(vm => vm.Updated, options => options.MapFrom(country => country.Updated));
         }

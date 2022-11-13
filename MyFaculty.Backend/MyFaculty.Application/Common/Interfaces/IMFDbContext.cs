@@ -27,6 +27,7 @@ namespace MyFaculty.Application.Common.Interfaces
         public DbSet<TeacherDiscipline> TeacherDisciplines { get; set; }
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<Region> Regions { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<AppUser> Users { get; set; }
         public DbSet<ExpertSystemState> ExpertSystemStates { get; set; }

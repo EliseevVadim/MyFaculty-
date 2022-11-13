@@ -12,7 +12,7 @@ namespace MyFaculty.Application.Features.Cities.Commands.CreateCity
         public CreateCityCommandValidator()
         {
             RuleFor(command => command.CityName).NotEmpty();
-            RuleFor(command => command.CountryId).NotEmpty();
+            RuleFor(command => command.RegionId).NotEmpty();
         }
     }
 }

@@ -16,9 +16,9 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasKey(city => city.Id);
             builder.Property(city => city.Id).ValueGeneratedOnAdd();
             builder.Property(city => city.CityName).IsRequired();
-            builder.HasOne(city => city.Country)
-                .WithMany(country => country.Cities)
-                .HasForeignKey(city => city.CountryId);
+            builder.HasOne(city => city.Region)
+                .WithMany(region => region.Cities)
+                .HasForeignKey(city => city.RegionId);
             builder.HasMany(city => city.Users)
                 .WithOne(user => user.City)
                 .HasForeignKey(user => user.CityId);

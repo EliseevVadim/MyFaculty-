@@ -32,7 +32,7 @@ namespace MyFaculty.Application.Features.Cities.Commands.UpdateCity
             if (city == null)
                 throw new EntityNotFoundException(nameof(City), request.Id);
             city.CityName = request.CityName;
-            city.CountryId = request.CountryId;
+            city.RegionId = request.RegionId;
             city.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<CityViewModel>(city);
