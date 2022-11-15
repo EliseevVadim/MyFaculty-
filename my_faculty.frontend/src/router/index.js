@@ -121,6 +121,21 @@ const routes = [
                 path: '/adminPanel/teachersDisciplines',
                 name: 'teachersDisciplines',
                 component: () => import('../views/adminPageViews/TeachersDisciplinesView')
+            },
+            {
+                path: '/adminPanel/countries',
+                name: 'countries',
+                component: () => import('../views/adminPageViews/CountriesView')
+            },
+            {
+                path: '/adminPanel/regions',
+                name: 'regions',
+                component: () => import('../views/adminPageViews/RegionsView')
+            },
+            {
+                path: '/adminPanel/cities',
+                name: 'cities',
+                component: () => import('../views/adminPageViews/CitiesView')
             }
         ]
     },

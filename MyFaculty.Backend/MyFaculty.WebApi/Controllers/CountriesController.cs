@@ -6,6 +6,7 @@ using MyFaculty.Application.Features.Countries.Commands.CreateCountry;
 using MyFaculty.Application.Features.Countries.Commands.DeleteCountry;
 using MyFaculty.Application.Features.Countries.Commands.UpdateCountry;
 using MyFaculty.Application.Features.Countries.Queries.GetCountries;
+using MyFaculty.Application.Features.Countries.Queries.GetCountryInfo;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
@@ -38,6 +39,30 @@ namespace MyFaculty.WebApi.Controllers
         {
             GetCountriesQuery query = new GetCountriesQuery();
             CountriesListViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the country by id
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /countries/1
+        /// </remarks>
+        /// <param name="id">Country id (integer)</param>
+        /// <returns>Returns CountryViewModel</returns>
+        /// <response code="200">Success</response>
+        /// <response code="404">Not found</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CountryViewModel>> Get(int id)
+        {
+            GetCountryInfoQuery query = new GetCountryInfoQuery()
+            {
+                Id = id
+            };
+            CountryViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 

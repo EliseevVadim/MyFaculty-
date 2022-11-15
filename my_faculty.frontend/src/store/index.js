@@ -16,6 +16,9 @@ import teachersDisciplines from "@/store/modules/teachersDisciplines";
 import pairs from "@/store/modules/pairs";
 import faculties from "@/store/modules/faculties";
 import expertSystem from "@/store/modules/expertSystem";
+import countries from "@/store/modules/countries";
+import regions from "@/store/modules/regions";
+import cities from "@/store/modules/cities";
 
 Vue.use(Vuex)
 
@@ -40,6 +43,9 @@ export default new Vuex.Store({
       teachersDisciplines,
       pairs,
       faculties,
-      expertSystem
+      expertSystem,
+      countries,
+      regions,
+      cities
   }
 })

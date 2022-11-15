@@ -7,6 +7,7 @@ using MyFaculty.Application.Features.Cities.Commands.DeleteCity;
 using MyFaculty.Application.Features.Cities.Commands.UpdateCity;
 using MyFaculty.Application.Features.Cities.Queries.GetCities;
 using MyFaculty.Application.Features.Cities.Queries.GetCitiesForRegion;
+using MyFaculty.Application.Features.Cities.Queries.GetCityInfo;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
@@ -39,6 +40,30 @@ namespace MyFaculty.WebApi.Controllers
         {
             GetCitiesQuery query = new GetCitiesQuery();
             CitiesListViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the city by id
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /cities/1
+        /// </remarks>
+        /// <param name="id">City id (integer)</param>
+        /// <returns>Returns CityViewModel</returns>
+        /// <response code="200">Success</response>
+        /// <response code="404">Not found</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CityViewModel>> Get(int id)
+        {
+            GetCityInfoQuery query = new GetCityInfoQuery()
+            {
+                Id = id
+            };
+            CityViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 

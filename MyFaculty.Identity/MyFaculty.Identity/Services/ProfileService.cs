@@ -25,8 +25,7 @@ namespace MyFaculty.Identity.Services
             List<Claim> claims = new List<Claim>()
             {
                 new Claim("FirstName", user.FirstName),
-                new Claim("LastName", user.LastName),
-                new Claim("AvatarPath", user.AvatarPath)
+                new Claim("LastName", user.LastName)
             };
             List<Claim> roles = context.Subject.FindAll(JwtClaimTypes.Role).ToList();
             context.IssuedClaims.AddRange(claims);

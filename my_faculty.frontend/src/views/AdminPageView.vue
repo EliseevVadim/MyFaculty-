@@ -126,7 +126,10 @@ export default {
                 ['Ученые звания', 'mdi-trophy-award', '/adminPanel/scienceRanks'],
                 ['Информация о парах', 'mdi-information-variant', '/adminPanel/pairInfos'],
                 ['Типы вторичных объектов', 'mdi-map-legend', '/adminPanel/secondaryObjectTypes'],
-                ['Назначение дисциплин', 'mdi-clipboard-check', '/adminPanel/teachersDisciplines']
+                ['Назначение дисциплин', 'mdi-clipboard-check', '/adminPanel/teachersDisciplines'],
+				['Страны', 'mdi-earth', '/adminPanel/countries'],
+				['Регионы', 'mdi-earth-box', '/adminPanel/regions'],
+				['Города', 'mdi-city', '/adminPanel/cities'],
             ],
 			/*animation stuff*/
 			DISPLAY_WIDTH: window.innerWidth,

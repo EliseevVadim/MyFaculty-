@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyFaculty.Application.Features.Regions.Commands.CreateRegion;
 using MyFaculty.Application.Features.Regions.Commands.DeleteRegion;
 using MyFaculty.Application.Features.Regions.Commands.UpdateRegion;
+using MyFaculty.Application.Features.Regions.Queries.GetRegionInfo;
 using MyFaculty.Application.Features.Regions.Queries.GetRegions;
 using MyFaculty.Application.Features.Regions.Queries.GetRegionsForCountry;
 using MyFaculty.Application.ViewModels;
@@ -39,6 +40,30 @@ namespace MyFaculty.WebApi.Controllers
         {
             GetRegionsQuery query = new GetRegionsQuery();
             RegionsListViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the region by id
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /regions/1
+        /// </remarks>
+        /// <param name="id">Region id (integer)</param>
+        /// <returns>Returns RegionViewModel</returns>
+        /// <response code="200">Success</response>
+        /// <response code="404">Not found</response>
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<RegionViewModel>> Get(int id)
+        {
+            GetRegionInfoQuery query = new GetRegionInfoQuery()
+            {
+                Id = id
+            };
+            RegionViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 
