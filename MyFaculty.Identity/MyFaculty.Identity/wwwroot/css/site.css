@@ -6,7 +6,7 @@
     height: 100%;
     background-size: cover;
     background-repeat: no-repeat;
-    background-image: url("https://www.donnu.ru/public/новое3.jpg");
+    background-image: url("../img/auth-bg.jpg");
 }
 
 .form-row {
