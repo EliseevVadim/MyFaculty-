@@ -16,7 +16,6 @@ namespace MyFaculty.Application.ViewModels
         public string CityName { get; set; }
         public int RegionId { get; set; }
         public RegionLookupDto Region { get; set; }
-        // TODO: add AppUsers
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
 
