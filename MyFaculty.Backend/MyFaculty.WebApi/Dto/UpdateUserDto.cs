@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using MyFaculty.Application.Common.Mappings;
 using MyFaculty.Application.Features.Users.Commands.UpdateUser;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyFaculty.WebApi.Dto
@@ -17,6 +18,7 @@ namespace MyFaculty.WebApi.Dto
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        public DateTime? BirthDate { get; set; }
         public IFormFile Photo { get; set; }
         public int CityId { get; set; }
         public string Website { get; set; }
@@ -30,6 +32,7 @@ namespace MyFaculty.WebApi.Dto
                 .ForMember(command => command.Email, options => options.MapFrom(dto => dto.Email))
                 .ForMember(command => command.FirstName, options => options.MapFrom(dto => dto.FirstName))
                 .ForMember(command => command.LastName, options => options.MapFrom(dto => dto.LastName))
+                .ForMember(command => command.BirthDate, options => options.MapFrom(dto => dto.BirthDate))
                 .ForMember(command => command.CityId, options => options.MapFrom(dto => dto.CityId))
                 .ForMember(command => command.Website, options => options.MapFrom(dto => dto.Website))
                 .ForMember(command => command.VKLink, options => options.MapFrom(dto => dto.VKLink))

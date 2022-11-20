@@ -108,7 +108,7 @@ namespace MyFaculty.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UserViewModel>> Update([FromForm] UpdateUserDto updateUserDto)
         {
-            int requesterId = int.Parse(User.Claims.First(claim => claim.Type == "sub").Value);
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             if (requesterId != updateUserDto.Id)
                 return Forbid();
             string photoPath = string.Empty;

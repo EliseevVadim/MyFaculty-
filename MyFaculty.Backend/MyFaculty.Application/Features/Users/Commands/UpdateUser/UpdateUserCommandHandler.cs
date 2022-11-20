@@ -35,9 +35,10 @@ namespace MyFaculty.Application.Features.Users.Commands.UpdateUser
             user.LastName = request.LastName;
             user.AvatarPath = string.IsNullOrEmpty(request.AvatarPath) ? user.AvatarPath : request.AvatarPath;
             user.CityId = request.CityId;
-            user.Website = request.Website;
-            user.VKLink = request.VKLink;
-            user.TelegramLink = request.TelegramLink;
+            user.BirthDate = request.BirthDate;
+            user.Website = string.IsNullOrWhiteSpace(request.Website) ? null : request.Website;
+            user.VKLink = string.IsNullOrWhiteSpace(request.VKLink) ? null : request.VKLink;
+            user.TelegramLink = string.IsNullOrWhiteSpace(request.TelegramLink) ? null : request.TelegramLink;
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<UserViewModel>(user);
         }

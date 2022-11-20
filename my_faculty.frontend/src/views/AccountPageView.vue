@@ -114,8 +114,7 @@
 							contain
 						>
 							<v-img
-								src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-								max-height="30"
+								:src="CURRENT_USER.avatarPath === null ? 'img/blank-item.jpg' : CURRENT_USER.avatarPath"
 							/>
 						</v-list-item-avatar>
 						<v-list-item-content>
@@ -155,7 +154,7 @@
 					fluid
 					class="personal-page-content"
 				>
-					<router-view />
+					<router-view v-if="isFullyMounted" />
 				</v-container>
 				<PagesFooter />
 			</v-main>
@@ -167,6 +166,7 @@ import ItemGroup from "@/components/AccountComponents/base/ItemGroup";
 import Item from "@/components/AccountComponents/base/Item";
 import {VHover, VListItem} from "vuetify/lib/components";
 import PagesFooter from "@/components/AccountComponents/core/PagesFooter";
+import {mapGetters} from "vuex";
 export default {
 	name: "AccountPageView",
 	components: {
@@ -199,10 +199,11 @@ export default {
 	data() {
 		return {
 			drawer: true,
-			userAuthorized: false,
+			userAuthorized: true,
+			isFullyMounted : false,
 			userProfile: {
-				firstName: null,
-				lastName: null,
+				firstName: 'Загрузка',
+				lastName: '...',
 			},
 			notifications: [
 				'Mike John Responded to your email',
@@ -240,7 +241,9 @@ export default {
 			this.drawer = value;
 		},
 		getFullName() {
-			return this.userProfile.firstName + ' ' + this.userProfile.lastName
+			return this.CURRENT_USER.firstName === undefined || this.CURRENT_USER.lastName === undefined ?
+				'Загрузка...' :
+				this.CURRENT_USER.firstName + ' ' + this.CURRENT_USER.lastName;
 		},
 		signOut() {
 			this.$oidc.logout();
@@ -251,11 +254,20 @@ export default {
 			document.title = "Личный кабинет";
 			this.userAuthorized = await this.$oidc.isUser();
 			let profile = await this.$oidc.getUserProfile();
-			this.userProfile.firstName = profile.FirstName;
-			this.userProfile.lastName = profile.LastName;
+			let id = profile.sub;
+			this.$loading(true);
+			await this.$store.dispatch('loadCurrentUser', id)
+				.then(() => {
+					this.isFullyMounted = true;
+					this.$oidc.currentUserId = id;
+					this.$loading(false);
+				})
 		}
 		catch (error) {}
 	},
+	computed: {
+		...mapGetters(['CURRENT_USER'])
+	}
 }
 </script>
 

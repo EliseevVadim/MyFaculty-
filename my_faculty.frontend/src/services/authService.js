@@ -40,6 +40,8 @@ oidcClient.events.addUserSignedOut(() => {
 });
 
 export default new class SecurityService {
+    currentUserId
+
     login() {
         return oidcClient.signinRedirect();
     }

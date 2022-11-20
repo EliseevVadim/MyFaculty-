@@ -19,6 +19,7 @@ import expertSystem from "@/store/modules/expertSystem";
 import countries from "@/store/modules/countries";
 import regions from "@/store/modules/regions";
 import cities from "@/store/modules/cities";
+import users from "@/store/modules/users";
 
 Vue.use(Vuex)
 
@@ -46,6 +47,7 @@ export default new Vuex.Store({
       expertSystem,
       countries,
       regions,
-      cities
+      cities,
+      users
   }
 })
