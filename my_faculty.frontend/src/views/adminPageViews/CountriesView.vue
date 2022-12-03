@@ -197,17 +197,25 @@ export default {
 			this.country.id = null;
 		},
 		deleteCountry(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteScienceRank', id)
-					.then(() => {
-						this.resetCountry();
-						this.$store.dispatch('loadAllRanks');
-					})
-					.catch(() => {
-						this.resetCountry();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteCountry', id)
+							.then(() => {
+								this.resetCountry();
+								this.$store.dispatch('loadAllCountries');
+							})
+							.catch(() => {
+								this.resetCountry();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingCountry(id) {
 			this.errorText = "";

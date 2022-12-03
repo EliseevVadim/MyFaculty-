@@ -274,17 +274,25 @@ export default {
 			this.floor.faculty_id = null;
 		},
 		deleteFloor(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteFloor', id)
-					.then(() => {
-						this.resetFloor();
-						this.$store.dispatch('loadAllFloors');
-					})
-					.catch(() => {
-						this.resetFloor();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteFloor', id)
+							.then(() => {
+								this.resetFloor();
+								this.$store.dispatch('loadAllFloors');
+							})
+							.catch(() => {
+								this.resetFloor();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingFloor(id) {
 			this.errorText = "";

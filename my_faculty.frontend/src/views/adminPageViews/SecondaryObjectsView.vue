@@ -363,17 +363,25 @@ export default {
 			};
 		},
 		deleteSecondaryObject(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteSecondaryObject', id)
-					.then(() => {
-						this.resetSecondaryObject();
-						this.$store.dispatch('loadAllSecondaryObjects');
-					})
-					.catch(() => {
-						this.resetSecondaryObject();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteSecondaryObject', id)
+							.then(() => {
+								this.resetSecondaryObject();
+								this.$store.dispatch('loadAllSecondaryObjects');
+							})
+							.catch(() => {
+								this.resetSecondaryObject();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingSecondaryObject(id) {
 			this.errorText = "";

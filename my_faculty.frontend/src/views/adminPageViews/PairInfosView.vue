@@ -223,17 +223,25 @@ export default {
 			this.pairInfo.end_time = "";
 		},
 		deletePairInfo(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deletePairInfo', id)
-					.then(() => {
-						this.resetPairInfo();
-						this.$store.dispatch('loadAllPairInfos');
-					})
-					.catch(() => {
-						this.resetPairInfo();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deletePairInfo', id)
+							.then(() => {
+								this.resetPairInfo();
+								this.$store.dispatch('loadAllPairInfos');
+							})
+							.catch(() => {
+								this.resetPairInfo();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingPairInfo(id) {
 			this.errorText = "";

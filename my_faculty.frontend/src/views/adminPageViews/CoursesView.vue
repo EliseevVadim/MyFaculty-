@@ -227,17 +227,25 @@ export default {
 			this.course.faculty_id = null;
 		},
 		deleteCourse(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteCourse', id)
-					.then(() => {
-						this.resetCourse();
-						this.$store.dispatch('loadAllCourses');
-					})
-					.catch(() => {
-						this.resetCourse();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteCourse', id)
+							.then(() => {
+								this.resetCourse();
+								this.$store.dispatch('loadAllCourses');
+							})
+							.catch(() => {
+								this.resetCourse();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingCourse(id) {
 			this.errorText = "";

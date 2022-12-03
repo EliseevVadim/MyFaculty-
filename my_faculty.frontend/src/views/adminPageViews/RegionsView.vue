@@ -110,7 +110,7 @@
 								fab
 								small
 								color="yellow"
-								@click="startUpdatingCourse(item.id)"
+								@click="startUpdatingRegion(item.id)"
 							>
 								<v-icon dark>
 									mdi-pencil
@@ -122,7 +122,7 @@
 								small
 								dark
 								color="red"
-								@click="deleteCourse(item.id)"
+								@click="deleteRegion(item.id)"
 							>
 								<v-icon dark>
 									mdi-delete
@@ -215,20 +215,28 @@ export default {
 			this.region.region_name = "";
 			this.region.country_id = null;
 		},
-		deleteCourse(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteRegion', id)
-					.then(() => {
-						this.resetRegion();
-						this.$store.dispatch('loadAllRegions');
-					})
-					.catch(() => {
-						this.resetRegion();
-						alert("Невозможно удалить запись");
-					})
-			}
+		deleteRegion(id) {
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteRegion', id)
+							.then(() => {
+								this.resetRegion();
+								this.$store.dispatch('loadAllRegions');
+							})
+							.catch(() => {
+								this.resetRegion();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
-		startUpdatingCourse(id) {
+		startUpdatingRegion(id) {
 			this.errorText = "";
 			this.region.id = id;
 			this.$store.dispatch('loadRegionById', id)

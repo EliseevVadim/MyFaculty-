@@ -194,17 +194,25 @@ export default {
 			this.discipline.id = null;
 		},
 		deleteDiscipline(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteDiscipline', id)
-					.then(() => {
-						this.resetDiscipline();
-						this.$store.dispatch('loadAllDisciplines');
-					})
-					.catch(() => {
-						this.resetDiscipline();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteDiscipline', id)
+							.then(() => {
+								this.resetDiscipline();
+								this.$store.dispatch('loadAllDisciplines');
+							})
+							.catch(() => {
+								this.resetDiscipline();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingDiscipline(id) {
 			this.errorText = "";

@@ -204,17 +204,25 @@ export default {
 			this.object_type.type_path = "";
 		},
 		deleteObjectType(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteObjectType', id)
-					.then(() => {
-						this.resetObjectType();
-						this.$store.dispatch('loadAllObjectTypes');
-					})
-					.catch(() => {
-						this.resetObjectType();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteObjectType', id)
+							.then(() => {
+								this.resetObjectType();
+								this.$store.dispatch('loadAllObjectTypes');
+							})
+							.catch(() => {
+								this.resetObjectType();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingObjectType(id) {
 			this.errorText = "";

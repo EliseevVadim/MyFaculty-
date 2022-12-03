@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueLoading from "vuejs-loading-plugin";
+import Notifications from "vue-notification";
+import VuetifyConfirm from "vuetify-confirm";
 import App from './App.vue'
-import axios from "axios";
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
@@ -19,6 +20,19 @@ Vue.use(VueLoading, {
     customLoader: LoadingScreen,
     background: 'rgba(0, 0, 0, 0.5)'
 });
+
+Vue.use(Notifications);
+
+Vue.use(VuetifyConfirm, {
+    vuetify,
+    buttonTrueText: "Да",
+    buttonFalseText: "Нет",
+    title: "Подтверждение действия",
+    width: 350,
+    color: "warning",
+    icon: "warning",
+    property: "$confirm"
+})
 
 new Vue({
   router,

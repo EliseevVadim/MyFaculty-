@@ -273,17 +273,25 @@ export default {
 			this.teacher.photo = null;
 		},
 		deleteTeacher(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteTeacher', id)
-					.then(() => {
-						this.resetTeacher();
-						this.$store.dispatch('loadAllTeachers');
-					})
-					.catch(() => {
-						this.resetTeacher();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteTeacher', id)
+							.then(() => {
+								this.resetTeacher();
+								this.$store.dispatch('loadAllTeachers');
+							})
+							.catch(() => {
+								this.resetTeacher();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingTeacher(id) {
 			this.errorText = "";
@@ -299,16 +307,28 @@ export default {
 				})
 		},
 		sendTokenToTeacher(id) {
-			if (confirm("Вы действительно хотите отправить верификационный токен на почту преподавателю с id = " + id + "?")) {
-				this.$store.dispatch('sendVerificationTokenToTeacher', id)
-					.then(() => {
-						alert("Верификационный токен был успешно отправлен.");
-					})
-					.catch((error) => {
-						console.log(error);
-						alert("Произошла ошибка отправления. Попробуйте еще.");
-					})
-			}
+			this.$confirm("Вы действительно хотите отправить верификационный токен на почту преподавателю с id = " + id + "?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('sendVerificationTokenToTeacher', id)
+							.then(() => {
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Успешная операция',
+									text: 'Верификационный токен был успешно отправлен.',
+									type: 'success'
+								});
+							})
+							.catch(() => {
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Произошла ошибка отправления. Попробуйте еще.',
+									type: 'error'
+								});
+							})
+					}
+				});
 		}
 	},
 	computed: {

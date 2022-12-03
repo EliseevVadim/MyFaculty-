@@ -197,17 +197,25 @@ export default {
             this.rank.id = null;
         },
         deleteScienceRank(id) {
-            if (confirm("Вы действительно хотите удалить данную запись")) {
-                this.$store.dispatch('deleteScienceRank', id)
-                    .then(() => {
-                        this.resetRank();
-                        this.$store.dispatch('loadAllRanks');
-                    })
-                    .catch(() => {
-                        this.resetRank();
-                        alert("Невозможно удалить запись");
-                    })
-            }
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteScienceRank', id)
+							.then(() => {
+								this.resetRank();
+								this.$store.dispatch('loadAllRanks');
+							})
+							.catch(() => {
+								this.resetRank();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
         },
         startUpdatingScienceRank(id) {
             this.errorText = "";

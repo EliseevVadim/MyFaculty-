@@ -244,17 +244,25 @@ export default {
 			this.regionsAreLoaded = null;
 		},
 		deleteCity(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteCity', id)
-					.then(() => {
-						this.resetCity();
-						this.$store.dispatch('loadAllCities');
-					})
-					.catch(() => {
-						this.resetCity();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteCity', id)
+							.then(() => {
+								this.resetCity();
+								this.$store.dispatch('loadAllCities');
+							})
+							.catch(() => {
+								this.resetCity();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingCity(id) {
 			this.errorText = "";

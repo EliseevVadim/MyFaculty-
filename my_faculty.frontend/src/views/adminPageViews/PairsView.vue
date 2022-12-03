@@ -401,17 +401,25 @@ export default {
 			this.selectedFacultyForGroupsId = null;
 		},
 		deletePair(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deletePair', id)
-					.then(() => {
-						this.resetPair();
-						this.$store.dispatch('loadAllPairs');
-					})
-					.catch(() => {
-						this.resetPair();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deletePair', id)
+							.then(() => {
+								this.resetPair();
+								this.$store.dispatch('loadAllPairs');
+							})
+							.catch(() => {
+								this.resetPair();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingPair(id) {
 			this.errorText = "";

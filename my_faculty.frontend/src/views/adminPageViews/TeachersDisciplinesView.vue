@@ -217,17 +217,25 @@ export default {
 			this.teacher_discipline.teacher_id = null;
 		},
 		deleteTeacherDiscipline(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteTeacherDiscipline', id)
-					.then(() => {
-						this.resetTeacherDiscipline();
-						this.$store.dispatch('loadAllTeachersDisciplines');
-					})
-					.catch(() => {
-						this.resetTeacherDiscipline();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteTeacherDiscipline', id)
+							.then(() => {
+								this.resetTeacherDiscipline();
+								this.$store.dispatch('loadAllTeachersDisciplines');
+							})
+							.catch(() => {
+								this.resetTeacherDiscipline();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingTeacherDiscipline(id) {
 			this.errorText = "";

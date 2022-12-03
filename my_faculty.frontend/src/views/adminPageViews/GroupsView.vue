@@ -243,17 +243,25 @@ export default {
 			this.coursesAreLoaded = null;
 		},
 		deleteGroup(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteGroup', id)
-					.then(() => {
-						this.resetGroup();
-						this.$store.dispatch('loadAllGroups');
-					})
-					.catch(() => {
-						this.resetGroup();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteGroup', id)
+							.then(() => {
+								this.resetGroup();
+								this.$store.dispatch('loadAllGroups');
+							})
+							.catch(() => {
+								this.resetGroup();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingGroup(id) {
 			this.errorText = "";

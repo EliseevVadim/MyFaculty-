@@ -363,17 +363,25 @@ export default {
 			};
 		},
 		deleteAuditorium(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteAuditorium', id)
-					.then(() => {
-						this.resetAuditorium();
-						this.$store.dispatch('loadAllAuditoriums');
-					})
-					.catch(() => {
-						this.resetAuditorium();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteAuditorium', id)
+							.then(() => {
+								this.resetAuditorium();
+								this.$store.dispatch('loadAllAuditoriums');
+							})
+							.catch(() => {
+								this.resetAuditorium();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingAuditorium(id) {
 			this.errorText = "";

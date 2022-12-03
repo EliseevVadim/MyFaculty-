@@ -209,17 +209,25 @@ export default {
 			this.faculty.id = null;
 		},
 		deleteFaculty(id) {
-			if (confirm("Вы действительно хотите удалить данную запись")) {
-				this.$store.dispatch('deleteFaculty', id)
-					.then(() => {
-						this.resetFaculty();
-						this.$store.dispatch('loadAllFaculties');
-					})
-					.catch(() => {
-						this.resetFaculty();
-						alert("Невозможно удалить запись");
-					})
-			}
+			this.$confirm("Вы действительно хотите удалить данную запись?")
+				.then((result) => {
+					if (result) {
+						this.$store.dispatch('deleteFaculty', id)
+							.then(() => {
+								this.resetFaculty();
+								this.$store.dispatch('loadAllFaculties');
+							})
+							.catch(() => {
+								this.resetFaculty();
+								this.$notify({
+									group: 'admin-actions',
+									title: 'Ошибка',
+									text: 'Невозможно удалить запись',
+									type: 'error'
+								});
+							})
+					}
+				});
 		},
 		startUpdatingFaculty(id) {
 			this.errorText = "";
