@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyFaculty.Application.Dto;
 using MyFaculty.Application.Features.Teachers.Commands.CreateTeacher;
 using MyFaculty.Application.Features.Teachers.Commands.DeleteTeacher;
 using MyFaculty.Application.Features.Teachers.Commands.UpdateTeacher;
@@ -12,6 +13,7 @@ using MyFaculty.Application.Features.Teachers.Queries.GetTeachers;
 using MyFaculty.Application.Features.Teachers.Queries.GetVerificationTokenQuery;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
+using MyFaculty.WebApi.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -78,31 +80,30 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the teacher's verification token by id
+        /// Sends the teacher's verification token to teacher's email by id
         /// </summary>
         /// <remarks>
         /// Sample request: 
-        /// GET /teachers/1/verification-token
+        /// GET /teachers/1/send-verification-token
         /// </remarks>
         /// <param name="id">Teacher's id (integer)</param>
-        /// <returns>Returns Guid</returns>
+        /// <returns>Returns OkResult</returns>
         /// <response code="200">Success</response>
         /// <response code="404">Not found</response>
-        [HttpGet("{id}/verification-token")]
+        [HttpGet("{id}/send-verification-token")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Guid>> GetVerificationToken(int id)
+        public async Task<IActionResult> SendVerificationToken(int id)
         {
             GetVerificationTokenQuery query = new GetVerificationTokenQuery()
             {
                 Id = id
             };
-            Guid token = await Mediator.Send(query);
-            return Ok(new
-            {
-                token = token
-            });
+            TeacherVerificationCredentialsDto credentials = await Mediator.Send(query);
+            EmailService emailService = new EmailService(_configuration);
+            await emailService.SendEmailAsync(credentials.Email, "Токен преподавательской верификации", $"Ваш токен: {credentials.VerificationToken}");
+            return Ok();
         }
 
         /// <summary>

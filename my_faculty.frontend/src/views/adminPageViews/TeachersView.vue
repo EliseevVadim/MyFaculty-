@@ -162,6 +162,18 @@
 									mdi-delete
 								</v-icon>
 							</v-btn>
+							<v-btn
+								class="mx-2"
+								fab
+								small
+								dark
+								color="green"
+								@click="sendTokenToTeacher(item.id)"
+							>
+								<v-icon dark>
+									mdi-email
+								</v-icon>
+							</v-btn>
 						</td>
 					</tr>
 					</tbody>
@@ -285,6 +297,18 @@ export default {
 					this.updating = true;
 					this.showAddingForm = true;
 				})
+		},
+		sendTokenToTeacher(id) {
+			if (confirm("Вы действительно хотите отправить верификационный токен на почту преподавателю с id = " + id + "?")) {
+				this.$store.dispatch('sendVerificationTokenToTeacher', id)
+					.then(() => {
+						alert("Верификационный токен был успешно отправлен.");
+					})
+					.catch((error) => {
+						console.log(error);
+						alert("Произошла ошибка отправления. Попробуйте еще.");
+					})
+			}
 		}
 	},
 	computed: {

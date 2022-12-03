@@ -93,6 +93,19 @@ const actions = {
 					reject(error);
 				})
 		});
+	},
+	sendVerificationTokenToTeacher: (context, id) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.get(config.apiUrl + '/api/teachers/' + id + '/send-verification-token', {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
 	}
 };
 
