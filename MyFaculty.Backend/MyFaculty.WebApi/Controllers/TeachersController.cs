@@ -9,6 +9,7 @@ using MyFaculty.Application.Features.Teachers.Commands.DeleteTeacher;
 using MyFaculty.Application.Features.Teachers.Commands.UpdateTeacher;
 using MyFaculty.Application.Features.Teachers.Queries.GetTeacherInfo;
 using MyFaculty.Application.Features.Teachers.Queries.GetTeachers;
+using MyFaculty.Application.Features.Teachers.Queries.GetVerificationTokenQuery;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System;
@@ -74,6 +75,34 @@ namespace MyFaculty.WebApi.Controllers
             };
             TeacherViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the teacher's verification token by id
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /teachers/1/verification-token
+        /// </remarks>
+        /// <param name="id">Teacher's id (integer)</param>
+        /// <returns>Returns Guid</returns>
+        /// <response code="200">Success</response>
+        /// <response code="404">Not found</response>
+        [HttpGet("{id}/verification-token")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<Guid>> GetVerificationToken(int id)
+        {
+            GetVerificationTokenQuery query = new GetVerificationTokenQuery()
+            {
+                Id = id
+            };
+            Guid token = await Mediator.Send(query);
+            return Ok(new
+            {
+                token = token
+            });
         }
 
         /// <summary>

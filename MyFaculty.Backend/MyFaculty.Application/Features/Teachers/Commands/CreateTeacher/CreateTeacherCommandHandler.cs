@@ -31,6 +31,7 @@ namespace MyFaculty.Application.Features.Teachers.Commands.CreateTeacher
                 PhotoPath = request.PhotoPath,
                 Email = request.Email,
                 BirthDate = request.BirthDate,
+                VerifiactionToken = Guid.NewGuid(),
                 ScienceRankId = request.ScienceRankId,
                 Created = DateTime.Now
             };

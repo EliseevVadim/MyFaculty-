@@ -15,6 +15,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
         {
             builder.HasKey(teacher => teacher.Id);
             builder.Property(teacher => teacher.Id).ValueGeneratedOnAdd();
+            builder.HasIndex(teacher => teacher.VerifiactionToken).IsUnique();
             builder.HasOne(teacher => teacher.ScienceRank)
                 .WithMany(rank => rank.Teachers)
                 .HasForeignKey(teacher => teacher.ScienceRankId);

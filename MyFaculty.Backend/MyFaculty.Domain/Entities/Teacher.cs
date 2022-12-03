@@ -16,6 +16,7 @@ namespace MyFaculty.Domain.Entities
         public string FIO { get; set; }
         public string PhotoPath { get; set; }
         public string Email { get; set; }
+        public Guid VerifiactionToken { get; set; }
         public DateTime BirthDate { get; set; }
         public int ScienceRankId { get; set; }
         public ScienceRank ScienceRank { get; set; }
