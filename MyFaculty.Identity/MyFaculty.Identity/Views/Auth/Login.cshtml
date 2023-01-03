@@ -32,7 +32,9 @@
                         </button>
                     </div>
                     <div class="col s12 center first-nav-link">
-                        <a class="form-link" href="/auth/register">Еще не зарегистрированы? Создайте аккаунт!</a>
+                        <a asp-controller="Auth" asp-action="Register" 
+                            asp-route-returnUrl="@Model.ReturnUrl"
+                            class="form-link">Еще не зарегистрированы? Создайте аккаунт!</a>
                     </div>
                     <div class="col s12 center">
                         <a class="form-link" href="/auth/forgotpassword">Забыли пароль?</a>

@@ -146,6 +146,14 @@
 					<div />
 				</v-list>
 				<template v-slot:append>
+					<div class="pa-1">
+						<router-link
+							to="/teacher-verification"
+							class="verification_suggestion"
+						>
+							Преподаватель? Верифицируйте свой аккаунт!
+						</router-link>
+					</div>
 					<v-btn outlined @click="signOut" color="red" class="mt-3 mb-4">Выйти</v-btn>
 				</template>
 			</v-navigation-drawer>
@@ -332,4 +340,7 @@ export default {
 				font-weight: 500
 				text-decoration: none
 				text-transform: uppercase
+.verification_suggestion
+	color: white !important
+	font-size: 12px
 </style>

@@ -40,7 +40,7 @@ namespace MyFaculty.Identity
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireUppercase = false;
                 config.User.RequireUniqueEmail = true;
-                config.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+";
+                config.User.AllowedUserNameCharacters = "'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._+";
             })
                 .AddEntityFrameworkStores<AuthDbContext>()
                 .AddDefaultTokenProviders()

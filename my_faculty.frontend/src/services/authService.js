@@ -61,6 +61,11 @@ export default new class SecurityService {
         return !!user && !user.expired && user.profile.role.includes('User');
     }
 
+    async isTeacher() {
+        let user = await oidcClient.getUser();
+        return !!user && !user.expired && user.profile.role.includes('Teacher');
+    }
+
     async completeLogin() {
         return await oidcClient.signinRedirectCallback();
     }

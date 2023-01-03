@@ -2,16 +2,19 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyFaculty.Application.Dto;
 using MyFaculty.Application.Features.Teachers.Commands.CreateTeacher;
 using MyFaculty.Application.Features.Teachers.Commands.DeleteTeacher;
 using MyFaculty.Application.Features.Teachers.Commands.UpdateTeacher;
+using MyFaculty.Application.Features.Teachers.Commands.VerifyTeacher;
 using MyFaculty.Application.Features.Teachers.Queries.GetTeacherInfo;
 using MyFaculty.Application.Features.Teachers.Queries.GetTeachers;
 using MyFaculty.Application.Features.Teachers.Queries.GetVerificationTokenQuery;
 using MyFaculty.Application.ViewModels;
+using MyFaculty.Domain.Entities;
 using MyFaculty.WebApi.Dto;
 using MyFaculty.WebApi.Services;
 using System;
@@ -103,6 +106,37 @@ namespace MyFaculty.WebApi.Controllers
             TeacherVerificationCredentialsDto credentials = await Mediator.Send(query);
             EmailService emailService = new EmailService(_configuration);
             await emailService.SendEmailAsync(credentials.Email, "Токен преподавательской верификации", $"Ваш токен: {credentials.VerificationToken}");
+            return Ok();
+        }
+
+        /// <summary>
+        /// Creates the teacher
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /teachers/verify
+        /// {
+        ///     "userId": 1,
+        ///     "verificationToken": "guid"
+        /// }
+        /// </remarks>
+        /// <param name="verifyTeacherDto">VerifyTeacherDto object</param>
+        /// <returns>Retruns OkResult</returns>
+        /// <response code="200">Sucess</response>
+        /// <response code="403">Forbidden</response> 
+        /// <response code="500">Server error</response>
+        [HttpPost("verify")]
+        [Authorize(Roles = "User")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Create([FromBody] VerifyTeacherDto verifyTeacherDto)
+        {
+            VerifyTeacherCommand command = _mapper.Map<VerifyTeacherCommand>(verifyTeacherDto);
+            TeacherVerificationDto verificationDto = await Mediator.Send(command);
+            if (!verificationDto.VerificationIsSuccessful)
+                return Forbid();
+            RolesService rolesService = new RolesService();
+            await rolesService.AddUserToRoleAsync(verificationDto.VerifyingAcconut.Id, "Teacher");
             return Ok();
         }
 

@@ -8,7 +8,8 @@ namespace MyFaculty.Identity.Configurations
         private static string[] _roles = new[]
         {
             "User",
-            "Admin"
+            "Admin",
+            "Teacher"
         };
 
         public static IServiceCollection AddRolesManager(this IServiceCollection services)

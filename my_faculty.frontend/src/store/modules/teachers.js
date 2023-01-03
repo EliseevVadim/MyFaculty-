@@ -106,6 +106,19 @@ const actions = {
 					reject(error);
 				})
 		})
+	},
+	sendVerificationRequest: (context, payload) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.post(config.apiUrl + '/api/teachers/verify', payload, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error)
+				});
+		})
 	}
 };
 

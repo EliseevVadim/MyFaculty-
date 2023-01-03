@@ -158,6 +158,11 @@ const routes = [
                 path: '/clubs',
                 name: 'Сообщества курсов',
                 component: () => import('../views/accountPageViews/ClubsView')
+            },
+            {
+                path: '/teacher-verification',
+                name: 'Верификация преподавателя',
+                component: () => import('../views/accountPageViews/TeacherVerificationView')
             }
         ]
     },
