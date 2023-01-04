@@ -331,7 +331,7 @@ export default {
 				lastName: null,
 				birthDate: null,
 				photo: null,
-				cityId: null,
+				cityId: '',
 				website: null,
 				vkLink: null,
 				telegramLink: null
@@ -372,7 +372,7 @@ export default {
 			});
 		},
 		openEditForm() {
-			this.myProfile = this.CURRENT_USER;
+			this.myProfile = JSON.parse(JSON.stringify(this.CURRENT_USER));
 			this.myProfile.birthDate = this.CURRENT_USER.birthDate === null ? null : this.CURRENT_USER.birthDate.slice(0, 10);
 			this.$store.dispatch('loadAllCountries');
 			if (this.CURRENT_USER.city !== null) {

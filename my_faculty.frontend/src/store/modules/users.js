@@ -62,7 +62,8 @@ const actions = {
 			formData.append('firstName', payload.firstName);
 			formData.append('lastName', payload.lastName);
 			formData.append('email', payload.email);
-			formData.append('cityId', payload.cityId);
+			if (payload.cityId !== null)
+				formData.append('cityId', payload.cityId);
 			formData.append('photo', payload.photo);
 			formData.append('website', payload.website ?? '');
 			formData.append('vkLink', payload.vkLink ?? '');
