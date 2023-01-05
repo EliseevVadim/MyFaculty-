@@ -465,7 +465,6 @@ export default {
 			});
 		},
 		openEditForm() {
-			console.log(this.CURRENT_USER);
 			this.myProfile = JSON.parse(JSON.stringify(this.CURRENT_USER));
 			this.myProfile.birthDate = this.CURRENT_USER.birthDate === null ? null : this.CURRENT_USER.birthDate.slice(0, 10);
 			this.$store.dispatch('loadAllCountries');

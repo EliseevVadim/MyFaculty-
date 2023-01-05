@@ -163,6 +163,11 @@ const routes = [
                 path: '/teacher-verification',
                 name: 'Верификация преподавателя',
                 component: () => import('../views/accountPageViews/TeacherVerificationView')
+            },
+            {
+                path: '/id:id',
+                name: 'Просмотр профиля пользователя',
+                component: () => import('../views/accountPageViews/UserView')
             }
         ]
     },
