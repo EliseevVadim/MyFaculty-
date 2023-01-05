@@ -201,9 +201,11 @@ export default {
 		this.$store.dispatch('loadUserById', id)
 			.then((response) => {
 				this.watchingProfile = response.data;
+				document.title = this.getFullName();
 			})
 			.catch((error) => {
 				if (error.response.status === 404) {
+					document.title = "Пользователь не найден";
 					this.userNotFound = true;
 					document.getElementsByClassName('v-main__wrap')[0].style.background = '#313131';
 				}
