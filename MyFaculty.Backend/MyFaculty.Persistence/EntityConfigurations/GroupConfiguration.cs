@@ -21,6 +21,9 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasOne(group => group.Course)
                 .WithMany(course => course.Groups)
                 .HasForeignKey(group => group.CourseId);
+            builder.HasMany(group => group.Students)
+                .WithOne(user => user.Group)
+                .HasForeignKey(user => user.GroupId);
         }
     }
 }

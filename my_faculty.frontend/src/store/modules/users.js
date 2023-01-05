@@ -64,6 +64,12 @@ const actions = {
 			formData.append('email', payload.email);
 			if (payload.cityId !== null)
 				formData.append('cityId', payload.cityId);
+			if (payload.facultyId !== null)
+				formData.append('facultyId', payload.facultyId);
+			if (payload.courseId !== null)
+				formData.append('courseId', payload.courseId);
+			if (payload.groupId !== null)
+				formData.append('groupId', payload.groupId);
 			formData.append('photo', payload.photo);
 			formData.append('website', payload.website ?? '');
 			formData.append('vkLink', payload.vkLink ?? '');

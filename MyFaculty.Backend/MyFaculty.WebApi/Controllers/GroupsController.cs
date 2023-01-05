@@ -7,6 +7,7 @@ using MyFaculty.Application.Features.Groups.Commands.DeleteGroup;
 using MyFaculty.Application.Features.Groups.Commands.UpdateGroup;
 using MyFaculty.Application.Features.Groups.Queries.GetGroupInfo;
 using MyFaculty.Application.Features.Groups.Queries.GetGroups;
+using MyFaculty.Application.Features.Groups.Queries.GetGroupsForCourse;
 using MyFaculty.Application.Features.Groups.Queries.GetGroupsForFaculty;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
@@ -75,15 +76,37 @@ namespace MyFaculty.WebApi.Controllers
         /// GET /groups/faculty/1
         /// </remarks>
         /// <param name="id">Specific faculty id (integer)</param>
-        /// <returns>CoursesListViewModel</returns>
+        /// <returns>GroupsListViewModel</returns>
         /// <response code="200">Success</response>
         [HttpGet("faculty/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<CoursesListViewModel>> GetByFacultyId(int id)
+        public async Task<ActionResult<GroupsListViewModel>> GetByFacultyId(int id)
         {
             GetGroupsForFacultyQuery query = new GetGroupsForFacultyQuery()
             {
                 FacultyId = id
+            };
+            GroupsListViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the list of groups for a specific course
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /groups/course/1
+        /// </remarks>
+        /// <param name="id">Specific course id (integer)</param>
+        /// <returns>CoursesListViewModel</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("course/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<GroupsListViewModel>> GetByCourseId(int id)
+        {
+            GetGroupsForCourseQuery query = new GetGroupsForCourseQuery()
+            {
+                CourseId = id
             };
             GroupsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);

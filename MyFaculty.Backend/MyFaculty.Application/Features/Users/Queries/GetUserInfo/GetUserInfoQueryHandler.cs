@@ -31,6 +31,9 @@ namespace MyFaculty.Application.Features.Users.Queries.GetUserInfo
                 .Include(user => user.City)
                     .ThenInclude(city => city.Region)
                         .ThenInclude(region => region.Country)
+                .Include(user => user.Faculty)
+                .Include(user => user.Course)
+                .Include(user => user.Group)
                 .FirstOrDefaultAsync(user => user.Id == request.Id, cancellationToken);
             if (user == null)
                 throw new EntityNotFoundException(nameof(AppUser), request.Id);

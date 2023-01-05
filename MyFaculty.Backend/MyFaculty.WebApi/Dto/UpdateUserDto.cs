@@ -21,6 +21,9 @@ namespace MyFaculty.WebApi.Dto
         public DateTime? BirthDate { get; set; }
         public IFormFile Photo { get; set; }
         public int? CityId { get; set; }
+        public int? FacultyId { get; set; }
+        public int? CourseId { get; set; }
+        public int? GroupId { get; set; }
         public string Website { get; set; }
         public string VKLink { get; set; }
         public string TelegramLink { get; set; }
@@ -34,6 +37,9 @@ namespace MyFaculty.WebApi.Dto
                 .ForMember(command => command.LastName, options => options.MapFrom(dto => dto.LastName))
                 .ForMember(command => command.BirthDate, options => options.MapFrom(dto => dto.BirthDate))
                 .ForMember(command => command.CityId, options => options.MapFrom(dto => dto.CityId == 0 ? null : dto.CityId))
+                .ForMember(command => command.FacultyId, options => options.MapFrom(dto => dto.FacultyId == 0 ? null : dto.FacultyId))
+                .ForMember(command => command.CourseId, options => options.MapFrom(dto => dto.CourseId == 0 ? null : dto.CourseId))
+                .ForMember(command => command.GroupId, options => options.MapFrom(dto => dto.GroupId == 0 ? null : dto.GroupId))
                 .ForMember(command => command.Website, options => options.MapFrom(dto => dto.Website))
                 .ForMember(command => command.VKLink, options => options.MapFrom(dto => dto.VKLink))
                 .ForMember(command => command.TelegramLink, options => options.MapFrom(dto => dto.TelegramLink));

@@ -16,9 +16,15 @@ namespace MyFaculty.Application.Dto
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string AvatarPath { get; set; }
-        public int CityId { get; set; }
+        public int? CityId { get; set; }
+        public int? FacultyId { get; set; }
+        public int? CourseId { get; set; }
+        public int? GroupId { get; set; }
         public string CityName { get; set; }
         public string CountryName { get; set; }
+        public string FacultyName { get; set; }
+        public string CourseName { get; set; }
+        public string GroupName { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -29,8 +35,14 @@ namespace MyFaculty.Application.Dto
                 .ForMember(dto => dto.LastName, options => options.MapFrom(user => user.LastName))
                 .ForMember(dto => dto.AvatarPath, options => options.MapFrom(user => user.AvatarPath))
                 .ForMember(dto => dto.CityId, options => options.MapFrom(user => user.CityId))
+                .ForMember(vm => vm.FacultyId, options => options.MapFrom(user => user.FacultyId))
+                .ForMember(vm => vm.CourseId, options => options.MapFrom(user => user.CourseId))
+                .ForMember(vm => vm.GroupId, options => options.MapFrom(user => user.GroupId))
                 .ForMember(dto => dto.CityName, options => options.MapFrom(user => user.City.CityName))
-                .ForMember(dto => dto.CountryName, options => options.MapFrom(user => user.City.Region.Country.CountryName));
+                .ForMember(dto => dto.CountryName, options => options.MapFrom(user => user.City.Region.Country.CountryName))
+                .ForMember(dto => dto.FacultyName, options => options.MapFrom(user => user.Faculty.FacultyName))
+                .ForMember(dto => dto.CourseName, options => options.MapFrom(user => user.Course.CourseName))
+                .ForMember(dto => dto.GroupName, options => options.MapFrom(user => user.Group.GroupName));
         }
     }
 }

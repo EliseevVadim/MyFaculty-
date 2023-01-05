@@ -17,6 +17,7 @@ namespace MyFaculty.Domain.Entities
         public int CourseId { get; set; }
         public Course Course { get; set; }
         public List<Pair> Pairs { get; set; } = new();
+        public List<AppUser> Students { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
     }

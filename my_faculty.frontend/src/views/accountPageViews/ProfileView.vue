@@ -121,7 +121,7 @@
 								></v-autocomplete>
 							</v-col>
 							<h1 v-else-if="regionsAreLoaded === false" class="red--text">
-								Для данной страны информация о регонах отсутствует.
+								Для данной страны информация о регионах отсутствует.
 								Дальнейшее заполнение невозможно.
 							</h1>
 							<v-col
@@ -141,6 +141,55 @@
 							</v-col>
 							<h1 v-else-if="citiesAreLoaded === false" class="red--text">
 								Для данного региона информация о городах отсутствует.
+								Дальнейшее заполнение невозможно.
+							</h1>
+							<v-col
+								cols="12"
+							>
+								<v-autocomplete
+									:items="this.FACULTIES.faculties"
+									item-text="facultyName"
+									item-value="id"
+									label="Выберите факультет"
+									v-model="selectedFacultyId"
+									@change="loadCoursesList"
+								></v-autocomplete>
+							</v-col>
+							<v-col
+								v-if="coursesAreLoaded"
+								cols="12"
+							>
+								<v-autocomplete
+									label="Курс"
+									required
+									:items="this.COURSES.courses"
+									item-text="courseName"
+									item-value="id"
+									hide-details="auto"
+									v-model="selectedCourseId"
+									@change="loadGroupsList"
+								></v-autocomplete>
+							</v-col>
+							<h1 v-else-if="coursesAreLoaded === false" class="red--text">
+								Для данного факультета информация о курсах отсутствует.
+								Дальнейшее заполнение невозможно.
+							</h1>
+							<v-col
+								v-if="groupsAreLoaded"
+								cols="12"
+							>
+								<v-autocomplete
+									label="Группа"
+									required
+									:items="this.GROUPS.groups"
+									item-text="groupName"
+									item-value="id"
+									hide-details="auto"
+									v-model="myProfile.groupId"
+								></v-autocomplete>
+							</v-col>
+							<h1 v-else-if="groupsAreLoaded === false" class="red--text">
+								Для данного курса информация о группах отсутствует.
 								Дальнейшее заполнение невозможно.
 							</h1>
 							<v-col cols="12">
@@ -316,6 +365,43 @@
 					</v-col>
 				</v-row>
 			</v-col>
+			<v-col
+				class="d-flex flex-column col-sm-6 col-12"
+			>
+				<h4 class="info-subheader">Студенческая информация</h4>
+				<v-row class="d-flex justify-center flex-column">
+					<v-col class="d-flex flex-sm-row flex-column pb-0">
+						<v-col class="text-left">
+							<span class="parameter-name">Факультет:</span>
+						</v-col>
+						<v-col>
+							<span class="parameter-value">
+								{{CURRENT_USER.faculty === null ? 'не указано' : CURRENT_USER.faculty.facultyName}}
+							</span>
+						</v-col>
+					</v-col>
+					<v-col class="d-flex flex-sm-row flex-column pb-0 pt-0">
+						<v-col class="text-left">
+							<span class="parameter-name">Курс:</span>
+						</v-col>
+						<v-col>
+							<span class="parameter-value">
+								{{CURRENT_USER.course === null ? 'не указано' : CURRENT_USER.course.courseName}}
+							</span>
+						</v-col>
+					</v-col>
+					<v-col class="d-flex flex-sm-row flex-column pb-0 pt-0">
+						<v-col class="text-left">
+							<span class="parameter-name">Группа:</span>
+						</v-col>
+						<v-col>
+							<span class="parameter-value">
+								{{CURRENT_USER.group === null ? 'не указано' : CURRENT_USER.group.groupName}}
+							</span>
+						</v-col>
+					</v-col>
+				</v-row>
+			</v-col>
 		</v-row>
 	</v-container>
 </template>
@@ -331,7 +417,10 @@ export default {
 				lastName: null,
 				birthDate: null,
 				photo: null,
-				cityId: '',
+				cityId: null,
+				facultyId: null,
+				courseId: null,
+				groupId: null,
 				website: null,
 				vkLink: null,
 				telegramLink: null
@@ -342,8 +431,12 @@ export default {
 			previewImage: null,
 			selectedCountryId: null,
 			selectedRegionId: null,
+			selectedFacultyId: null,
+			selectedCourseId: null,
 			regionsAreLoaded: null,
 			citiesAreLoaded: null,
+			coursesAreLoaded: null,
+			groupsAreLoaded: null,
 			photoRules: [
 				value => !value || value.size < 2000000 || 'Размер фото превышает 2 МБ!'
 			],
@@ -372,6 +465,7 @@ export default {
 			});
 		},
 		openEditForm() {
+			console.log(this.CURRENT_USER);
 			this.myProfile = JSON.parse(JSON.stringify(this.CURRENT_USER));
 			this.myProfile.birthDate = this.CURRENT_USER.birthDate === null ? null : this.CURRENT_USER.birthDate.slice(0, 10);
 			this.$store.dispatch('loadAllCountries');
@@ -380,6 +474,15 @@ export default {
 				this.loadRegionsList();
 				this.selectedRegionId = this.CURRENT_USER.city.regionId;
 				this.loadCitiesList();
+			}
+			this.$store.dispatch('loadAllFaculties');
+			if (this.CURRENT_USER.faculty !== null) {
+				this.selectedFacultyId = this.CURRENT_USER.faculty.id;
+				this.loadCoursesList();
+			}
+			if (this.CURRENT_USER.course !== null) {
+				this.selectedCourseId = this.CURRENT_USER.course.id;
+				this.loadGroupsList();
 			}
 			this.showEditingForm = true;
 			this.previewImage = null;
@@ -409,8 +512,26 @@ export default {
 					this.$loading(false);
 				});
 		},
+		loadCoursesList() {
+			this.$loading(true);
+			this.$store.dispatch('loadCoursesByFacultyId', this.selectedFacultyId)
+				.then(() => {
+					this.coursesAreLoaded = this.COURSES.courses.length > 0;
+					this.$loading(false);
+				});
+		},
+		loadGroupsList() {
+			this.$loading(true);
+			this.$store.dispatch('loadGroupsByCourseId', this.selectedCourseId)
+				.then(() => {
+					this.groupsAreLoaded = this.GROUPS.groups.length > 0;
+					this.$loading(false);
+				});
+		},
 		editProfile() {
 			this.$loading(true);
+			this.myProfile.facultyId = this.selectedFacultyId;
+			this.myProfile.courseId = this.selectedCourseId;
 			this.$store.dispatch('updateUser', this.myProfile)
 				.then(() => {
 					this.$store.dispatch('loadCurrentUser', this.$oidc.currentUserId)
@@ -429,7 +550,10 @@ export default {
 		...mapGetters(['CURRENT_USER']),
 		...mapGetters(['COUNTRIES']),
 		...mapGetters(['REGIONS']),
-		...mapGetters(['CITIES'])
+		...mapGetters(['CITIES']),
+		...mapGetters(['FACULTIES']),
+		...mapGetters(['COURSES']),
+		...mapGetters(['GROUPS'])
 	}
 }
 </script>

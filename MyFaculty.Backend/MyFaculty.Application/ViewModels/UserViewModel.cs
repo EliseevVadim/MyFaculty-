@@ -19,7 +19,13 @@ namespace MyFaculty.Application.ViewModels
         public string AvatarPath { get; set; }
         public DateTime? BirthDate { get; set; }
         public int? CityId { get; set; }
+        public int? FacultyId { get; set; }
+        public int? CourseId { get; set; }
+        public int? GroupId { get; set; }
         public CityLookupDto City { get; set; }
+        public FacultyLookupDto Faculty { get; set; }
+        public CourseLookupDto Course { get; set; }
+        public GroupLookupDto Group { get; set; }
         public string Website { get; set; }
         public string VKLink { get; set; }
         public string TelegramLink { get; set; }
@@ -34,7 +40,13 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.AvatarPath, options => options.MapFrom(user => user.AvatarPath))
                 .ForMember(vm => vm.BirthDate, options => options.MapFrom(user => user.BirthDate))
                 .ForMember(vm => vm.CityId, options => options.MapFrom(user => user.CityId))
+                .ForMember(vm => vm.FacultyId, options => options.MapFrom(user => user.FacultyId))
+                .ForMember(vm => vm.CourseId, options => options.MapFrom(user => user.CourseId))
+                .ForMember(vm => vm.GroupId, options => options.MapFrom(user => user.GroupId))
                 .ForMember(vm => vm.City, options => options.MapFrom(user => user.City))
+                .ForMember(vm => vm.Faculty, options => options.MapFrom(user => user.Faculty))
+                .ForMember(vm => vm.Course, options => options.MapFrom(user => user.Course))
+                .ForMember(vm => vm.Group, options => options.MapFrom(user => user.Group))
                 .ForMember(vm => vm.Website, options => options.MapFrom(user => user.Website))
                 .ForMember(vm => vm.VKLink, options => options.MapFrom(user => user.VKLink))
                 .ForMember(vm => vm.TelegramLink, options => options.MapFrom(user => user.TelegramLink));
