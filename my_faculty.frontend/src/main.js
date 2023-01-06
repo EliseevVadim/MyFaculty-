@@ -11,10 +11,12 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css';
 import SecurityService from './services/authService';
 import * as d3 from "d3";
 import LoadingScreen from "@/components/LoadingScreen";
+import BackgroundColorService from './services/backgroundColorService';
 
 Vue.config.productionTip = false;
 Vue.prototype.$oidc = SecurityService;
 Vue.prototype.$d3 = d3;
+Vue.prototype.$backgroundColorService = BackgroundColorService;
 
 Vue.use(VueLoading, {
     customLoader: LoadingScreen,
