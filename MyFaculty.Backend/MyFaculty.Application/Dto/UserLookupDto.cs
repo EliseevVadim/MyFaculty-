@@ -20,6 +20,7 @@ namespace MyFaculty.Application.Dto
         public int? FacultyId { get; set; }
         public int? CourseId { get; set; }
         public int? GroupId { get; set; }
+        public bool IsTeacher { get; set; }
         public string CityName { get; set; }
         public string CountryName { get; set; }
         public string FacultyName { get; set; }
@@ -38,6 +39,7 @@ namespace MyFaculty.Application.Dto
                 .ForMember(vm => vm.FacultyId, options => options.MapFrom(user => user.FacultyId))
                 .ForMember(vm => vm.CourseId, options => options.MapFrom(user => user.CourseId))
                 .ForMember(vm => vm.GroupId, options => options.MapFrom(user => user.GroupId))
+                .ForMember(vm => vm.IsTeacher, options => options.MapFrom(user => user.IsTeacher))
                 .ForMember(dto => dto.CityName, options => options.MapFrom(user => user.City.CityName))
                 .ForMember(dto => dto.CountryName, options => options.MapFrom(user => user.City.Region.Country.CountryName))
                 .ForMember(dto => dto.FacultyName, options => options.MapFrom(user => user.Faculty.FacultyName))

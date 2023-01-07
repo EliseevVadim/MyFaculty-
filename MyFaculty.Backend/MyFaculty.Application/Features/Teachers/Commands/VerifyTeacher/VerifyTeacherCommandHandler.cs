@@ -29,6 +29,11 @@ namespace MyFaculty.Application.Features.Teachers.Commands.VerifyTeacher
                 && teacher != null 
                 && teacher.Email == user.Email 
                 && teacher.VerifiactionToken == request.VerificationToken;
+            if (verificationIsSuccessful)
+            {
+                user.IsTeacher = true;
+                await _context.SaveChangesAsync(cancellationToken);
+            }
             return new TeacherVerificationDto
             {
                 VerificationIsSuccessful = verificationIsSuccessful,

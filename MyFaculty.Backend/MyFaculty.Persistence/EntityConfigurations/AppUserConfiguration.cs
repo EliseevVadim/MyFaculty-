@@ -35,6 +35,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasOne(user => user.Group)
                 .WithMany(group => group.Students)
                 .HasForeignKey(user => user.GroupId);
+            builder.Property(user => user.IsTeacher).HasDefaultValue(false);
             builder.Property(user => user.Website).IsRequired(false);
             builder.Property(user => user.VKLink).IsRequired(false);
             builder.Property(user => user.TelegramLink).IsRequired(false);

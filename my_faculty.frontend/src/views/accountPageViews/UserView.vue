@@ -9,9 +9,10 @@
 		>
 			<v-row class="d-flex justify-center">
 				<h1
-					v-text="getFullName()"
 					class="pb-5"
 				>
+					{{getFullName()}}
+					<TeacherVerificationMark v-if="watchingProfile.isTeacher"/>
 				</h1>
 			</v-row>
 			<v-row
@@ -168,9 +169,10 @@
 
 <script>
 import NotFoundPage from "@/components/AccountComponents/core/service-pages/NotFoundPage";
+import TeacherVerificationMark from "@/components/AccountComponents/core/verificationMarks/TeacherVerificationMark";
 export default {
 	name: "UserView",
-	components: {NotFoundPage},
+	components: {TeacherVerificationMark, NotFoundPage},
 	data() {
 		return {
 			watchingProfile: {},

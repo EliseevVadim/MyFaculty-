@@ -22,6 +22,7 @@ namespace MyFaculty.Application.ViewModels
         public int? FacultyId { get; set; }
         public int? CourseId { get; set; }
         public int? GroupId { get; set; }
+        public bool IsTeacher { get; set; }
         public CityLookupDto City { get; set; }
         public FacultyLookupDto Faculty { get; set; }
         public CourseLookupDto Course { get; set; }
@@ -43,6 +44,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.FacultyId, options => options.MapFrom(user => user.FacultyId))
                 .ForMember(vm => vm.CourseId, options => options.MapFrom(user => user.CourseId))
                 .ForMember(vm => vm.GroupId, options => options.MapFrom(user => user.GroupId))
+                .ForMember(vm => vm.IsTeacher, options => options.MapFrom(user => user.IsTeacher))
                 .ForMember(vm => vm.City, options => options.MapFrom(user => user.City))
                 .ForMember(vm => vm.Faculty, options => options.MapFrom(user => user.Faculty))
                 .ForMember(vm => vm.Course, options => options.MapFrom(user => user.Course))

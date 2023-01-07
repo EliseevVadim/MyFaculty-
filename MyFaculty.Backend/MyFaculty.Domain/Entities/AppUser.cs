@@ -18,6 +18,7 @@ namespace MyFaculty.Domain.Entities
         public int? FacultyId { get; set; }
         public int? CourseId { get; set; }
         public int? GroupId { get; set; }
+        public bool IsTeacher { get; set; }
         public string Website { get; set; }
         public string VKLink { get; set; }
         public string TelegramLink { get; set; }

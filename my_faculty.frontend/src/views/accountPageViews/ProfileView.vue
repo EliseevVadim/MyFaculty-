@@ -239,9 +239,10 @@
 		</v-dialog>
 		<v-row class="d-flex justify-center">
 			<h1
-				v-text="getFullName()"
 				class="pb-5"
 			>
+				{{getFullName()}}
+				<TeacherVerificationMark v-if="CURRENT_USER.isTeacher"/>
 			</h1>
 			<v-btn
 				class="mx-2"
@@ -408,8 +409,10 @@
 
 <script>
 import {mapGetters} from "vuex";
+import TeacherVerificationMark from "@/components/AccountComponents/core/verificationMarks/TeacherVerificationMark";
 export default {
 	name: "ProfileView",
+	components: {TeacherVerificationMark},
 	data() {
 		return {
 			myProfile : {

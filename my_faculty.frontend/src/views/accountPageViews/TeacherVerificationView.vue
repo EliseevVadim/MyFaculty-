@@ -96,14 +96,17 @@ export default {
 			this.$loading(true);
 			this.$store.dispatch('sendVerificationRequest', requestBody)
 				.then(() => {
-					this.$loading(false);
-					this.$notify({
-						group: 'admin-actions',
-						title: 'Успешная операция',
-						text: 'Верификация прошла успешно',
-						type: 'success'
-					});
-					this.rulesHaveBeenRead = false;
+					this.$store.dispatch('loadCurrentUser', this.$oidc.currentUserId)
+						.then(() => {
+							this.$loading(false);
+							this.$notify({
+								group: 'admin-actions',
+								title: 'Успешная операция',
+								text: 'Верификация прошла успешно',
+								type: 'success'
+							});
+							this.rulesHaveBeenRead = false;
+						})
 				})
 				.catch(() => {
 					this.$loading(false);
