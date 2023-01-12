@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<NotFoundPage v-if="userNotFound" message="Пользователь не найден"></NotFoundPage>
+		<ErrorPage v-if="userNotFound" errorCode="404" message="Пользователь не найден"></ErrorPage>
 		<v-container
 			v-else
 			fluid
@@ -168,11 +168,11 @@
 </template>
 
 <script>
-import NotFoundPage from "@/components/AccountComponents/core/service-pages/NotFoundPage";
+import ErrorPage from "@/components/AccountComponents/core/service-pages/ErrorPage";
 import TeacherVerificationMark from "@/components/AccountComponents/core/verificationMarks/TeacherVerificationMark";
 export default {
 	name: "UserView",
-	components: {TeacherVerificationMark, NotFoundPage},
+	components: {TeacherVerificationMark, ErrorPage},
 	data() {
 		return {
 			watchingProfile: {},
@@ -209,15 +209,11 @@ export default {
 				if (error.response.status === 404) {
 					document.title = "Пользователь не найден";
 					this.userNotFound = true;
-					this.$backgroundColorService.setBackgroundFor404Page();
 				}
 			})
 			.finally(() => {
 				this.$loading(false);
 			})
-	},
-	destroyed() {
-		this.$backgroundColorService.restoreBackground();
 	}
 }
 </script>

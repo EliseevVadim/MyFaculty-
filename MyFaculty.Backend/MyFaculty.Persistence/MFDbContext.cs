@@ -40,6 +40,7 @@ namespace MyFaculty.Persistence
         public DbSet<Region> Regions { get; set; } = null!;
         public DbSet<City> Cities { get; set; } = null!;
         public DbSet<AppUser> Users { get; set; } = null!;
+        public DbSet<StudyClub> StudyClubs { get; set; } = null!;
         public DbSet<ExpertSystemState> ExpertSystemStates { get; set; } = null!;
         public DbSet<ExpertSystemStateTransition> ExpertSystemStateTransitions { get; set; } = null!;
         public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; } = null!;

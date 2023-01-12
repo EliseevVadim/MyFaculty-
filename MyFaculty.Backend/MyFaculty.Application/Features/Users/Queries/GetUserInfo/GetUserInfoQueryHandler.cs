@@ -28,6 +28,8 @@ namespace MyFaculty.Application.Features.Users.Queries.GetUserInfo
         public async Task<UserViewModel> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
         {
             AppUser user = await _context.Users
+                .Include(user => user.StudyClubs)
+                    .ThenInclude(club => club.Members)
                 .Include(user => user.City)
                     .ThenInclude(city => city.Region)
                         .ThenInclude(region => region.Country)

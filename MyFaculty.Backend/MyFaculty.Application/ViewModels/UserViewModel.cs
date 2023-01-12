@@ -27,6 +27,7 @@ namespace MyFaculty.Application.ViewModels
         public FacultyLookupDto Faculty { get; set; }
         public CourseLookupDto Course { get; set; }
         public GroupLookupDto Group { get; set; }
+        public List<StudyClubLookupDto> StudyClubsAtMembership { get; set; }
         public string Website { get; set; }
         public string VKLink { get; set; }
         public string TelegramLink { get; set; }
@@ -49,6 +50,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.Faculty, options => options.MapFrom(user => user.Faculty))
                 .ForMember(vm => vm.Course, options => options.MapFrom(user => user.Course))
                 .ForMember(vm => vm.Group, options => options.MapFrom(user => user.Group))
+                .ForMember(vm => vm.StudyClubsAtMembership, options => options.MapFrom(user => user.StudyClubs))
                 .ForMember(vm => vm.Website, options => options.MapFrom(user => user.Website))
                 .ForMember(vm => vm.VKLink, options => options.MapFrom(user => user.VKLink))
                 .ForMember(vm => vm.TelegramLink, options => options.MapFrom(user => user.TelegramLink));

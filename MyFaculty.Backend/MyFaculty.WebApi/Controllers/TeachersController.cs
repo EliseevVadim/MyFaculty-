@@ -110,7 +110,7 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the teacher
+        /// Verifies the teacher
         /// </summary>
         /// <remarks>
         /// Sample request:

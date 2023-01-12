@@ -162,12 +162,17 @@ const routes = [
             {
                 path: '/teacher-verification',
                 name: 'Верификация преподавателя',
-                component: () => import('../views/accountPageViews/TeacherVerificationView')
+                component: () => import('../views/accountPageViews/teacherViews/TeacherVerificationView')
             },
             {
                 path: '/id:id',
                 name: 'Просмотр профиля пользователя',
                 component: () => import('../views/accountPageViews/UserView')
+            },
+            {
+                path: '/create-study-club',
+                name: 'Создать сообщество курса',
+                component: () => import('../views/accountPageViews/teacherViews/CreateStudyClubView')
             }
         ]
     },

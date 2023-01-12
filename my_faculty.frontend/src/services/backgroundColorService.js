@@ -1,5 +1,5 @@
 export default new class BackgroundColorService {
-	setBackgroundFor404Page() {
+	setBackgroundForErrorPage() {
 		document.getElementsByClassName('v-main__wrap')[0].style.background = '#313131';
 	}
 

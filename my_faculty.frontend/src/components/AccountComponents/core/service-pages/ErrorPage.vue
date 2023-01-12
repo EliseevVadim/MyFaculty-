@@ -2,7 +2,11 @@
 	<div>
 		<div class="test-error">
 			<div class="sign">
-				<div class="neon-blue" id="title">4<span id="fade">0</span>4</div>
+				<div class="neon-blue" id="title">
+					{{codeAsArray[0]}}
+					<span id="fade">{{codeAsArray[1]}}</span>
+					{{codeAsArray[2]}}
+				</div>
 				<div class="neon-blue">{{message}}<br>
 					<span class="neon-purple" id="trav">My</span>
 					<span class="neon-elov">Faculty</span></div>
@@ -14,8 +18,19 @@
 
 <script>
 export default {
-	name: "NotFoundPage",
-	props: ['message']
+	name: "ErrorPage",
+	props: ['errorCode', 'message'],
+	computed: {
+		codeAsArray() {
+			return this.errorCode.split('');
+		}
+	},
+	mounted() {
+		this.$backgroundColorService.setBackgroundForErrorPage();
+	},
+	destroyed() {
+		this.$backgroundColorService.restoreBackground();
+	}
 }
 </script>
 
@@ -50,7 +65,7 @@ export default {
 #fade {
 	opacity: 0.8;
 	color: #ebffff;
-	text-shadow: 2px 2px 1px rgba(0,0,0,0.3), 0 0px 15px #fff, 0 0 10px #38eeff, 0 0 50px #38eeff;
+	text-shadow: 2px 2px 1px rgba(0,0,0,0.3), 0 0 15px #fff, 0 0 10px #38eeff, 0 0 50px #38eeff;
 	-webkit-animation: fade 3s infinite alternate;
 	-moz-animation: fade 3s infinite alternate;
 	-o-animation: fade 3s infinite alternate;
@@ -60,7 +75,7 @@ export default {
 	margin: 0 auto;
 	text-align: center;
 	color: #ebffff;
-	text-shadow: 2px 2px 1px rgba(0,0,0,0.3), 0 0px 15px #fff, 0 0 10px #38eeff, 0 0 50px #38eeff;
+	text-shadow: 2px 2px 1px rgba(0,0,0,0.3), 0 0 15px #fff, 0 0 10px #38eeff, 0 0 50px #38eeff;
 }
 .neon-purple {
 	font-family: 'League Script', Helvetica, Arial, sans-serif;
