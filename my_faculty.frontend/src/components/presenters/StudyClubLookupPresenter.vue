@@ -5,7 +5,10 @@
 			:key="item.clubName"
 		>
 			<v-list-item-avatar>
-				<v-img :src="item.imagePath === '' ? 'img/blank-club.png' : item.imagePath"></v-img>
+				<v-img
+					class="club-image"
+					:src="item.imagePath ? item.imagePath : 'img/blank-club.png'"
+				/>
 			</v-list-item-avatar>
 
 			<v-list-item-content class="club-lookup-content">
@@ -13,7 +16,7 @@
 					<router-link class="club-title" :to="'/clubs/' + item.id">{{item.clubName}}</router-link>
 				</v-list-item-title>
 				<v-list-item-subtitle>
-					{{ item.membersCount }} участников
+					{{prettifyMembersCount()}}
 				</v-list-item-subtitle>
 			</v-list-item-content>
 			<v-menu
@@ -123,6 +126,24 @@ export default {
 					});
 					this.$loading(false);
 				});
+		},
+		prettifyMembersCount() {
+			let  count = this.item.membersCount;
+			let lastNumber = count % 100;
+			let variants = ['участник', 'участника', 'участников'];
+			if (lastNumber > 10 && lastNumber < 20)
+				return `${count} ${variants[2]}`;
+			let lastDigit = lastNumber % 10;
+			switch (lastDigit) {
+				case 1:
+					return `${count} ${variants[0]}`;
+				case 2:
+				case 3:
+				case 4:
+					return `${count} ${variants[1]}`;
+				default:
+					return `${count} ${variants[2]}`;
+			}
 		}
 	}
 }
@@ -140,5 +161,14 @@ export default {
 	}
 	.club-menu-option {
 		cursor: pointer;
+	}
+	.club-image {
+		margin: 0 auto;
+		border-radius: 50%;
+		border: double 3px transparent;
+		background-image: linear-gradient(white, white),
+		radial-gradient(circle at bottom left, red 20%, blue, black);
+		background-origin: border-box;
+		background-clip: padding-box, border-box;
 	}
 </style>
