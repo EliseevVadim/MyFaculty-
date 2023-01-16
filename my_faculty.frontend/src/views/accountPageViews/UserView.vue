@@ -24,7 +24,7 @@
 					<v-img
 						contain
 						max-width="200"
-						:src="watchingProfile.avatarPath === null ? 'img/blank-item.jpg' : watchingProfile.avatarPath"
+						:src="watchingProfile.avatarPath ? watchingProfile.avatarPath : 'img/blank-item.png'"
 						class="text-center"
 					>
 					</v-img>

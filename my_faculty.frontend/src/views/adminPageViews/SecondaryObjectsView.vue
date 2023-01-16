@@ -18,7 +18,7 @@
 			persistent
 			fullscreen
 			hide-overlay
-			transition="dialog-bottom-transition"
+			transition="showMembers-bottom-transition"
 		>
 			<v-card>
 				<v-card-actions>

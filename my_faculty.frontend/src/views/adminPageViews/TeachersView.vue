@@ -124,7 +124,7 @@
 					<tbody>
 					<tr v-for="(item,index) in items" :key="index">
 						<td>
-							<img width="100" height="100" :src="item.photoPath === null || item.photoPath === '' ? '../img/blank-item.jpg' : item.photoPath" alt="#"/>
+							<img width="100" height="100" :src="item.photoPath === null || item.photoPath === '' ? '../img/blank-item.png' : item.photoPath" alt="#"/>
 						</td>
 						<td>
 							{{item.fio}}

@@ -265,7 +265,7 @@
 				<v-img
 					contain
 					max-width="200"
-					:src="CURRENT_USER.avatarPath === null ? 'img/blank-item.jpg' : CURRENT_USER.avatarPath"
+					:src="CURRENT_USER.avatarPath ? CURRENT_USER.avatarPath : 'img/blank-item.png'"
 					class="text-center"
 				>
 				</v-img>

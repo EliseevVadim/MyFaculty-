@@ -173,6 +173,11 @@ const routes = [
                 path: '/create-study-club',
                 name: 'Создать сообщество курса',
                 component: () => import('../views/accountPageViews/teacherViews/CreateStudyClubView')
+            },
+            {
+                path: '/clubs/:id',
+                name: 'Просмотр сообщества курса',
+                component: () => import('../views/accountPageViews/StudyClubView')
             }
         ]
     },

@@ -19,7 +19,7 @@
                                     </span>
 							</v-col>
 							<v-col>
-								<img :src="teacher.photoPath === null || teacher.photoPath === '' ? '../img/blank-item.jpg' : teacher.photoPath" alt="#"/>
+								<img :src="teacher.photoPath === null || teacher.photoPath === '' ? '../img/blank-item.png' : teacher.photoPath" alt="#"/>
 							</v-col>
 						</v-row>
 						<v-row d-flex class="mt-3">
@@ -122,7 +122,7 @@
 					<tbody>
 					<tr v-for="(item,index) in items" :key="index">
 						<td>
-							<img width="100" height="100" :src="item.photoPath === null || item.photoPath === '' ? '../img/blank-item.jpg' : item.photoPath" alt="#"/>
+							<img width="100" height="100" :src="item.photoPath === null || item.photoPath === '' ? '../img/blank-item.png' : item.photoPath" alt="#"/>
 						</td>
 						<td>
 							{{item.fio}}

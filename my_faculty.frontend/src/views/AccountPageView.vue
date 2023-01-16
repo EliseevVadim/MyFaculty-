@@ -114,7 +114,7 @@
 							contain
 						>
 							<v-img
-								:src="CURRENT_USER.avatarPath === null ? 'img/blank-item.jpg' : CURRENT_USER.avatarPath"
+								:src="CURRENT_USER.avatarPath === null ? 'img/blank-item.png' : CURRENT_USER.avatarPath"
 							/>
 						</v-list-item-avatar>
 						<v-list-item-content>

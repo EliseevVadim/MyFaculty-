@@ -27,7 +27,10 @@ namespace MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubInfo
 
         public async Task<StudyClubViewModel> Handle(GetStudyClubInfoQuery request, CancellationToken cancellationToken)
         {
-            StudyClub club = await _context.StudyClubs.FirstOrDefaultAsync(club => club.Id == request.Id, cancellationToken);
+            StudyClub club = await _context.StudyClubs
+                .Include(club => club.Members)
+                .Include(club => club.Moderators)
+                .FirstOrDefaultAsync(club => club.Id == request.Id, cancellationToken);
             if (club == null)
                 throw new EntityNotFoundException(nameof(StudyClub), request.Id);
             return _mapper.Map<StudyClubViewModel>(club);
