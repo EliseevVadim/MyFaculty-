@@ -71,6 +71,57 @@ const actions = {
 				})
 		})
 	},
+	addModeratorToStudyClub: (context, payload) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.post(config.apiUrl + '/api/studyclubs/add-moderator', {
+				'issuerId': payload.issuerId,
+				'studyClubId': payload.studyClubId,
+				'moderatorId': payload.moderatorId
+			}, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
+	demoteModeratorAtStudyClub: (context, payload) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.post(config.apiUrl + '/api/studyclubs/demote-moderator', {
+				'issuerId': payload.issuerId,
+				'studyClubId': payload.studyClubId,
+				'moderatorId': payload.moderatorId
+			}, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
+	removeUserFromStudyClub: (context, payload) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.post(config.apiUrl + '/api/studyclubs/remove-user', {
+				'issuerId': payload.issuerId,
+				'studyClubId': payload.studyClubId,
+				'removingUserId': payload.removingUserId
+			}, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
 	leaveStudyClub: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.post(config.apiUrl + '/api/studyclubs/leave', {
@@ -102,7 +153,8 @@ const actions = {
 		return new Promise(async (resolve, reject) => {
 			let formData = new FormData();
 			formData.append('id', payload.id);
-			formData.append('clubName', payload.clubName);
+			formData.append('issuerId', payload.issuerId);
+			formData.append('studyClubName', payload.clubName);
 			formData.append('description', payload.description);
 			formData.append('ownerId', payload.ownerId);
 			formData.append('image', payload.image);

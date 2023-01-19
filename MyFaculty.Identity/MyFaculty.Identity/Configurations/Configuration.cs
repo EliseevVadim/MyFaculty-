@@ -71,7 +71,8 @@ namespace MyFaculty.Identity.Configurations
                         IdentityServerConstants.StandardScopes.Profile,
                         "MyFacultyWebAPI"
                     },
-                    AllowAccessTokensViaBrowser = true
+                    AllowAccessTokensViaBrowser = true,
+                    UpdateAccessTokenClaimsOnRefresh = true
                 }
             };
     }

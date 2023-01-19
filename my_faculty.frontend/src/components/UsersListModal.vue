@@ -28,7 +28,12 @@
 							<v-col
 								class="text-center col-xs-12 col-sm-4 col-md-3" v-for="user in users"
 							>
-								<UserInClubLookupPresenter :user="user"/>
+								<UserInClubLookupPresenter
+									:user="user"
+									:context-menu-authorization-checker="contextMenuAuthorizationChecker"
+									:full-access-checker="fullAccessChecker"
+									:context-actions="contextActions"
+								/>
 							</v-col>
 						</v-row>
 					</v-container>
@@ -43,9 +48,9 @@ import UserInClubLookupPresenter from "@/components/presenters/UserInClubLookupP
 export default {
 	name: "UsersListModal",
 	components: {UserInClubLookupPresenter},
-	props: ['users', 'show', 'title'],
+	props: ['users', 'show', 'title', 'contextMenuAuthorizationChecker', 'fullAccessChecker', 'contextActions'],
 	methods: {
-		close(event) {
+		close() {
 			this.$emit('close');
 		}
 	},

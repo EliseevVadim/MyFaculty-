@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyFaculty.Application.Features.StudyClubs.Commands.AddModeratorToStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Commands.CreateStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Commands.DeleteStudyClub;
+using MyFaculty.Application.Features.StudyClubs.Commands.DemoteStudyClubModerator;
 using MyFaculty.Application.Features.StudyClubs.Commands.JoinStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Commands.LeaveStudyClub;
+using MyFaculty.Application.Features.StudyClubs.Commands.RemoveUserFromStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Commands.UpdateStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubInfo;
 using MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubs;
@@ -202,7 +205,7 @@ namespace MyFaculty.WebApi.Controllers
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// POST /studyclubs/join
+        /// POST /studyclubs/leave
         ///     "userId": 1,
         ///     "studyClubId": 1
         /// }
@@ -230,6 +233,105 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
+        /// Add the moderator to study club
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /studyclubs/add-moderator
+        ///     "issuerId": 1,
+        ///     "moderatorId": 2,
+        ///     "studyClubId": 1
+        /// }
+        /// </remarks>
+        /// <param name="addModeratorToStudyClubDto">AddModeratorToStudyClubDto object</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Server error</response>
+        [HttpPost("add-moderator")]
+        [Authorize(Roles = "User")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddModerator([FromBody] AddModeratorToStudyClubDto addModeratorToStudyClubDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (requesterId != addModeratorToStudyClubDto.IssuerId)
+                return Forbid();
+            AddModeratorToStudyClubCommand command = _mapper.Map<AddModeratorToStudyClubCommand>(addModeratorToStudyClubDto);
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Demotes the moderator at study club
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /studyclubs/demote-moderator
+        ///     "issuerId": 1,
+        ///     "moderatorId": 2,
+        ///     "studyClubId": 1
+        /// }
+        /// </remarks>
+        /// <param name="demoteStudyClubModeratorDto">DemoteStudyClubModeratorDto object</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Server error</response>
+        [HttpPost("demote-moderator")]
+        [Authorize(Roles = "User")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DemoteModerator([FromBody] DemoteStudyClubModeratorDto demoteStudyClubModeratorDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (requesterId != demoteStudyClubModeratorDto.IssuerId)
+                return Forbid();
+            DemoteStudyClubModeratorCommand command = _mapper.Map<DemoteStudyClubModeratorCommand>(demoteStudyClubModeratorDto);
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Removes the user from study club
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /studyclubs/remove-user
+        ///     "issuerId": 1,
+        ///     "removingUserId": 2,
+        ///     "studyClubId": 1
+        /// }
+        /// </remarks>
+        /// <param name="removeUserFromStudyClubDto">RemoveUserFromStudyClubDto object</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Server error</response>
+        [HttpPost("remove-user")]
+        [Authorize(Roles = "User")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RemoveUser([FromBody] RemoveUserFromStudyClubDto removeUserFromStudyClubDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (requesterId != removeUserFromStudyClubDto.IssuerId)
+                return Forbid();
+            RemoveUserFromStudyClubCommand command = _mapper.Map<RemoveUserFromStudyClubCommand>(removeUserFromStudyClubDto);
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
         /// Updates the study club
         /// </summary>
         /// <remarks>
@@ -249,14 +351,14 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="404">Not found</response>
         /// <response code="500">Server error</response>
         [HttpPut]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<StudyClubViewModel>> Update([FromForm] UpdateStudyClubDto updateStudyClubDto)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (requesterId != updateStudyClubDto.OwnerId)
+            if (requesterId != updateStudyClubDto.IssuerId)
                 return Forbid();
             string photoPath = string.Empty;
             string savePath = string.Empty;

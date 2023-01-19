@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using MyFaculty.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace MyFaculty.Application.Common.Interfaces
 {
     public interface IMFDbContext
     {
+        DatabaseFacade Database { get; }
         public DbSet<Auditorium> Auditoriums { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<MyFaculty.Domain.Entities.WorkDayOfWeek> DaysOfWeek { get; set; }
@@ -36,5 +38,9 @@ namespace MyFaculty.Application.Common.Interfaces
         public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        public async Task<int> ExecuteSqlRawAsync(string sql)
+        {
+            return await Database.ExecuteSqlRawAsync(sql);
+        }
     }
 }

@@ -11,6 +11,8 @@ namespace MyFaculty.WebApi.Dto
         [Required]
         public int Id { get; set; }
         [Required]
+        public int IssuerId { get; set; }
+        [Required]
         public string StudyClubName { get; set; }
         public string Description { get; set; }
         public IFormFile Image { get; set; }
@@ -21,6 +23,7 @@ namespace MyFaculty.WebApi.Dto
         {
             profile.CreateMap<UpdateStudyClubDto, UpdateStudyClubCommand>()
                 .ForMember(command => command.Id, options => options.MapFrom(dto => dto.Id))
+                .ForMember(command => command.IssuerId, options => options.MapFrom(dto => dto.IssuerId))
                 .ForMember(command => command.StudyClubName, options => options.MapFrom(dto => dto.StudyClubName))
                 .ForMember(command => command.Description, options => options.MapFrom(dto => dto.Description))
                 .ForMember(command => command.OwnerId, options => options.MapFrom(dto => dto.OwnerId));

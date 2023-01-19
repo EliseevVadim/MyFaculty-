@@ -1,4 +1,5 @@
 import Oidc from "oidc-client";
+import {config} from "@/config/config";
 
 let oidcClient = new Oidc.UserManager({
     userStore: new Oidc.WebStorageStateStore(),
@@ -14,7 +15,8 @@ let oidcClient = new Oidc.UserManager({
     automaticSilentRenew: true,
     silent_redirect_uri: "http://localhost:8080/silent-renew.html",
     monitorSession: false,
-    silentRequestTimeout: 10000000000
+    silentRequestTimeout: 10000000000,
+	revokeAccessTokenOnSignout: true
 });
 
 Oidc.Log.logger = console;
@@ -22,6 +24,10 @@ Oidc.Log.level = Oidc.Log.INFO;
 
 oidcClient.events.addUserLoaded((user) => {
     localStorage.setItem('apiKey', user.access_token);
+    config.headers = {
+        'Authorization': 'Bearer ' + localStorage.getItem('apiKey')
+    }
+    console.log(config.headers)
 });
 
 oidcClient.events.addAccessTokenExpiring(() => {

@@ -88,7 +88,6 @@ export default {
 				return;
 			this.errorText = "";
 			this.studyClub.ownerId = this.$oidc.currentUserId;
-			console.log(this.studyClub);
 			this.$loading(true);
 			this.$store.dispatch('addStudyClub', this.studyClub)
 				.then(() => {

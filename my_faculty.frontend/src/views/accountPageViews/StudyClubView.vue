@@ -3,15 +3,133 @@
 		<UsersListModal
 			:show="showMembers"
 			:users="watchingClub.members"
+			:context-menu-authorization-checker="currentUserIsModerator"
+			:full-access-checker="currentUserIsGroupOwner"
+			:context-actions="membersActions"
 			title="Участники сообщества"
 			@close="showMembers = false"
 		/>
 		<UsersListModal
 			:show="showModerators"
 			:users="watchingClub.moderators"
+			:context-menu-authorization-checker="currentUserIsGroupOwner"
+			:full-access-checker="currentUserIsGroupOwner"
+			:context-actions="moderatorsActions"
 			title="Модераторы сообщества"
 			@close="showModerators = false"
 		/>
+		<v-dialog
+			v-model="showEditingForm"
+			persistent
+			max-width="600px"
+		>
+			<v-card>
+				<v-card-title class="d-flex justify-center">
+					<span class="text-h5">Редактировать информацию о сообществе</span>
+				</v-card-title>
+				<v-card-text>
+					<h2 class="text-center red--text">{{errorText}}</h2>
+					<v-container>
+						<v-form
+							lazy-validation
+							ref="submitForm"
+							v-model="formValid">
+							<v-col cols="12">
+								<v-text-field
+									label="Название сообщества курса*"
+									required
+									:rules="commonRules"
+									hide-details="auto"
+									v-model="updatingClub.clubName"
+								></v-text-field>
+							</v-col>
+							<v-col cols="12">
+								<v-textarea
+									label="Описание"
+									hide-details="auto"
+									v-model="updatingClub.description"
+								></v-textarea>
+							</v-col>
+							<v-col cols="12">
+								<v-file-input
+									:rules="photoRules"
+									show-size
+									accept="image/png, image/jpeg, image/bmp"
+									placeholder="Выберите фото"
+									prepend-icon="mdi-camera"
+									hide-details="auto"
+									label="Фото"
+									@change="changePreview"
+									v-model="updatingClub.image"
+								></v-file-input>
+								<div class="mt-5" v-if="previewImage !== null">
+									<h4 class="black--text">Предпросмотр изображения сообщества</h4>
+									<v-row class="mt-3">
+										<v-col class="d-flex d-sm-block col-sm-6 col-12 justify-center">
+											<v-img
+												contain
+												max-width="200"
+												:src="previewImage"
+											>
+											</v-img>
+										</v-col>
+										<v-col class="d-flex d-sm-block col-sm-6 col-12 justify-center">
+											<v-avatar
+												class="align-self-center"
+												contain
+											>
+												<v-img
+													:src="previewImage"
+													class="updating-image-preview"
+												>
+												</v-img>
+											</v-avatar>
+										</v-col>
+									</v-row>
+								</div>
+							</v-col>
+							<v-col
+								cols="12"
+							>
+								<v-autocomplete
+									:items="this.watchingClub.moderators"
+									:item-text="getUserFullName"
+									item-value="id"
+									label="Выберите нового владельца"
+									:rules="commonRules"
+									v-model="updatingClub.ownerId"
+								>
+								</v-autocomplete>
+								<b class="red--text">
+									ОСТОРОЖНО! При изменении последнего поля
+									Вы потеряете управляющий доступ к сообществу. Выбор доступен только из
+									модераторов.
+								</b>
+							</v-col>
+						</v-form>
+					</v-container>
+					<small>Поля, помеченные * обязательны к заполнению</small>
+				</v-card-text>
+				<v-card-actions>
+					<v-spacer></v-spacer>
+					<v-btn
+						color="blue darken-1"
+						text
+						@click="showEditingForm = false"
+					>
+						Закрыть
+					</v-btn>
+					<v-btn
+						color="blue darken-1"
+						text
+						@click="editClub"
+						:disabled="!formValid"
+					>
+						Сохранить
+					</v-btn>
+				</v-card-actions>
+			</v-card>
+		</v-dialog>
 		<ErrorPage v-if="clubNotFound" error-code="404" message="Сообщество курса не найдено"/>
 		<v-container
 			fluid
@@ -29,6 +147,7 @@
 					fab
 					small
 					color="white"
+					@click="openEditForm"
 				>
 					<v-icon>
 						mdi-pencil
@@ -146,9 +265,44 @@ export default {
 	data() {
 		return {
 			watchingClub: {},
+			updatingClub: {
+				clubName: "",
+				clubDescription: "",
+				clubImage: null,
+				ownerId: null
+			},
+			errorText: "",
+			photoRules: [
+				value => !value || value.size < 2000000 || 'Размер фото превышает 2 МБ!'
+			],
+			commonRules: [
+				v => !!v || 'Поле является обязательным для заполнения'
+			],
+			previewImage: null,
+			formValid: true,
 			clubNotFound: false,
 			showMembers: false,
-			showModerators: false
+			showModerators: false,
+			showEditingForm: false,
+			membersActions: [
+				{
+					title: "Удалить из сообщества",
+					method: this.removeFromClub,
+					requireFullAccess: false
+				},
+				{
+					title: "Сделать модератором",
+					method: this.promoteToModerator,
+					requireFullAccess: true
+				}
+			],
+			moderatorsActions: [
+				{
+					title: "Понизить до обычного пользователя",
+					method: this.demoteFromModerator,
+					requireFullAccess: false
+				}
+			]
 		}
 	},
 	methods: {
@@ -156,13 +310,16 @@ export default {
 			return this.watchingClub.owner.firstName + " " + this.watchingClub.owner.lastName;
 		},
  		currentUserIsGroupOwner() {
-			return this.watchingClub.ownerId === this.$oidc.currentUserId;
+			return this.watchingClub.ownerId == this.$oidc.currentUserId;
 		},
 		currentUserIsMember() {
 			return this.watchingClub.members.find(user => user.id == this.$oidc.currentUserId) !== undefined;
 		},
 		currentUserIsModerator() {
 			return this.watchingClub.moderators.find(user => user.id == this.$oidc.currentUserId) !== undefined;
+		},
+		getUserFullName(user) {
+			return user.firstName + " " + user.lastName;
 		},
 		joinStudyClub() {
 			this.$loading(true);
@@ -187,6 +344,17 @@ export default {
 				})
 		},
 		leaveStudyClub() {
+			if (this.currentUserIsModerator())
+				this.$confirm('В данном сообществе Вы являетесь модератором. Выход из него повлечет ' +
+					'потерю этой должности. Продолжить?')
+					.then((result) => {
+						if (result)
+							this.continueStudyClubLeaving();
+					})
+			else
+				this.continueStudyClubLeaving()
+		},
+		continueStudyClubLeaving() {
 			this.$loading(true);
 			this.$store.dispatch('leaveStudyClub', {
 				studyClubId: this.watchingClub.id,
@@ -217,6 +385,118 @@ export default {
 				type: 'success'
 			});
 			this.$loading(false);
+		},
+		changePreview(payload) {
+			if (payload) {
+				this.previewImage = URL.createObjectURL(payload);
+				URL.revokeObjectURL(payload);
+				return;
+			}
+			this.previewImage = null;
+		},
+		openEditForm() {
+			this.updatingClub = JSON.parse(JSON.stringify(this.watchingClub));
+			this.showEditingForm = true;
+		},
+		editClub() {
+			this.formValid = this.$refs.submitForm.validate();
+			if(!this.formValid)
+				return;
+			this.errorText = "";
+			this.$loading(true);
+			this.updatingClub.issuerId = this.$oidc.currentUserId;
+			this.$store.dispatch('updateStudyClub', this.updatingClub)
+				.then(() => {
+					this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
+						.then((response) => {
+							this.watchingClub = response.data;
+							this.showEditingForm = false;
+							this.$loading(false);
+							this.resetUpdatingClub();
+						})
+				})
+				.catch(() => {
+					this.errorText = "Произошла ошибка обновления информации о сообществе. Перепроверьте ввод.";
+					this.$loading(false);
+				});
+		},
+		resetUpdatingClub() {
+			this.updatingClub.clubImage = null;
+			this.updatingClub.clubName = "";
+			this.updatingClub.clubDescription = "";
+			this.updatingClub.ownerId = null;
+			this.updatingClub.image = null;
+			this.previewImage = null;
+			this.updatingClub.issuerId = null;
+		},
+		removeFromClub(userId) {
+			this.$loading(true);
+			this.$store.dispatch('removeUserFromStudyClub', {
+				studyClubId: this.watchingClub.id,
+				issuerId: this.$oidc.currentUserId,
+				removingUserId: userId
+			})
+				.then(() => {
+					this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
+						.then((response) => {
+							this.reloadStudyClubWithMessage(response, 'Пользователь успешно исключен из сообщества!')
+						})
+				})
+				.catch((error) => {
+					this.$notify({
+						group: 'admin-actions',
+						title: 'Ошибка',
+						text: error.response.data.error,
+						type: 'error'
+					});
+					this.$loading(false);
+				})
+		},
+		promoteToModerator(userId) {
+			this.$loading(true);
+			this.$store.dispatch('addModeratorToStudyClub', {
+				studyClubId: this.watchingClub.id,
+				issuerId: this.$oidc.currentUserId,
+				moderatorId: userId
+			})
+				.then(() => {
+					this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
+						.then((response) => {
+							this.reloadStudyClubWithMessage(response, 'Пользователь был успешно повышен до модератора!')
+						})
+				})
+				.catch((error) => {
+					this.$notify({
+						group: 'admin-actions',
+						title: 'Ошибка',
+						text: error.response.data.error,
+						type: 'error'
+					});
+					this.$loading(false);
+				})
+		},
+		demoteFromModerator(userId) {
+			this.$loading(true);
+			this.$store.dispatch('demoteModeratorAtStudyClub', {
+				studyClubId: this.watchingClub.id,
+				issuerId: this.$oidc.currentUserId,
+				moderatorId: userId
+			})
+				.then(() => {
+					this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
+						.then((response) => {
+							this.reloadStudyClubWithMessage(response, 'Пользователь был успешно снят с должности модератора!')
+						})
+				})
+				.catch((error) => {
+					this.$notify({
+						group: 'admin-actions',
+						title: 'Ошибка',
+						text: error.response.data.error,
+						type: 'error'
+					});
+					this.$loading(false);
+				})
 		}
 	},
 	mounted() {
@@ -225,7 +505,6 @@ export default {
 		this.$store.dispatch('loadStudyClubById', id)
 			.then((response) => {
 				this.watchingClub = response.data;
-				console.log(this.watchingClub);
 				document.title = this.watchingClub.clubName;
 			})
 			.catch((error) => {
@@ -283,5 +562,8 @@ export default {
 	}
 	.modal-invoker {
 		cursor: pointer;
+	}
+	.updating-image-preview {
+		border-style: solid;
 	}
 </style>

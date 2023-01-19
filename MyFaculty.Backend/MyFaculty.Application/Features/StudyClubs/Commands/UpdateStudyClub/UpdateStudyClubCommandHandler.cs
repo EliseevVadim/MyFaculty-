@@ -33,13 +33,11 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.UpdateStudyClub
             AppUser owner = await _context.Users.FirstOrDefaultAsync(user => user.Id == request.OwnerId);
             if (owner == null)
                 throw new EntityNotFoundException(nameof(AppUser), request.OwnerId);
-            if (!club.Moderators.Contains(owner))
-                club.Moderators.Add(owner);
-            if (!club.Members.Contains(owner))
-                club.Members.Add(owner);
+            if (club.OwnerId != request.IssuerId)
+                throw new UnauthorizedActionException("Данное действие Вам запрещено.");
             club.ClubName = request.StudyClubName;
             club.Description = request.Description;
-            club.ImagePath = String.IsNullOrEmpty(request.ImagePath) ? request.ImagePath : request.ImagePath;
+            club.ImagePath = String.IsNullOrEmpty(request.ImagePath) ? club.ImagePath : request.ImagePath;
             club.OwnerId = request.OwnerId;      
             club.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);

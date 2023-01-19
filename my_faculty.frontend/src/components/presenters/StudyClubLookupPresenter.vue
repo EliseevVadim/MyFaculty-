@@ -67,6 +67,9 @@ export default {
 		}
 	},
  	methods: {
+		currentUserIsModerator() {
+			return this.item.moderators.find(user => user.id == this.$oidc.currentUserId) !== undefined;
+		},
 		joinStudyClub() {
 			this.$loading(true);
 			this.$store.dispatch('joinStudyClub', {
@@ -98,6 +101,17 @@ export default {
 				});
 		},
 		leaveStudyClub() {
+			if (this.currentUserIsModerator())
+				this.$confirm('В данном сообществе Вы являетесь модератором. Выход из него повлечет ' +
+					'потерю этой должности. Продолжить?')
+					.then((result) => {
+						if (result)
+							this.continueStudyClubLeaving();
+					})
+			else
+				this.continueStudyClubLeaving()
+		},
+		continueStudyClubLeaving() {
 			this.$loading(true);
 			this.$store.dispatch('leaveStudyClub', {
 				studyClubId: this.item.id,

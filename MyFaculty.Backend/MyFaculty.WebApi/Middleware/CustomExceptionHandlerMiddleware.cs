@@ -42,6 +42,12 @@ namespace MyFaculty.WebApi.Middleware
                 case EntityNotFoundException notFoundException:
                     code = HttpStatusCode.NotFound;
                     break;
+                case DestructiveActionException destructiveAction:
+                    code = HttpStatusCode.Conflict;
+                    break;
+                case UnauthorizedActionException unauthorizedAction:
+                    code = HttpStatusCode.Unauthorized;
+                    break;
             }
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
