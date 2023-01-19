@@ -25,7 +25,7 @@
 						contain
 						max-width="200"
 						:src="watchingProfile.avatarPath ? watchingProfile.avatarPath : 'img/blank-item.png'"
-						class="text-center"
+						class="text-center profile-avatar"
 					>
 					</v-img>
 				</v-col>
@@ -219,5 +219,11 @@ export default {
 </script>
 
 <style scoped>
-
+	.profile-avatar {
+		border: double 5px transparent;
+		background-image: linear-gradient(white, white),
+			radial-gradient(circle at bottom left, red 20%, blue, black);
+		background-origin: border-box;
+		background-clip: padding-box, border-box;
+	}
 </style>

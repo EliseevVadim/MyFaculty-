@@ -114,7 +114,8 @@
 							contain
 						>
 							<v-img
-								:src="CURRENT_USER.avatarPath === null ? 'img/blank-item.png' : CURRENT_USER.avatarPath"
+								class="user-avatar"
+								:src="CURRENT_USER.avatarPath ? CURRENT_USER.avatarPath : 'img/blank-item.png'"
 							/>
 						</v-list-item-avatar>
 						<v-list-item-content>
@@ -281,6 +282,11 @@ export default {
 
 <style lang="sass">
 @import '~vuetify/src/styles/tools/_rtl.sass'
+.user-avatar
+	border: double 3px transparent
+	background-image: linear-gradient(white, white), radial-gradient(circle at bottom left, red 20%, blue, black)
+	background-origin: border-box
+	background-clip: padding-box, border-box
 .v-main__wrap
 	display: flex
 	flex-direction: column

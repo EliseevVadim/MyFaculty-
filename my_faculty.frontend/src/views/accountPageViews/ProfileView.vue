@@ -98,7 +98,6 @@
 									:items="this.COUNTRIES.countries"
 									item-text="countryName"
 									item-value="id"
-									:rules="commonRules"
 									label="Выберите страну"
 									v-model="selectedCountryId"
 									@change="loadRegionsList"
@@ -266,7 +265,7 @@
 					contain
 					max-width="200"
 					:src="CURRENT_USER.avatarPath ? CURRENT_USER.avatarPath : 'img/blank-item.png'"
-					class="text-center"
+					class="text-center profile-avatar"
 				>
 				</v-img>
 			</v-col>
@@ -586,5 +585,12 @@ export default {
 	}
 	.avatar-preview {
 		border-style: solid;
+	}
+	.profile-avatar {
+		border: double 5px transparent;
+		background-image: linear-gradient(white, white),
+			radial-gradient(circle at bottom left, red 20%, blue, black);
+		background-origin: border-box;
+		background-clip: padding-box, border-box;
 	}
 </style>
