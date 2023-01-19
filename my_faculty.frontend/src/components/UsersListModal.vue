@@ -31,7 +31,7 @@
 								<UserInClubLookupPresenter
 									:user="user"
 									:context-menu-authorization-checker="contextMenuAuthorizationChecker"
-									:full-access-checker="fullAccessChecker"
+									:user-has-full-access="userHasFullAccess"
 									:context-actions="contextActions"
 								/>
 							</v-col>
@@ -48,7 +48,7 @@ import UserInClubLookupPresenter from "@/components/presenters/UserInClubLookupP
 export default {
 	name: "UsersListModal",
 	components: {UserInClubLookupPresenter},
-	props: ['users', 'show', 'title', 'contextMenuAuthorizationChecker', 'fullAccessChecker', 'contextActions'],
+	props: ['users', 'show', 'title', 'contextMenuAuthorizationChecker', 'userHasFullAccess', 'contextActions'],
 	methods: {
 		close() {
 			this.$emit('close');

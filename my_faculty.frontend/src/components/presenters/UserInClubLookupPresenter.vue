@@ -38,7 +38,7 @@
 					ripple
 					v-for="(item, i) in contextActions"
 					:key="i"
-					v-if="!item.requireFullAccess || fullAccessChecker()"
+					v-if="!item.requireFullAccess || userHasFullAccess"
 				>
 					<v-list-item-title
 						class="context-option"
@@ -55,7 +55,7 @@
 <script>
 export default {
 	name: "UserInClubLookupPresenter",
-	props: ['user', 'contextMenuAuthorizationChecker', 'fullAccessChecker', 'contextActions'],
+	props: ['user', 'contextMenuAuthorizationChecker', 'userHasFullAccess', 'contextActions'],
 	methods: {
 		getUserFullName(user) {
 			return user.firstName + " " + user.lastName;

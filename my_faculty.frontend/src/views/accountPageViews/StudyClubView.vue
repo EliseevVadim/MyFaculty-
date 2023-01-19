@@ -4,7 +4,7 @@
 			:show="showMembers"
 			:users="watchingClub.members"
 			:context-menu-authorization-checker="currentUserIsModerator"
-			:full-access-checker="currentUserIsGroupOwner"
+			:user-has-full-access="currentUserIsGroupOwner()"
 			:context-actions="membersActions"
 			title="Участники сообщества"
 			@close="showMembers = false"
@@ -13,7 +13,7 @@
 			:show="showModerators"
 			:users="watchingClub.moderators"
 			:context-menu-authorization-checker="currentUserIsGroupOwner"
-			:full-access-checker="currentUserIsGroupOwner"
+			:user-has-full-access="currentUserIsGroupOwner()"
 			:context-actions="moderatorsActions"
 			title="Модераторы сообщества"
 			@close="showModerators = false"
@@ -153,7 +153,7 @@
 						mdi-pencil
 					</v-icon>
 				</v-btn>
-				<v-spacer class="d-none d-sm-block"></v-spacer>
+				<v-spacer class="d-block"></v-spacer>
 				<v-menu
 					v-if="currentUserIsMember()"
 					bottom
@@ -241,6 +241,7 @@
 					class="d-flex col-12 col-sm-6 justify-center justify-sm-end"
 				>
 					<v-img
+						aspect-ratio="1"
 						max-width="150"
 						max-height="150"
 						:src="watchingClub.imagePath ? watchingClub.imagePath : '../img/blank-club.png'"
@@ -333,11 +334,11 @@ export default {
 							this.reloadStudyClubWithMessage(response, 'Вы успешно вступили в сообщество!');
 						})
 				})
-				.catch(() => {
+				.catch((error) => {
 					this.$notify({
 						group: 'admin-actions',
 						title: 'Ошибка',
-						text: 'Произошла ошибка, попробуйте заново.',
+						text: error.response.data.error,
 						type: 'error'
 					});
 					this.$loading(false);
@@ -366,11 +367,11 @@ export default {
 							this.reloadStudyClubWithMessage(response, 'Вы успешно покинули сообщество!')
 						})
 				})
-				.catch(() => {
+				.catch((error) => {
 					this.$notify({
 						group: 'admin-actions',
 						title: 'Ошибка',
-						text: 'Произошла ошибка, попробуйте заново.',
+						text: error.response.data.error,
 						type: 'error'
 					});
 					this.$loading(false);
