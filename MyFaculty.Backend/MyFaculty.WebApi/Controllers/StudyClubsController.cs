@@ -5,12 +5,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyFaculty.Application.Features.StudyClubs.Commands.AddModeratorToStudyClub;
+using MyFaculty.Application.Features.StudyClubs.Commands.AddUsersToStudyClubByCourse;
+using MyFaculty.Application.Features.StudyClubs.Commands.AddUsersToStudyClubByGroup;
 using MyFaculty.Application.Features.StudyClubs.Commands.CreateStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Commands.DeleteStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Commands.DemoteStudyClubModerator;
 using MyFaculty.Application.Features.StudyClubs.Commands.JoinStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Commands.LeaveStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Commands.RemoveUserFromStudyClub;
+using MyFaculty.Application.Features.StudyClubs.Commands.RemoveUsersFromStudyClubByCourse;
+using MyFaculty.Application.Features.StudyClubs.Commands.RemoveUsersFromStudyClubByGroup;
 using MyFaculty.Application.Features.StudyClubs.Commands.UpdateStudyClub;
 using MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubInfo;
 using MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubs;
@@ -327,6 +331,138 @@ namespace MyFaculty.WebApi.Controllers
             if (requesterId != removeUserFromStudyClubDto.IssuerId)
                 return Forbid();
             RemoveUserFromStudyClubCommand command = _mapper.Map<RemoveUserFromStudyClubCommand>(removeUserFromStudyClubDto);
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Adds users from specific group to study club
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /studyclubs/add-users-from-group
+        ///     "issuerId": 1,
+        ///     "groupId": 2,
+        ///     "studyClubId": 1
+        /// }
+        /// </remarks>
+        /// <param name="addUsersToStudyClubByGroupDto">AddUsersToStudyClubByGroupDto object</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Server error</response>
+        [HttpPost("add-users-from-group")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddUsersFromGroup([FromBody] AddUsersToStudyClubByGroupDto addUsersToStudyClubByGroupDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (requesterId != addUsersToStudyClubByGroupDto.IssuerId)
+                return Forbid();
+            AddUsersToStudyClubByGroupCommand command = _mapper.Map<AddUsersToStudyClubByGroupCommand>(addUsersToStudyClubByGroupDto);
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Adds users from specific course to study club
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /studyclubs/add-users-from-course
+        ///     "issuerId": 1,
+        ///     "courseId": 2,
+        ///     "studyClubId": 1
+        /// }
+        /// </remarks>
+        /// <param name="addUsersToStudyClubByCourseDto">AddUsersToStudyClubByCourseDto object</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Server error</response>
+        [HttpPost("add-users-from-course")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddUsersFromCourse([FromBody] AddUsersToStudyClubByCourseDto addUsersToStudyClubByCourseDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (requesterId != addUsersToStudyClubByCourseDto.IssuerId)
+                return Forbid();
+            AddUsersToStudyClubByCourseCommand command = _mapper.Map<AddUsersToStudyClubByCourseCommand>(addUsersToStudyClubByCourseDto);
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Removes users from specific group from study club
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /studyclubs/remove-users-from-group
+        ///     "issuerId": 1,
+        ///     "groupId": 2,
+        ///     "studyClubId": 1
+        /// }
+        /// </remarks>
+        /// <param name="removeUsersFromStudyClubByGroupDto">RemoveUsersFromStudyClubByGroupDto object</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Server error</response>
+        [HttpPost("remove-users-from-group")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RemoveUsersByGroup([FromBody] RemoveUsersFromStudyClubByGroupDto removeUsersFromStudyClubByGroupDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (requesterId != removeUsersFromStudyClubByGroupDto.IssuerId)
+                return Forbid();
+            RemoveUsersFromStudyClubByGroupCommand command = _mapper.Map<RemoveUsersFromStudyClubByGroupCommand>(removeUsersFromStudyClubByGroupDto);
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Adds users from specific course to study club
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /studyclubs/remove-users-from-course
+        ///     "issuerId": 1,
+        ///     "courseId": 2,
+        ///     "studyClubId": 1
+        /// }
+        /// </remarks>
+        /// <param name="removeUsersFromStudyClubByCourseDto">RemoveUsersFromStudyClubByCourseDto object</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Server error</response>
+        [HttpPost("remove-users-from-course")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RemoveUsersByCourse([FromBody] RemoveUsersFromStudyClubByCourseDto removeUsersFromStudyClubByCourseDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (requesterId != removeUsersFromStudyClubByCourseDto.IssuerId)
+                return Forbid();
+            RemoveUsersFromStudyClubByCourseCommand command = _mapper.Map<RemoveUsersFromStudyClubByCourseCommand>(removeUsersFromStudyClubByCourseDto);
             await Mediator.Send(command);
             return NoContent();
         }

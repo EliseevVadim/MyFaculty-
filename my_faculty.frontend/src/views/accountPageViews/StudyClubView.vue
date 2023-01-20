@@ -18,6 +18,20 @@
 			title="Модераторы сообщества"
 			@close="showModerators = false"
 		/>
+		<MassStudyClubAddingForm
+			ref="massAddForm"
+			:show="showMassAddingForm"
+			:study-club-id="watchingClub.id"
+			@close="closeMassAddingForm"
+			@load="reloadStudyClubWithMessage('Добавление прошло успешно')"
+		/>
+		<MassStudyClubDeletingForm
+			ref="massDeleteForm"
+			:show="showMassDeletingForm"
+			:study-club-id="watchingClub.id"
+			@close="closeMassDeletingForm"
+			@load="reloadStudyClubWithMessage('Исключение прошло успешно')"
+		/>
 		<v-dialog
 			v-model="showEditingForm"
 			persistent
@@ -135,7 +149,7 @@
 			fluid
 			v-if="Object.keys(watchingClub).length !== 0"
 		>
-			<v-row class="d-flex justify-start ma-1">
+			<v-row class="d-flex justify-start ma-1 mt-3">
 				<h1
 					class="club-name"
 				>
@@ -152,6 +166,28 @@
 					<v-icon>
 						mdi-pencil
 					</v-icon>
+				</v-btn>
+				<v-btn
+					v-if="currentUserIsGroupOwner()"
+					class="mx-2"
+					color="primary"
+					@click="openMassAddingForm"
+				>
+					<v-icon left>
+						mdi-account-multiple-plus
+					</v-icon>
+					Массовое добавление
+				</v-btn>
+				<v-btn
+					v-if="currentUserIsGroupOwner()"
+					class="mx-2 white--text"
+					color="red"
+					@click="openMassDeletingForm"
+				>
+					<v-icon left>
+						mdi-account-multiple-remove
+					</v-icon>
+					Массовое исключение
 				</v-btn>
 				<v-spacer class="d-block"></v-spacer>
 				<v-menu
@@ -260,9 +296,13 @@ import ErrorPage from "@/components/AccountComponents/core/service-pages/ErrorPa
 import TeacherVerificationMark from "@/components/AccountComponents/core/verificationMarks/TeacherVerificationMark";
 import UserInClubLookupPresenter from "@/components/presenters/UserInClubLookupPresenter";
 import UsersListModal from "@/components/UsersListModal";
+import MassStudyClubAddingForm from "@/components/AccountComponents/teacherComponents/MassStudyClubAddingForm";
+import MassStudyClubDeletingForm from "@/components/AccountComponents/teacherComponents/MassStudyClubDeletingForm";
 export default {
 	name: "StudyClubView",
-	components: {UsersListModal, UserInClubLookupPresenter, TeacherVerificationMark, ErrorPage},
+	components: {
+		MassStudyClubDeletingForm,
+		MassStudyClubAddingForm, UsersListModal, UserInClubLookupPresenter, TeacherVerificationMark, ErrorPage},
 	data() {
 		return {
 			watchingClub: {},
@@ -285,6 +325,8 @@ export default {
 			showMembers: false,
 			showModerators: false,
 			showEditingForm: false,
+			showMassAddingForm: false,
+			showMassDeletingForm: false,
 			membersActions: [
 				{
 					title: "Удалить из сообщества",
@@ -329,10 +371,7 @@ export default {
 				userId: this.$oidc.currentUserId
 			})
 				.then(() => {
-					this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
-						.then((response) => {
-							this.reloadStudyClubWithMessage(response, 'Вы успешно вступили в сообщество!');
-						})
+					this.reloadStudyClubWithMessage('Вы успешно вступили в сообщество!');
 				})
 				.catch((error) => {
 					this.$notify({
@@ -362,10 +401,7 @@ export default {
 				userId: this.$oidc.currentUserId
 			})
 				.then(() => {
-					this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
-						.then((response) => {
-							this.reloadStudyClubWithMessage(response, 'Вы успешно покинули сообщество!')
-						})
+					this.reloadStudyClubWithMessage('Вы успешно покинули сообщество!');
 				})
 				.catch((error) => {
 					this.$notify({
@@ -377,15 +413,18 @@ export default {
 					this.$loading(false);
 				})
 		},
-		reloadStudyClubWithMessage(response, message) {
-			this.watchingClub = response.data;
-			this.$notify({
-				group: 'admin-actions',
-				title: 'Успешная операция',
-				text: message,
-				type: 'success'
-			});
-			this.$loading(false);
+		reloadStudyClubWithMessage(message) {
+			this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
+				.then((response) => {
+					this.watchingClub = response.data;
+					this.$notify({
+						group: 'admin-actions',
+						title: 'Успешная операция',
+						text: message,
+						type: 'success'
+					});
+					this.$loading(false);
+				})
 		},
 		changePreview(payload) {
 			if (payload) {
@@ -438,10 +477,7 @@ export default {
 				removingUserId: userId
 			})
 				.then(() => {
-					this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
-						.then((response) => {
-							this.reloadStudyClubWithMessage(response, 'Пользователь успешно исключен из сообщества!')
-						})
+					this.reloadStudyClubWithMessage('Пользователь успешно исключен из сообщества!');
 				})
 				.catch((error) => {
 					this.$notify({
@@ -461,10 +497,7 @@ export default {
 				moderatorId: userId
 			})
 				.then(() => {
-					this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
-						.then((response) => {
-							this.reloadStudyClubWithMessage(response, 'Пользователь был успешно повышен до модератора!')
-						})
+					this.reloadStudyClubWithMessage('Пользователь был успешно повышен до модератора!');
 				})
 				.catch((error) => {
 					this.$notify({
@@ -484,10 +517,7 @@ export default {
 				moderatorId: userId
 			})
 				.then(() => {
-					this.$store.dispatch('loadStudyClubById', this.watchingClub.id)
-						.then((response) => {
-							this.reloadStudyClubWithMessage(response, 'Пользователь был успешно снят с должности модератора!')
-						})
+					this.reloadStudyClubWithMessage('Пользователь был успешно снят с должности модератора!');
 				})
 				.catch((error) => {
 					this.$notify({
@@ -498,6 +528,22 @@ export default {
 					});
 					this.$loading(false);
 				})
+		},
+		openMassAddingForm() {
+			this.showMassAddingForm = true;
+			this.$refs.massAddForm.loadData();
+		},
+		openMassDeletingForm() {
+			this.showMassDeletingForm = true;
+			this.$refs.massDeleteForm.loadData();
+		},
+		closeMassAddingForm() {
+			this.showMassAddingForm = false;
+			this.$refs.massAddForm.resetData();
+		},
+		closeMassDeletingForm() {
+			this.showMassDeletingForm = false;
+			this.$refs.massDeleteForm.resetData();
 		}
 	},
 	mounted() {

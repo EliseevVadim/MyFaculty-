@@ -122,6 +122,74 @@ const actions = {
 				})
 		})
 	},
+	addUsersFromGroupToStudyClub: (context, payload) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.post(config.apiUrl + '/api/studyclubs/add-users-from-group', {
+				'issuerId': payload.issuerId,
+				'studyClubId': payload.studyClubId,
+				'groupId': payload.groupId
+			}, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
+	addUsersFromCourseToStudyClub: (context, payload) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.post(config.apiUrl + '/api/studyclubs/add-users-from-course', {
+				'issuerId': payload.issuerId,
+				'studyClubId': payload.studyClubId,
+				'courseId': payload.courseId
+			}, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
+	removeUsersByGroupFromStudyClub: (context, payload) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.post(config.apiUrl + '/api/studyclubs/remove-users-from-group', {
+				'issuerId': payload.issuerId,
+				'studyClubId': payload.studyClubId,
+				'groupId': payload.groupId
+			}, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
+	removeUsersByCourseFromStudyClub: (context, payload) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.post(config.apiUrl + '/api/studyclubs/remove-users-from-course', {
+				'issuerId': payload.issuerId,
+				'studyClubId': payload.studyClubId,
+				'courseId': payload.courseId
+			}, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
 	leaveStudyClub: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.post(config.apiUrl + '/api/studyclubs/leave', {

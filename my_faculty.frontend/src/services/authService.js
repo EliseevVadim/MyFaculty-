@@ -23,11 +23,9 @@ Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.INFO;
 
 oidcClient.events.addUserLoaded((user) => {
-    localStorage.setItem('apiKey', user.access_token);
     config.headers = {
-        'Authorization': 'Bearer ' + localStorage.getItem('apiKey')
+        'Authorization': 'Bearer ' + user.access_token
     }
-    console.log(config.headers)
 });
 
 oidcClient.events.addAccessTokenExpiring(() => {
