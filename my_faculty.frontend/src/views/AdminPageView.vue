@@ -106,7 +106,7 @@ export default {
 	components: {NotAuthorizedAdminPage},
 	data() {
         return {
-            userAuthorized: false,
+            userAuthorized: null,
 			userName: null,
             drawer: false,
             items: [

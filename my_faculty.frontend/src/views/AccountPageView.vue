@@ -115,7 +115,7 @@
 						>
 							<v-img
 								class="user-avatar"
-								:src="CURRENT_USER.avatarPath ? CURRENT_USER.avatarPath : 'img/blank-item.png'"
+								:src="CURRENT_USER.avatarPath ? CURRENT_USER.avatarPath : '../img/blank-item.png'"
 							/>
 						</v-list-item-avatar>
 						<v-list-item-content>

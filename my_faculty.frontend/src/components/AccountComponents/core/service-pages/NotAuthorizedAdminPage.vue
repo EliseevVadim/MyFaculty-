@@ -2,7 +2,7 @@
 	<div id="screwOffContainer" @mousemove="mouseMove">
 		<div></div>
 		<canvas></canvas>
-		<h1>Тебе здесь не место. Возвращайся на <a href="/">главную</a>.</h1>
+		<h1>Тебе здесь не место. Возвращайся на <a href="/">главную</a>, пока можешь ;]</h1>
 	</div>
 </template>
 
@@ -11,6 +11,7 @@ export default {
 	name: "NotAuthorizedAdminPage",
 	data() {
 		return {
+			renderAnimation: null,
 			DISPLAY_WIDTH: window.innerWidth,
 			DISPLAY_HEIGHT: window.innerHeight,
 			DISPLAY_DURATION: 10,
@@ -25,7 +26,10 @@ export default {
 			eyes: []
 		}
 	},
-	mounted() {
+	async mounted() {
+		this.renderAnimation = !await this.$oidc.isAdmin();
+		if (!this.renderAnimation)
+			return;
 		this.mouse = {
 			x: this.DISPLAY_WIDTH / 2,
 			y: this.DISPLAY_HEIGHT / 2
