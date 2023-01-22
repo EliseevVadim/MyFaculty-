@@ -19,7 +19,7 @@
                                     </span>
 							</v-col>
 							<v-col>
-								<img :src="teacher.photoPath === null || teacher.photoPath === '' ? '../img/blank-item.png' : teacher.photoPath" alt="#"/>
+								<img :src="teacher.photoPath ? teacher.photoPath : '../img/blank-item.png'" alt="#"/>
 							</v-col>
 						</v-row>
 						<v-row d-flex class="mt-3">
@@ -78,7 +78,7 @@
 							</v-col>
 							<v-col>
 								<ul>
-									<li v-for="(item, i) in teacher.teacherDisciplines" :key="i">
+									<li v-for="(item, i) in teacher.teacherDisciplines" :key="i" class="text-left">
                                         <span class="card-value">
                                             {{item.disciplineName}}
                                         </span>

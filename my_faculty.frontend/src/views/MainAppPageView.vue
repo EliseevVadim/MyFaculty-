@@ -22,14 +22,14 @@
             <v-btn @click="signIn" v-else outlined class="d-none d-sm-block">Авторизоваться</v-btn>
             <template v-slot:extension>
                 <v-tabs
-                        align-with-title
-                        class="d-none d-sm-flex"
-                        v-model="tab"
+					align-with-title
+					class="d-none d-sm-flex"
+					v-model="tab"
                 >
                     <v-tabs-slider color="yellow"></v-tabs-slider>
                     <v-tab
-                            v-for="(item, i) in items"
-                            v-bind:to="item.link"
+						v-for="(item, i) in items"
+						v-bind:to="item.link"
                     >
                         {{item.text}}
                     </v-tab>
@@ -43,8 +43,8 @@
                 dark
         >
             <v-list
-                    nav
-                    dense
+				nav
+				dense
             >
                 <v-list-item-group
                 >

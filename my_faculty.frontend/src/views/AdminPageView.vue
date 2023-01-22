@@ -17,9 +17,9 @@
                 >
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn
-                                tile
-                                v-bind="attrs"
-                                v-on="on"
+							tile
+							v-bind="attrs"
+							v-on="on"
                         >
                             <v-icon left>
                                 mdi-account-circle
@@ -29,7 +29,7 @@
                     </template>
                     <v-list>
                         <v-list-item-group
-                                active-class="deep-purple--text text--accent-4"
+							active-class="deep-purple--text text--accent-4"
                         >
                             <v-list-item @click="logout">
                                 <v-list-item-icon>

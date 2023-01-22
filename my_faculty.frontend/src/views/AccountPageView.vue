@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<h1 v-if="!userAuthorized">
-			hell off
+			Для просмотра содержимого необходимо авторизоваться. Перенаправляем Вас...
 		</h1>
 		<v-app v-else>
 			<v-app-bar
@@ -176,9 +176,11 @@ import Item from "@/components/AccountComponents/base/Item";
 import {VHover, VListItem} from "vuetify/lib/components";
 import PagesFooter from "@/components/AccountComponents/core/PagesFooter";
 import {mapGetters} from "vuex";
+import ErrorPage from "@/components/AccountComponents/core/service-pages/ErrorPage";
 export default {
 	name: "AccountPageView",
 	components: {
+		ErrorPage,
 		PagesFooter,
 		Item, ItemGroup,
 		AppBarItem: {
@@ -262,6 +264,8 @@ export default {
 		try {
 			document.title = "Личный кабинет";
 			this.userAuthorized = await this.$oidc.isUser();
+			if (!this.userAuthorized)
+				await this.$oidc.login();
 			let profile = await this.$oidc.getUserProfile();
 			let id = profile.sub;
 			this.$loading(true);

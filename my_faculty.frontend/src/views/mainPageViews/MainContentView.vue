@@ -273,7 +273,8 @@ export default {
 		background: #f3f2f1;
 		margin: 10px auto;
 		border: 1px solid black;
-		width: 851px;
+		width: 100%;
+		max-width: 851px;
 		height: 606px;
 		overflow: hidden;
 	}
