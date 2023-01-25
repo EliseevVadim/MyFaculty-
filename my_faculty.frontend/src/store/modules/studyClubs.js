@@ -223,7 +223,7 @@ const actions = {
 			formData.append('id', payload.id);
 			formData.append('issuerId', payload.issuerId);
 			formData.append('studyClubName', payload.clubName);
-			formData.append('description', payload.description);
+			formData.append('description', payload.description ? payload.description : '');
 			formData.append('ownerId', payload.ownerId);
 			formData.append('image', payload.image);
 			await axios.put(config.apiUrl + '/api/studyclubs', formData, {

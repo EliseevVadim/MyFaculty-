@@ -243,6 +243,11 @@ export default {
 					title: 'Сообщества курсов',
 					icon: 'mdi-cast-education',
 					to: '/clubs',
+				},
+				{
+					title: 'Сообщества',
+					icon: 'mdi-account-group',
+					to: '/communities',
 				}
 			]
 		}

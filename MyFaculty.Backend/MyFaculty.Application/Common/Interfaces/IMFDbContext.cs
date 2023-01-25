@@ -33,6 +33,10 @@ namespace MyFaculty.Application.Common.Interfaces
         public DbSet<City> Cities { get; set; }
         public DbSet<AppUser> Users { get; set; }
         public DbSet<StudyClub> StudyClubs { get; set; }
+        public DbSet<InformationPublic> InformationPublics { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<ClubTask> ClubTasks { get; set; }
+        public DbSet<InfoPost> InfoPosts { get; set; }
         public DbSet<ExpertSystemState> ExpertSystemStates { get; set; }
         public DbSet<ExpertSystemStateTransition> ExpertSystemStateTransitions { get; set; }
         public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; }

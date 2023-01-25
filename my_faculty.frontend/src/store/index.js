@@ -21,6 +21,7 @@ import regions from "@/store/modules/regions";
 import cities from "@/store/modules/cities";
 import users from "@/store/modules/users";
 import studyClubs from "@/store/modules/studyClubs";
+import infoPublics from "@/store/modules/infoPublics";
 
 Vue.use(Vuex)
 
@@ -50,6 +51,7 @@ export default new Vuex.Store({
       regions,
       cities,
       users,
-      studyClubs
+      studyClubs,
+      infoPublics
   }
 })

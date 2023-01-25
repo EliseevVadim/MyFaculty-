@@ -41,6 +41,10 @@ namespace MyFaculty.Persistence
         public DbSet<City> Cities { get; set; } = null!;
         public DbSet<AppUser> Users { get; set; } = null!;
         public DbSet<StudyClub> StudyClubs { get; set; } = null!;
+        public DbSet<InformationPublic> InformationPublics { get; set; } = null!;
+        public DbSet<Post> Posts { get; set; } = null!;
+        public DbSet<ClubTask> ClubTasks { get; set; } = null!;
+        public DbSet<InfoPost> InfoPosts { get; set; } = null!;
         public DbSet<ExpertSystemState> ExpertSystemStates { get; set; } = null!;
         public DbSet<ExpertSystemStateTransition> ExpertSystemStateTransitions { get; set; } = null!;
         public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; } = null!;

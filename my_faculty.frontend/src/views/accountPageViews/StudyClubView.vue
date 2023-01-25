@@ -244,7 +244,7 @@
 						<b>Модераторов: </b>
 						<span>{{watchingClub.moderators.length}}</span>
 					</v-col>
-					<v-col class="mt-0" to="/">
+					<v-col class="mt-0">
 						<b>Владелец: </b>
 						<router-link
 							:to="'/id' + watchingClub.ownerId"

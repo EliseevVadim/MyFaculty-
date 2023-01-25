@@ -20,6 +20,8 @@ namespace MyFaculty.Domain.Entities
         public AppUser Owner { get; set; }
         public List<AppUser> Members { get; set; } = new List<AppUser>();
         public List<AppUser> Moderators { get; set; } = new List<AppUser>();
+        public List<ClubTask> ClubTasks { get; set; }
+        public List<InfoPost> InfoPosts { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
     }

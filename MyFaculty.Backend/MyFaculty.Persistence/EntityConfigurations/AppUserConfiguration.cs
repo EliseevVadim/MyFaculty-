@@ -38,6 +38,9 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasMany(user => user.OwnedStudyClubs)
                 .WithOne(club => club.Owner)
                 .HasForeignKey(club => club.OwnerId);
+            builder.HasMany(user => user.OwnedInformationPublics)
+                .WithOne(infoPublic => infoPublic.Owner)
+                .HasForeignKey(infoPublic => infoPublic.OwnerId);
             builder.Property(user => user.IsTeacher).HasDefaultValue(false);
             builder.Property(user => user.Website).IsRequired(false);
             builder.Property(user => user.VKLink).IsRequired(false);

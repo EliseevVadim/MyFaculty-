@@ -12,6 +12,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.DeleteStudyClub
         public DeleteStudyClubCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
+            RuleFor(command => command.IssuerId).NotEmpty();
         }
     }
 }

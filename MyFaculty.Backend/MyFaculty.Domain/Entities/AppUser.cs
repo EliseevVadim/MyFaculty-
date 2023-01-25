@@ -27,7 +27,12 @@ namespace MyFaculty.Domain.Entities
         public Course Course { get; set; }
         public Group Group { get; set; }
         public List<StudyClub> StudyClubs { get; set; } = new List<StudyClub>();
+        public List<InformationPublic> InformationPublics { get; set; } = new List<InformationPublic>();
         public List<StudyClub> OwnedStudyClubs { get; set; } = new List<StudyClub>();
+        public List<InformationPublic> OwnedInformationPublics { get; set; } = new List<InformationPublic>();
         public List<StudyClub> StudyClubsAtModeration { get; set; } = new List<StudyClub>();
+        public List<InformationPublic> BlockedPublics { get; set; } = new List<InformationPublic>();
+        public List<Post> Posts { get; set; }
+        public List<InfoPost> LikedPosts { get; set; } = new List<InfoPost>();
     }
 }

@@ -28,6 +28,12 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasMany(club => club.Moderators)
                 .WithMany(user => user.StudyClubsAtModeration)
                 .UsingEntity(j => j.ToTable("UsersModeratesClubs"));
-        }
+            builder.HasMany(club => club.ClubTasks)
+                .WithOne(task => task.OwningStudyClub)
+                .HasForeignKey(task => task.StudyClubId);
+            builder.HasMany(club => club.InfoPosts)
+                .WithOne(post => post.OwningStudyClub)
+                .HasForeignKey(post => post.StudyClubId);
+       }
     }
 }

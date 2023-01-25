@@ -17,6 +17,51 @@ namespace MyFaculty.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.17");
 
+            modelBuilder.Entity("AppUserInfoPost", b =>
+                {
+                    b.Property<int>("LikedPostsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LikedUsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LikedPostsId", "LikedUsersId");
+
+                    b.HasIndex("LikedUsersId");
+
+                    b.ToTable("userslikedposts");
+                });
+
+            modelBuilder.Entity("AppUserInformationPublic", b =>
+                {
+                    b.Property<int>("InformationPublicsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MembersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InformationPublicsId", "MembersId");
+
+                    b.HasIndex("MembersId");
+
+                    b.ToTable("UsersAtInformationPublics");
+                });
+
+            modelBuilder.Entity("AppUserInformationPublic1", b =>
+                {
+                    b.Property<int>("BlockedPublicsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BlockedUsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BlockedPublicsId", "BlockedUsersId");
+
+                    b.HasIndex("BlockedUsersId");
+
+                    b.ToTable("UsersBlockedInPublics");
+                });
+
             modelBuilder.Entity("AppUserStudyClub", b =>
                 {
                     b.Property<int>("MembersId")
@@ -44,7 +89,7 @@ namespace MyFaculty.Persistence.Migrations
 
                     b.HasIndex("StudyClubsAtModerationId");
 
-                    b.ToTable("UsersModeratedClubs");
+                    b.ToTable("UsersModeratesClubs");
                 });
 
             modelBuilder.Entity("MyFaculty.Domain.Entities.AppUser", b =>
@@ -394,6 +439,41 @@ namespace MyFaculty.Persistence.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("MyFaculty.Domain.Entities.InformationPublic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OwnerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PublicName")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("PublicName")
+                        .IsUnique();
+
+                    b.ToTable("InformationPublics");
+                });
+
             modelBuilder.Entity("MyFaculty.Domain.Entities.Pair", b =>
                 {
                     b.Property<int>("Id")
@@ -498,21 +578,49 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 1, 8, 13, 55, 29, 286, DateTimeKind.Local).AddTicks(6312),
+                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 686, DateTimeKind.Local).AddTicks(614),
                             RepeatingName = "Каждую неделю"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 1, 8, 13, 55, 29, 286, DateTimeKind.Local).AddTicks(6829),
+                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 686, DateTimeKind.Local).AddTicks(1556),
                             RepeatingName = "По верхней неделе"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2023, 1, 8, 13, 55, 29, 286, DateTimeKind.Local).AddTicks(6837),
+                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 686, DateTimeKind.Local).AddTicks(1572),
                             RepeatingName = "По нижней неделе"
                         });
+                });
+
+            modelBuilder.Entity("MyFaculty.Domain.Entities.Post", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Attachments")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("TextContent")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("posts");
                 });
 
             modelBuilder.Entity("MyFaculty.Domain.Entities.Region", b =>
@@ -658,7 +766,7 @@ namespace MyFaculty.Persistence.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("StudyClub");
+                    b.ToTable("StudyClubs");
                 });
 
             modelBuilder.Entity("MyFaculty.Domain.Entities.Teacher", b =>
@@ -751,39 +859,119 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 1, 8, 13, 55, 29, 248, DateTimeKind.Local).AddTicks(3961),
+                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 457, DateTimeKind.Local).AddTicks(2483),
                             DaysName = "Понедельник"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 1, 8, 13, 55, 29, 251, DateTimeKind.Local).AddTicks(8324),
+                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9843),
                             DaysName = "Вторник"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2023, 1, 8, 13, 55, 29, 251, DateTimeKind.Local).AddTicks(8349),
+                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9893),
                             DaysName = "Среда"
                         },
                         new
                         {
                             Id = 4,
-                            Created = new DateTime(2023, 1, 8, 13, 55, 29, 251, DateTimeKind.Local).AddTicks(8352),
+                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9899),
                             DaysName = "Четверг"
                         },
                         new
                         {
                             Id = 5,
-                            Created = new DateTime(2023, 1, 8, 13, 55, 29, 251, DateTimeKind.Local).AddTicks(8353),
+                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9904),
                             DaysName = "Пятница"
                         },
                         new
                         {
                             Id = 6,
-                            Created = new DateTime(2023, 1, 8, 13, 55, 29, 251, DateTimeKind.Local).AddTicks(8356),
+                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9908),
                             DaysName = "Суббота"
                         });
+                });
+
+            modelBuilder.Entity("MyFaculty.Domain.Entities.ClubTask", b =>
+                {
+                    b.HasBaseType("MyFaculty.Domain.Entities.Post");
+
+                    b.Property<DateTime>("DeadLine")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("StudyClubId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("StudyClubId");
+
+                    b.ToTable("clubTasks");
+                });
+
+            modelBuilder.Entity("MyFaculty.Domain.Entities.InfoPost", b =>
+                {
+                    b.HasBaseType("MyFaculty.Domain.Entities.Post");
+
+                    b.Property<bool>("CommentsAllowed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int?>("InfoPublicId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StudyClubId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("InfoPublicId");
+
+                    b.HasIndex("StudyClubId");
+
+                    b.ToTable("infoPosts");
+                });
+
+            modelBuilder.Entity("AppUserInfoPost", b =>
+                {
+                    b.HasOne("MyFaculty.Domain.Entities.InfoPost", null)
+                        .WithMany()
+                        .HasForeignKey("LikedPostsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyFaculty.Domain.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("LikedUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AppUserInformationPublic", b =>
+                {
+                    b.HasOne("MyFaculty.Domain.Entities.InformationPublic", null)
+                        .WithMany()
+                        .HasForeignKey("InformationPublicsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyFaculty.Domain.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("MembersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AppUserInformationPublic1", b =>
+                {
+                    b.HasOne("MyFaculty.Domain.Entities.InformationPublic", null)
+                        .WithMany()
+                        .HasForeignKey("BlockedPublicsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyFaculty.Domain.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("BlockedUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AppUserStudyClub", b =>
@@ -940,6 +1128,17 @@ namespace MyFaculty.Persistence.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("MyFaculty.Domain.Entities.InformationPublic", b =>
+                {
+                    b.HasOne("MyFaculty.Domain.Entities.AppUser", "Owner")
+                        .WithMany("OwnedInformationPublics")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("MyFaculty.Domain.Entities.Pair", b =>
                 {
                     b.HasOne("MyFaculty.Domain.Entities.Auditorium", "Auditorium")
@@ -997,6 +1196,17 @@ namespace MyFaculty.Persistence.Migrations
                     b.Navigation("PairRepeating");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("MyFaculty.Domain.Entities.Post", b =>
+                {
+                    b.HasOne("MyFaculty.Domain.Entities.AppUser", "Author")
+                        .WithMany("Posts")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("MyFaculty.Domain.Entities.Region", b =>
@@ -1070,9 +1280,51 @@ namespace MyFaculty.Persistence.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("MyFaculty.Domain.Entities.ClubTask", b =>
+                {
+                    b.HasOne("MyFaculty.Domain.Entities.Post", null)
+                        .WithOne()
+                        .HasForeignKey("MyFaculty.Domain.Entities.ClubTask", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyFaculty.Domain.Entities.StudyClub", "OwningStudyClub")
+                        .WithMany("ClubTasks")
+                        .HasForeignKey("StudyClubId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OwningStudyClub");
+                });
+
+            modelBuilder.Entity("MyFaculty.Domain.Entities.InfoPost", b =>
+                {
+                    b.HasOne("MyFaculty.Domain.Entities.Post", null)
+                        .WithOne()
+                        .HasForeignKey("MyFaculty.Domain.Entities.InfoPost", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyFaculty.Domain.Entities.InformationPublic", "OwningInformationPublic")
+                        .WithMany("InfoPosts")
+                        .HasForeignKey("InfoPublicId");
+
+                    b.HasOne("MyFaculty.Domain.Entities.StudyClub", "OwningStudyClub")
+                        .WithMany("InfoPosts")
+                        .HasForeignKey("StudyClubId");
+
+                    b.Navigation("OwningInformationPublic");
+
+                    b.Navigation("OwningStudyClub");
+                });
+
             modelBuilder.Entity("MyFaculty.Domain.Entities.AppUser", b =>
                 {
+                    b.Navigation("OwnedInformationPublics");
+
                     b.Navigation("OwnedStudyClubs");
+
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("MyFaculty.Domain.Entities.Auditorium", b =>
@@ -1141,6 +1393,11 @@ namespace MyFaculty.Persistence.Migrations
                     b.Navigation("Students");
                 });
 
+            modelBuilder.Entity("MyFaculty.Domain.Entities.InformationPublic", b =>
+                {
+                    b.Navigation("InfoPosts");
+                });
+
             modelBuilder.Entity("MyFaculty.Domain.Entities.PairInfo", b =>
                 {
                     b.Navigation("Pairs");
@@ -1164,6 +1421,13 @@ namespace MyFaculty.Persistence.Migrations
             modelBuilder.Entity("MyFaculty.Domain.Entities.SecondaryObjectType", b =>
                 {
                     b.Navigation("SecondaryObjects");
+                });
+
+            modelBuilder.Entity("MyFaculty.Domain.Entities.StudyClub", b =>
+                {
+                    b.Navigation("ClubTasks");
+
+                    b.Navigation("InfoPosts");
                 });
 
             modelBuilder.Entity("MyFaculty.Domain.Entities.Teacher", b =>

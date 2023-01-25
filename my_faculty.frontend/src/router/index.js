@@ -175,9 +175,24 @@ const routes = [
                 component: () => import('../views/accountPageViews/teacherViews/CreateStudyClubView')
             },
             {
+                path: '/create-info-public',
+                name: 'Создать информационное сообщество',
+                component: () => import('../views/accountPageViews/CreateInformationPublic')
+            },
+            {
                 path: '/clubs/:id',
                 name: 'Просмотр сообщества курса',
                 component: () => import('../views/accountPageViews/StudyClubView')
+            },
+            {
+                path: '/communities',
+                name: 'Информационные сообщества',
+                component: () => import('../views/accountPageViews/PublicsView')
+            },
+            {
+                path: '/public:id',
+                name: 'Просмотр информационного сообщества',
+                component: () => import('../views/accountPageViews/InformationPublicView')
             }
         ]
     },

@@ -32,6 +32,8 @@ namespace MyFaculty.Application.Features.Users.Queries.GetUserInfo
                     .ThenInclude(club => club.Members)
                 .Include(user => user.StudyClubs)
                     .ThenInclude(club => club.Moderators)
+                .Include(user => user.InformationPublics)
+                    .ThenInclude(infoPublic => infoPublic.Members)
                 .Include(user => user.City)
                     .ThenInclude(city => city.Region)
                         .ThenInclude(region => region.Country)

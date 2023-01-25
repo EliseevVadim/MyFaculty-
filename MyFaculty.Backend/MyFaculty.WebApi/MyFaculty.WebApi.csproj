@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="uploads\images\info-publics\" />
     <Folder Include="uploads\images\study-clubs\" />
     <Folder Include="uploads\images\user_avatars\" />
     <Folder Include="uploads\images\teachers\" />

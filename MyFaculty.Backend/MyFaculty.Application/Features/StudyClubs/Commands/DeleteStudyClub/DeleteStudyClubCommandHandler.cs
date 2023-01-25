@@ -25,6 +25,11 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.DeleteStudyClub
             StudyClub club = await _context.StudyClubs.FindAsync(new object[] { request.Id }, cancellationToken);
             if (club == null)
                 throw new EntityNotFoundException(nameof(StudyClub), request.Id);
+            AppUser owner = await _context.Users.FindAsync(new object[] { request.IssuerId }, cancellationToken);
+            if (owner == null)
+                throw new EntityNotFoundException(nameof(AppUser), request.IssuerId);
+            if (club.OwnerId != request.IssuerId)
+                throw new UnauthorizedActionException("Данное действие Вам запрещено.");
             _context.StudyClubs.Remove(club);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

@@ -532,9 +532,11 @@ namespace MyFaculty.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             DeleteStudyClubCommand command = new DeleteStudyClubCommand()
             {
-                Id = id
+                Id = id,
+                IssuerId = requesterId
             };
             await Mediator.Send(command);
             return NoContent();

@@ -219,6 +219,29 @@ export default {
 </script>
 
 <style scoped>
+	.info-subheader {
+		font-size: 20px;
+		font-weight: bolder;
+		color: #283593;
+	}
+	.parameter-name {
+		font-weight: bold;
+		font-size: 18px;
+		text-align: left;
+		width: 200px;
+	}
+	.parameter-value {
+		text-align: left;
+		font-size: 18px;
+	}
+	a.parameter-value {
+		text-decoration: none;
+		color: blue;
+	}
+	a.parameter-value:visited {
+		text-decoration: none;
+		color: indigo;
+	}
 	.profile-avatar {
 		border: double 5px transparent;
 		background-image: linear-gradient(white, white),
