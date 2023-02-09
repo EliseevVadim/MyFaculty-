@@ -18,6 +18,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.Property(post => post.Id).ValueGeneratedOnAdd();
             builder.Property(post => post.TextContent).IsRequired(false);
             builder.Property(post => post.Attachments).IsRequired(false);
+            builder.Property(post => post.PostAttachmentsUid).IsRequired();
             builder.HasOne(post => post.Author)
                 .WithMany(user => user.Posts)
                 .HasForeignKey(post => post.AuthorId);

@@ -18,6 +18,13 @@
 			title="Заблокированные пользователи"
 			@close="showBanned = false"
 		/>
+		<CreateInformationPostModal
+			:show="showPostCreationForm"
+			:public-id="watchingPublic.id"
+			:study-club-id="''"
+			@close="showPostCreationForm = false"
+			@load="loadInfoPosts"
+		/>
 		<v-dialog
 			v-model="showEditingForm"
 			persistent
@@ -262,6 +269,28 @@
 				</v-col>
 			</v-row>
 			<v-divider v-if="!currentUserIsBlocked()"></v-divider>
+			<v-row class="mt-1">
+				<v-card-actions>
+					<v-btn
+						v-if="currentUserIsPublicOwner()"
+						color="primary"
+						@click="showPostCreationForm = true"
+					>
+						Новая запись
+						<v-icon right>
+							mdi-pencil
+						</v-icon>
+					</v-btn>
+				</v-card-actions>
+			</v-row>
+			<v-container class="mt-4 text-left mx-0">
+				<InformationPostPresenter
+					v-for="infoPost in informationPosts"
+					:key="infoPost.id + infoPost.updated + infoPost.likedUsers.length"
+					:post="infoPost"
+					@load="loadInfoPosts"
+				/>
+			</v-container>
 		</v-container>
 	</div>
 </template>
@@ -273,10 +302,15 @@ import UsersListModal from "@/components/UsersListModal";
 import UserInClubLookupPresenter from "@/components/presenters/UserInClubLookupPresenter";
 import TeacherVerificationMark from "@/components/AccountComponents/core/verificationMarks/TeacherVerificationMark";
 import ErrorPage from "@/components/AccountComponents/core/service-pages/ErrorPage";
+import CreateInformationPostModal from "@/components/AccountComponents/CreateInformationPostModal";
+import {mapGetters} from "vuex";
+import InformationPostPresenter from "@/components/presenters/InformationPostPresenter";
 
 export default {
 	name: "InformationPublicView",
 	components: {
+		InformationPostPresenter,
+		CreateInformationPostModal,
 		MassStudyClubDeletingForm,
 		MassStudyClubAddingForm, UsersListModal, UserInClubLookupPresenter, TeacherVerificationMark, ErrorPage},
 	data() {
@@ -301,6 +335,7 @@ export default {
 			showMembers: false,
 			showBanned: false,
 			showEditingForm: false,
+			showPostCreationForm: false,
 			membersActions: [
 				{
 					title: "Удалить из сообщества и заблокировать",
@@ -314,7 +349,8 @@ export default {
 					method: this.unblockUser,
 					requireFullAccess: false
 				}
-			]
+			],
+			informationPosts: []
 		}
 	},
 	methods: {
@@ -467,6 +503,12 @@ export default {
 			this.previewImage = null;
 			this.updatingPublic.issuerId = null;
 		},
+		loadInfoPosts() {
+			this.$store.dispatch('loadInfoPostsByInfoPublicId', this.watchingPublic.id)
+				.then(() => {
+					this.informationPosts = JSON.parse(JSON.stringify(this.INFO_POSTS.infoPosts));
+				});
+		}
 	},
 	mounted() {
 		let id = this.$route.params.id;
@@ -475,6 +517,7 @@ export default {
 			.then((response) => {
 				this.watchingPublic = response.data;
 				document.title = this.watchingPublic.publicName;
+				this.loadInfoPosts();
 			})
 			.catch((error) => {
 				if (error.response.status === 404) {
@@ -485,6 +528,9 @@ export default {
 			.finally(() => {
 				this.$loading(false);
 			})
+	},
+	computed: {
+		...mapGetters(['INFO_POSTS'])
 	}
 }
 </script>

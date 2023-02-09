@@ -578,19 +578,19 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 686, DateTimeKind.Local).AddTicks(614),
+                            Created = new DateTime(2023, 1, 28, 17, 16, 39, 994, DateTimeKind.Local).AddTicks(3194),
                             RepeatingName = "Каждую неделю"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 686, DateTimeKind.Local).AddTicks(1556),
+                            Created = new DateTime(2023, 1, 28, 17, 16, 39, 994, DateTimeKind.Local).AddTicks(4128),
                             RepeatingName = "По верхней неделе"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 686, DateTimeKind.Local).AddTicks(1572),
+                            Created = new DateTime(2023, 1, 28, 17, 16, 39, 994, DateTimeKind.Local).AddTicks(4143),
                             RepeatingName = "По нижней неделе"
                         });
                 });
@@ -609,6 +609,9 @@ namespace MyFaculty.Persistence.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("PostAttachmentsUid")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("TextContent")
                         .HasColumnType("longtext");
@@ -859,37 +862,37 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 457, DateTimeKind.Local).AddTicks(2483),
+                            Created = new DateTime(2023, 1, 28, 17, 16, 39, 816, DateTimeKind.Local).AddTicks(6485),
                             DaysName = "Понедельник"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9843),
+                            Created = new DateTime(2023, 1, 28, 17, 16, 39, 822, DateTimeKind.Local).AddTicks(4560),
                             DaysName = "Вторник"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9893),
+                            Created = new DateTime(2023, 1, 28, 17, 16, 39, 822, DateTimeKind.Local).AddTicks(4617),
                             DaysName = "Среда"
                         },
                         new
                         {
                             Id = 4,
-                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9899),
+                            Created = new DateTime(2023, 1, 28, 17, 16, 39, 822, DateTimeKind.Local).AddTicks(4624),
                             DaysName = "Четверг"
                         },
                         new
                         {
                             Id = 5,
-                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9904),
+                            Created = new DateTime(2023, 1, 28, 17, 16, 39, 822, DateTimeKind.Local).AddTicks(4628),
                             DaysName = "Пятница"
                         },
                         new
                         {
                             Id = 6,
-                            Created = new DateTime(2023, 1, 25, 12, 36, 13, 459, DateTimeKind.Local).AddTicks(9908),
+                            Created = new DateTime(2023, 1, 28, 17, 16, 39, 822, DateTimeKind.Local).AddTicks(4632),
                             DaysName = "Суббота"
                         });
                 });

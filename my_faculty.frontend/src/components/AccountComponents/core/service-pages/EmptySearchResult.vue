@@ -7,7 +7,7 @@
 		</h2>
 		<v-row class="d-flex justify-center ma-2">
 			<v-img
-				src="img/empty-search-result.jpg"
+				src="../img/empty-search-result.jpg"
 				min-width="150"
 				max-width="600"
 			>
@@ -25,6 +25,7 @@ export default {
 
 <style scoped>
 	.empty-result-title {
+		text-align: center;
 		color: black;
 		font-size: 20px;
 	}

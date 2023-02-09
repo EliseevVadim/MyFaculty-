@@ -12,6 +12,13 @@ import SecurityService from './services/authService';
 import * as d3 from "d3";
 import LoadingScreen from "@/components/LoadingScreen";
 import BackgroundColorService from './services/backgroundColorService';
+import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
+import 'tiptap-vuetify/dist/main.css';
+import VueFileAgent from 'vue-file-agent';
+import VueFileAgentStyles from 'vue-file-agent/dist/vue-file-agent.css';
+import 'viewerjs/dist/viewer.css';
+import VueViewer from "v-viewer";
+import DateTimePicker from 'vuetify2-datetime-picker';
 
 Vue.config.productionTip = false;
 Vue.prototype.$oidc = SecurityService;
@@ -34,11 +41,22 @@ Vue.use(VuetifyConfirm, {
     color: "warning",
     icon: "warning",
     property: "$confirm"
-})
+});
+
+Vue.use(TiptapVuetifyPlugin, {
+    vuetify,
+    iconsGroup: 'md'
+});
+
+Vue.use(VueFileAgent);
+
+Vue.use(VueViewer);
+
+Vue.use(DateTimePicker);
 
 new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
+    router,
+    store,
+    vuetify,
+    render: h => h(App)
 }).$mount('#app')

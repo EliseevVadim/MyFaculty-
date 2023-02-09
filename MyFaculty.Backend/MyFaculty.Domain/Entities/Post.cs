@@ -14,6 +14,7 @@ namespace MyFaculty.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string TextContent { get; set; }
+        public Guid PostAttachmentsUid { get; set; }
         public string Attachments { get; set; }
         public int AuthorId { get; set; }
         public AppUser Author { get; set; }

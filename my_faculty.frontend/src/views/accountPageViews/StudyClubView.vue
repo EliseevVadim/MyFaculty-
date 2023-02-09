@@ -32,6 +32,19 @@
 			@close="closeMassDeletingForm"
 			@load="reloadStudyClubWithMessage('Исключение прошло успешно')"
 		/>
+		<CreateInformationPostModal
+			:show="showPostCreationForm"
+			:public-id="''"
+			:study-club-id="watchingClub.id"
+			@close="showPostCreationForm = false"
+			@load="loadInfoPosts"
+		/>
+		<CreateClubTaskModal
+			:show="showTaskCreationForm"
+			:study-club-id="watchingClub.id"
+			@close="showTaskCreationForm = false"
+			@load="loadClubTasks"
+		/>
 		<v-dialog
 			v-model="showEditingForm"
 			persistent
@@ -167,28 +180,6 @@
 						mdi-pencil
 					</v-icon>
 				</v-btn>
-				<v-btn
-					v-if="currentUserIsGroupOwner()"
-					class="mx-2"
-					color="primary"
-					@click="openMassAddingForm"
-				>
-					<v-icon left>
-						mdi-account-multiple-plus
-					</v-icon>
-					Массовое добавление
-				</v-btn>
-				<v-btn
-					v-if="currentUserIsGroupOwner()"
-					class="mx-2 white--text"
-					color="red"
-					@click="openMassDeletingForm"
-				>
-					<v-icon left>
-						mdi-account-multiple-remove
-					</v-icon>
-					Массовое исключение
-				</v-btn>
 				<v-spacer class="d-block"></v-spacer>
 				<v-menu
 					v-if="currentUserIsMember()"
@@ -211,6 +202,18 @@
 								@click="leaveStudyClub"
 							>
 								Покинуть сообщество
+							</v-list-item-title>
+						</v-list-item>
+						<v-list-item
+							v-if="currentUserIsGroupOwner()"
+							v-for="(item, i) in additionalOwnerActions"
+							:key="i"
+						>
+							<v-list-item-title
+								class="club-menu-option"
+								@click="item.method"
+							>
+								{{item.title}}
 							</v-list-item-title>
 						</v-list-item>
 					</v-list>
@@ -287,6 +290,86 @@
 				</v-col>
 			</v-row>
 			<v-divider></v-divider>
+			<v-row
+				v-if="currentUserIsModerator()"
+				class="my-1 d-flex justify-space-between"
+			>
+				<v-btn
+					color="primary"
+					class="mb-2 mb-sm-0"
+					@click="showPostCreationForm = true"
+				>
+					Новая запись
+					<v-icon right>
+						mdi-pencil
+					</v-icon>
+				</v-btn>
+				<v-btn
+					color="primary"
+					@click="showTaskCreationForm = true"
+				>
+					Новое задание
+					<v-icon right>
+						mdi-checkbox-marked-circle-plus-outline
+					</v-icon>
+				</v-btn>
+			</v-row>
+			<v-row>
+				<v-tabs
+					:vertical="$vuetify.breakpoint.mobile"
+					background-color="transparent"
+					color="black"
+					grow
+				>
+					<v-tabs-slider color="purple accent-4"></v-tabs-slider>
+					<v-tab
+						class="font-weight-bold"
+						@click="selectInfoPostsDisplay"
+					>
+						Информационные записи
+					</v-tab>
+					<v-tab
+						class="font-weight-bold"
+						@click="selectClubTasksDisplay"
+					>
+						Задания
+					</v-tab>
+				</v-tabs>
+			</v-row>
+			<v-container class="mt-4 text-left mx-0">
+				<div v-if="showClubContent === clubContentType.InfoPosts">
+					<EmptySearchResult
+						v-if="informationPosts.length === 0"
+						message="Записей пока нет"
+					/>
+					<InformationPostPresenter
+						v-else
+						v-for="infoPost in informationPosts"
+						:key="infoPost.id + infoPost.updated + infoPost.likedUsers.length"
+						:post="infoPost"
+						@load="loadInfoPosts"
+					/>
+				</div>
+				<div v-else-if="showClubContent === clubContentType.ClubTasks">
+					<EmptySearchResult
+						v-if="clubTasks.length === 0"
+						message="Заданий пока нет"
+					/>
+					<ClubTaskPresenter
+						v-else
+						v-for="clubTask in clubTasks"
+						:key="clubTask.id + clubTask.updated"
+						:task="clubTask"
+						@load="loadClubTasks"
+					/>
+				</div>
+				<h1
+					v-else
+					class="red--text text-center"
+				>
+					Ошибка состояния
+				</h1>
+			</v-container>
 		</v-container>
 	</div>
 </template>
@@ -298,9 +381,20 @@ import UserInClubLookupPresenter from "@/components/presenters/UserInClubLookupP
 import UsersListModal from "@/components/UsersListModal";
 import MassStudyClubAddingForm from "@/components/AccountComponents/teacherComponents/MassStudyClubAddingForm";
 import MassStudyClubDeletingForm from "@/components/AccountComponents/teacherComponents/MassStudyClubDeletingForm";
+import CreateInformationPostModal from "@/components/AccountComponents/CreateInformationPostModal";
+import InformationPostPresenter from "@/components/presenters/InformationPostPresenter";
+import {mapGetters} from "vuex";
+import CreateClubTaskModal from "@/components/AccountComponents/CreateClubTaskModal";
+import ClubTaskPresenter from "@/components/presenters/ClubTaskPresenter";
+import EmptySearchResult from "@/components/AccountComponents/core/service-pages/EmptySearchResult";
 export default {
 	name: "StudyClubView",
 	components: {
+		EmptySearchResult,
+		ClubTaskPresenter,
+		CreateClubTaskModal,
+		InformationPostPresenter,
+		CreateInformationPostModal,
 		MassStudyClubDeletingForm,
 		MassStudyClubAddingForm, UsersListModal, UserInClubLookupPresenter, TeacherVerificationMark, ErrorPage},
 	data() {
@@ -319,6 +413,10 @@ export default {
 			commonRules: [
 				v => !!v || 'Поле является обязательным для заполнения'
 			],
+			clubContentType: {
+				InfoPosts: 0,
+				ClubTasks: 1
+			},
 			previewImage: null,
 			formValid: true,
 			clubNotFound: false,
@@ -327,6 +425,9 @@ export default {
 			showEditingForm: false,
 			showMassAddingForm: false,
 			showMassDeletingForm: false,
+			showPostCreationForm: false,
+			showTaskCreationForm: false,
+			showClubContent: null,
 			membersActions: [
 				{
 					title: "Удалить из сообщества",
@@ -345,7 +446,19 @@ export default {
 					method: this.demoteFromModerator,
 					requireFullAccess: false
 				}
-			]
+			],
+			additionalOwnerActions: [
+				{
+					title: "Массовое добавление",
+					method: this.openMassAddingForm
+				},
+				{
+					title: "Массовое исключение",
+					method: this.openMassDeletingForm
+				}
+			],
+			informationPosts: [],
+			clubTasks: []
 		}
 	},
 	methods: {
@@ -544,15 +657,37 @@ export default {
 		closeMassDeletingForm() {
 			this.showMassDeletingForm = false;
 			this.$refs.massDeleteForm.resetData();
+		},
+		selectInfoPostsDisplay() {
+			this.showClubContent = this.clubContentType.InfoPosts;
+			this.loadInfoPosts();
+		},
+		selectClubTasksDisplay() {
+			this.showClubContent = this.clubContentType.ClubTasks;
+			this.loadClubTasks();
+		},
+		loadInfoPosts() {
+			this.$store.dispatch('loadInfoPostsByStudyClubId', this.watchingClub.id)
+				.then(() => {
+					this.informationPosts = JSON.parse(JSON.stringify(this.INFO_POSTS.infoPosts));
+				});
+		},
+		loadClubTasks() {
+			this.$store.dispatch('loadClubTasksByStudyClubId', this.watchingClub.id)
+				.then(() => {
+					this.clubTasks = JSON.parse(JSON.stringify(this.CLUB_TASKS.clubTasks));
+				})
 		}
 	},
 	mounted() {
+		this.showClubContent = this.clubContentType.InfoPosts;
 		let id = this.$route.params.id;
 		this.$loading(true);
 		this.$store.dispatch('loadStudyClubById', id)
 			.then((response) => {
 				this.watchingClub = response.data;
 				document.title = this.watchingClub.clubName;
+				this.loadInfoPosts();
 			})
 			.catch((error) => {
 				if (error.response.status === 404) {
@@ -563,6 +698,10 @@ export default {
 			.finally(() => {
 				this.$loading(false);
 			})
+	},
+	computed: {
+		...mapGetters(['INFO_POSTS']),
+		...mapGetters(['CLUB_TASKS'])
 	}
 }
 </script>

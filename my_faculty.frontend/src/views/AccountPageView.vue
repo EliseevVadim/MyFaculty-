@@ -161,7 +161,7 @@
 			<v-main>
 				<v-container
 					fluid
-					class="personal-page-content"
+					class="personal-page-content main-content-page"
 				>
 					<router-view v-if="isFullyMounted" />
 				</v-container>
@@ -358,4 +358,6 @@ export default {
 .verification_suggestion
 	color: white !important
 	font-size: 12px
+.main-content-page
+	background: #edeef0
 </style>
