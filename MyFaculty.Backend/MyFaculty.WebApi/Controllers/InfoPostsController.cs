@@ -23,7 +23,6 @@ using MyFaculty.Application.Features.InfoPosts.Commands.LikeInfoPost;
 using MyFaculty.Application.Features.InfoPosts.Commands.UnlikeInfoPost;
 using MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPostsByStudyClub;
 
-
 namespace MyFaculty.WebApi.Controllers
 {
     [Produces("application/json")]
