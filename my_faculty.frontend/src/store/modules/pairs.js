@@ -24,6 +24,12 @@ const actions = {
 				context.commit('setPairs', response.data);
 			})
 	},
+	loadPairsByGroupId: async(context, id) => {
+		await axios.get(config.apiUrl + '/api/pairs/group/' + id)
+			.then((response) => {
+				context.commit('setPairs', response.data);
+			})
+	},
 	addPair: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.post(config.apiUrl + '/api/pairs', {

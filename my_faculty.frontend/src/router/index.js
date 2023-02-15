@@ -193,6 +193,11 @@ const routes = [
                 path: '/public:id',
                 name: 'Просмотр информационного сообщества',
                 component: () => import('../views/accountPageViews/InformationPublicView')
+            },
+            {
+                path: '/schedule',
+                name: 'Просмотр расписания',
+                component: () => import('../views/accountPageViews/ScheduleView')
             }
         ]
     },

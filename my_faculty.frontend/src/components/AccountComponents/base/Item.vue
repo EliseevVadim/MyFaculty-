@@ -1,5 +1,45 @@
 <template>
+	<v-tooltip
+		v-if="restricted"
+		max-width="200"
+		color="primary"
+		bottom
+	>
+		<template v-slot:activator="{on, attrs}">
+			<div
+				v-bind="attrs"
+				v-on="on"
+			>
+				<v-list-item
+					disabled
+					:href="href"
+					:rel="href && href !== '#' ? 'noopener' : undefined"
+					:target="href && href !== '#' ? '_blank' : undefined"
+					:to="item.to"
+					:active-class="`primary white--text`"
+				>
+					<v-list-item-icon
+						v-if="text"
+						class="v-list-item__icon--text"
+						v-text="computedText"
+					/>
+
+					<v-list-item-icon v-else-if="item.icon">
+						<v-icon v-text="item.icon" />
+					</v-list-item-icon>
+
+					<v-list-item-content v-if="item.title || item.subtitle">
+						<v-list-item-title v-text="item.title" />
+
+						<v-list-item-subtitle v-text="item.subtitle" />
+					</v-list-item-content>
+				</v-list-item>
+			</div>
+		</template>
+		<p class="text-left font-weight-bold">{{restrictText}}</p>
+	</v-tooltip>
 	<v-list-item
+		v-else
 		:href="href"
 		:rel="href && href !== '#' ? 'noopener' : undefined"
 		:target="href && href !== '#' ? '_blank' : undefined"
@@ -43,6 +83,14 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		restricted: {
+			type: Boolean,
+			default: false
+		},
+		restrictText: {
+			type: String,
+			default: ''
+		}
 	},
 	computed: {
 		computedText () {

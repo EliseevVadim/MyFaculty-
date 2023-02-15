@@ -142,8 +142,19 @@
 							v-else
 							:key="`item-${i}`"
 							:item="item"
+							:restricted="item.restricted"
+							:restrict-text="item.restrictExplanation"
 						/>
 					</template>
+					<Item
+						:item="{
+							title: 'Мое расписание',
+							icon: 'mdi-list-box-outline',
+							to: '/schedule'
+						}"
+						:restricted="!CURRENT_USER.groupId"
+						restrict-text="Раздел доступен только при указанной группе в профиле."
+					/>
 					<div />
 				</v-list>
 				<template v-slot:append>
@@ -228,26 +239,36 @@ export default {
 					icon: 'mdi-home',
 					title: 'На главную',
 					to: '/',
+					restricted: false,
+					restrictExplanation: ''
 				},
 				{
 					icon: 'mdi-account',
 					title: 'Профиль',
 					to: '/personal',
+					restricted: false,
+					restrictExplanation: ''
 				},
 				{
 					title: 'Новости',
 					icon: 'mdi-clipboard-outline',
 					to: '/news',
+					restricted: false,
+					restrictExplanation: ''
 				},
 				{
 					title: 'Сообщества курсов',
 					icon: 'mdi-cast-education',
 					to: '/clubs',
+					restricted: false,
+					restrictExplanation: ''
 				},
 				{
 					title: 'Сообщества',
 					icon: 'mdi-account-group',
 					to: '/communities',
+					restricted: false,
+					restrictExplanation: ''
 				}
 			]
 		}
@@ -284,7 +305,7 @@ export default {
 		catch (error) {}
 	},
 	computed: {
-		...mapGetters(['CURRENT_USER'])
+		...mapGetters(['CURRENT_USER']),
 	}
 }
 </script>
