@@ -22,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="uploads\comments-media\images\" />
+    <Folder Include="uploads\comments-media\miscellaneous\" />
     <Folder Include="uploads\images\info-publics\" />
     <Folder Include="uploads\images\study-clubs\" />
     <Folder Include="uploads\images\user_avatars\" />

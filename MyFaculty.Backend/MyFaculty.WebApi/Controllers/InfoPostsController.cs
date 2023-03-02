@@ -138,9 +138,9 @@ namespace MyFaculty.WebApi.Controllers
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             if (requesterId != createInfoPostDto.AuthorId)
                 return Forbid();
-            List<PostAttachment> postAttachments = new List<PostAttachment>(); 
+            List<Attachment> postAttachments = new List<Attachment>(); 
             Guid postAttachmentsUid = Guid.NewGuid();
-            List<PostAttachment> newFiles = ProcessNewFiles(createInfoPostDto.PostAttachments, postAttachmentsUid);
+            List<Attachment> newFiles = ProcessNewFiles(createInfoPostDto.PostAttachments, postAttachmentsUid);
             if (newFiles != null)
                 postAttachments.AddRange(newFiles);          
             CreateInfoPostCommand command = _mapper.Map<CreateInfoPostCommand>(createInfoPostDto);
@@ -247,8 +247,8 @@ namespace MyFaculty.WebApi.Controllers
                 return Forbid();
             string oldAttachments = updateInfoPostDto.OldAttachments;
             string actualAttachments = updateInfoPostDto.ActualAttachments;
-            List<PostAttachment> postAttachments = actualAttachments == null ? new List<PostAttachment>() : JsonConvert.DeserializeObject<List<PostAttachment>>(actualAttachments);
-            List<PostAttachment> newFiles = ProcessNewFiles(updateInfoPostDto.NewFiles, updateInfoPostDto.PostAttachmentsUid);
+            List<Attachment> postAttachments = actualAttachments == null ? new List<Attachment>() : JsonConvert.DeserializeObject<List<Attachment>>(actualAttachments);
+            List<Attachment> newFiles = ProcessNewFiles(updateInfoPostDto.NewFiles, updateInfoPostDto.PostAttachmentsUid);
             if (newFiles != null)
                 postAttachments.AddRange(newFiles);
             UpdateInfoPostCommand command = _mapper.Map<UpdateInfoPostCommand>(updateInfoPostDto);
@@ -256,9 +256,9 @@ namespace MyFaculty.WebApi.Controllers
             InfoPostViewModel infoPost = await Mediator.Send(command);
             if (oldAttachments != null && infoPost.Attachments != null)
             {
-                List<PostAttachment> oldFiles = JsonConvert.DeserializeObject<List<PostAttachment>>(oldAttachments);
-                List<PostAttachment> currentFiles = JsonConvert.DeserializeObject<List<PostAttachment>>(actualAttachments);
-                List<PostAttachment> filesToDelete = oldFiles.Except(currentFiles).ToList();
+                List<Attachment> oldFiles = JsonConvert.DeserializeObject<List<Attachment>>(oldAttachments);
+                List<Attachment> currentFiles = JsonConvert.DeserializeObject<List<Attachment>>(actualAttachments);
+                List<Attachment> filesToDelete = oldFiles.Except(currentFiles).ToList();
                 DeleteAttachments(filesToDelete);
             }
             return Ok(infoPost);
@@ -293,17 +293,17 @@ namespace MyFaculty.WebApi.Controllers
             string attachmetsData = infoPost.Attachments;
             if (attachmetsData != null)
             {
-                List<PostAttachment> filesToDelete = JsonConvert.DeserializeObject<List<PostAttachment>>(attachmetsData);
+                List<Attachment> filesToDelete = JsonConvert.DeserializeObject<List<Attachment>>(attachmetsData);
                 DeleteAttachments(filesToDelete);
             }
             return NoContent();
         }
 
-        private List<PostAttachment> ProcessNewFiles(List<IFormFile> files, Guid postAttachmentsUid)
+        private List<Attachment> ProcessNewFiles(List<IFormFile> files, Guid postAttachmentsUid)
         {
             if (files == null)
                 return null;
-            List<PostAttachment> attachments = new List<PostAttachment>();
+            List<Attachment> attachments = new List<Attachment>();
             string filePath = string.Empty;
             string savePath = string.Empty;
             string savePathTargetDirectory = string.Empty;
@@ -316,7 +316,7 @@ namespace MyFaculty.WebApi.Controllers
                 {
                     file.CopyTo(stream);
                 }
-                attachments.Add(new PostAttachment()
+                attachments.Add(new Attachment()
                 {
                     FileName = file.FileName,
                     ContentType = file.ContentType,
@@ -328,9 +328,9 @@ namespace MyFaculty.WebApi.Controllers
             return attachments;
         }
 
-        private void DeleteAttachments(List<PostAttachment> attachmentsToDelete)
+        private void DeleteAttachments(List<Attachment> attachmentsToDelete)
         {
-            foreach (PostAttachment attachment in attachmentsToDelete)
+            foreach (Attachment attachment in attachmentsToDelete)
             {
                 string path = attachment.Path
                     .Replace(_appDomain, $"{_webHostEnvironment.ContentRootPath}/");

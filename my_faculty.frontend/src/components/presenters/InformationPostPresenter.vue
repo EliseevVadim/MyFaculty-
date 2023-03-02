@@ -17,132 +17,162 @@
 			title="Оценившие пользователи"
 			@close="showLikedUsers = false"
 		/>
-		<v-container fluid class="post-container mb-3">
-			<v-list-item
-				class="mb-3"
-				:key="getFullName(post.author)"
-			>
-				<v-list-item-avatar>
-					<v-img
-						class="author-avatar"
-						:src="post.author.avatarPath ? post.author.avatarPath : '../img/blank-club.png'"
-					/>
-				</v-list-item-avatar>
-				<v-list-item-content class="club-lookup-content">
-					<v-list-item-title>
-						<router-link class="author-name" :to="'/id' + post.authorId">
-							{{getFullName(post.author)}}
-						</router-link>
-						<wbr>
-						<TeacherVerificationMark v-if="post.author.isTeacher"/>
-					</v-list-item-title>
-					<v-list-item-subtitle v-html="prettifyPublishDate()">
-					</v-list-item-subtitle>
-				</v-list-item-content>
-				<v-menu
-					v-if="currentUserIsPostAuthor()"
-					bottom
-					left
+		<CommentsModal
+			v-if="showComments"
+			:show="showComments"
+			:post-id="post.id"
+			@close="showComments = false"
+			@load="reloadPosts"
+		/>
+		<v-container
+			fluid
+			class="post-container mb-3 px-0"
+			:class="post.commentsAllowed ? 'pb-0' : ''"
+		>
+			<div class="internal-post-content">
+				<v-list-item
+					class="mb-3"
+					:key="getFullName(post.author)"
 				>
-					<template v-slot:activator="{ on, attrs }">
-						<v-btn
-							icon
-							v-bind="attrs"
-							v-on="on"
-						>
-							<v-icon>mdi-dots-horizontal</v-icon>
-						</v-btn>
-					</template>
-					<v-list>
-						<v-list-item ripple>
-							<v-list-item-title
-								class="post-context-menu-option"
-								@click="startPostEditing"
+					<v-list-item-avatar>
+						<v-img
+							class="author-avatar"
+							:src="post.author.avatarPath ? post.author.avatarPath : '../img/blank-club.png'"
+						/>
+					</v-list-item-avatar>
+					<v-list-item-content class="post-metadata">
+						<v-list-item-title>
+							<router-link class="author-name" :to="'/id' + post.authorId">
+								{{getFullName(post.author)}}
+							</router-link>
+							<wbr>
+							<TeacherVerificationMark v-if="post.author.isTeacher"/>
+						</v-list-item-title>
+						<v-list-item-subtitle v-html="prettifyPublishDate()">
+						</v-list-item-subtitle>
+					</v-list-item-content>
+					<v-menu
+						v-if="currentUserIsPostAuthor()"
+						bottom
+						left
+					>
+						<template v-slot:activator="{ on, attrs }">
+							<v-btn
+								icon
+								v-bind="attrs"
+								v-on="on"
 							>
-								Редактировать запись
-							</v-list-item-title>
-						</v-list-item>
-						<v-list-item ripple>
-							<v-list-item-title
-								class="post-context-menu-option"
-								@click="deleteInfoPost"
-							>
-								Удалить запись
-							</v-list-item-title>
-						</v-list-item>
-					</v-list>
-				</v-menu>
-			</v-list-item>
-			<v-row
-				class="ml-3"
-				v-html="post.textContent"
-			>
-			</v-row>
-			<viewer
-				class="image-gallery"
-				:images="images"
-			>
-				<img
-					v-for="src in images"
-					:key="src"
-					:src="src"
-					alt="#"
+								<v-icon>mdi-dots-horizontal</v-icon>
+							</v-btn>
+						</template>
+						<v-list>
+							<v-list-item ripple>
+								<v-list-item-title
+									class="post-context-menu-option"
+									@click="startPostEditing"
+								>
+									Редактировать запись
+								</v-list-item-title>
+							</v-list-item>
+							<v-list-item ripple>
+								<v-list-item-title
+									class="post-context-menu-option"
+									@click="deleteInfoPost"
+								>
+									Удалить запись
+								</v-list-item-title>
+							</v-list-item>
+						</v-list>
+					</v-menu>
+				</v-list-item>
+				<v-row
+					class="ml-3"
+					v-html="post.textContent"
 				>
-			</viewer>
-			<div class="theme-list" v-if="otherFiles.length > 0">
-				<div class="vue-file-agent grid-block-wrapper" style="padding: 0;">
-					<template v-for="(fileRecord, i) in otherFiles">
-						<VueFilePreview
-							:key="i"
-							:value="fileRecord"
-							:linkable="true"
-							class="file-preview-wrapper grid-box-item grid-block"
-							style="z-index: 0"
-						></VueFilePreview>
-					</template>
+				</v-row>
+				<viewer
+					class="image-gallery"
+					:images="images"
+				>
+					<img
+						v-for="src in images"
+						:key="src"
+						:src="src"
+						alt="#"
+					>
+				</viewer>
+				<div class="theme-list" v-if="otherFiles.length > 0">
+					<div class="vue-file-agent grid-block-wrapper" style="padding: 0;">
+						<template v-for="(fileRecord, i) in otherFiles">
+							<VueFilePreview
+								:key="i"
+								:value="fileRecord"
+								:linkable="true"
+								class="file-preview-wrapper grid-box-item grid-block"
+								style="z-index: 0"
+							></VueFilePreview>
+						</template>
+					</div>
 				</div>
-			</div>
-			<v-row>
-				<v-col class="d-flex align-center">
-					<v-btn
-						ref="like"
-						icon
-						large
-						color="primary"
-						:loading="likeButtonLoading"
-						@mouseover="hoverLikeButton"
-						@mouseout="leaveLikeButton"
-						@click="pressLikeButton"
-					>
-						<v-icon>
-							{{ displayedLikeButtonIcon }}
-						</v-icon>
-					</v-btn>
-					<span
-						title="Посмотреть список оценивших пользователей"
-						class="modal-invoker"
-						@click="showLikedUsers = true"
-					>
+				<v-row>
+					<v-col class="d-flex align-center">
+						<v-btn
+							ref="like"
+							icon
+							large
+							color="primary"
+							:loading="likeButtonLoading"
+							@mouseover="hoverLikeButton"
+							@mouseout="leaveLikeButton"
+							@click="pressLikeButton"
+						>
+							<v-icon>
+								{{ displayedLikeButtonIcon }}
+							</v-icon>
+						</v-btn>
+						<span
+							title="Посмотреть список оценивших пользователей"
+							class="modal-invoker"
+							@click="showLikedUsers = true"
+						>
 						{{ this.post.likedUsers.length !== 0 ? this.post.likedUsers.length : ''}}
 					</span>
-				</v-col>
-			</v-row>
+					</v-col>
+				</v-row>
+			</div>
+			<div v-if="post.commentsAllowed">
+				<v-divider></v-divider>
+				<v-container
+					@click="showComments = true"
+					class="comments-invoker d-flex"
+					v-ripple
+					fluid
+				>
+					<span>{{prettifyCommentsCount()}}</span>
+					<v-spacer></v-spacer>
+					<v-icon color="primary">
+						mdi-chevron-right
+					</v-icon>
+				</v-container>
+			</div>
 		</v-container>
 	</div>
 </template>
 
 <script>
 import EditInformationPostModal from "@/components/AccountComponents/EditInformationPostModal";
-import UsersListModal from "@/components/UsersListModal";
+import UsersListModal from "@/components/AccountComponents/UsersListModal";
 import TeacherVerificationMark from "@/components/AccountComponents/core/verificationMarks/TeacherVerificationMark";
+import CommentsModal from "@/components/AccountComponents/CommentsModal";
 export default {
 	name: "InformationPostPresenter",
-	components: {TeacherVerificationMark, UsersListModal, EditInformationPostModal},
+	components: {CommentsModal, TeacherVerificationMark, UsersListModal, EditInformationPostModal},
 	props: ['post'],
 	data() {
 		return {
 			showEditingForm: false,
 			showLikedUsers: false,
+			showComments: false,
 			images: [],
 			otherFiles: [],
 			likedUsersActions: [],
@@ -174,6 +204,26 @@ export default {
 				minute: 'numeric'
 			});
 			return `${creationDate} <wbr>(обновлено ${updateDate})`;
+		},
+		prettifyCommentsCount() {
+			if (this.post.commentsCount === 0)
+				return "Оставить комментарий...";
+			let  count = this.post.commentsCount;
+			let lastNumber = count % 100;
+			let variants = ['комментарий', 'комментария', 'комментариев'];
+			if (lastNumber > 10 && lastNumber < 20)
+				return `${count} ${variants[2]}`;
+			let lastDigit = lastNumber % 10;
+			switch (lastDigit) {
+				case 1:
+					return `${count} ${variants[0]}`;
+				case 2:
+				case 3:
+				case 4:
+					return `${count} ${variants[1]}`;
+				default:
+					return `${count} ${variants[2]}`;
+			}
 		},
 		currentUserLikesPost() {
 			return this.post.likedUsers.find(user => user.id == this.$oidc.currentUserId) !== undefined;
@@ -316,6 +366,15 @@ export default {
 		background: white;
 		border-radius: 10px;
 	}
+	.comments-invoker {
+		border-bottom-right-radius: 10px;
+		border-bottom-left-radius: 10px;
+		cursor: pointer;
+	}
+	.internal-post-content {
+		padding-right: 12px;
+		padding-left: 12px;
+	}
 	.author-name {
 		font-weight: bolder;
 		font-size: 16px;
@@ -333,15 +392,13 @@ export default {
 			position: relative;
 			border-radius: 8%;
 		}
-		/*img:hover {
-			z-index: 1000;
-			transform: scale(1.3);
-			transition: transform ease 0.5s;
-		}*/
 	}
 	.post-context-menu-option {
 		text-align: left;
 		cursor: pointer;
+	}
+	.post-metadata {
+		text-align: left;
 	}
 	.modal-invoker {
 		cursor: pointer;

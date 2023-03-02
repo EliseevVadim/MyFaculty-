@@ -22,6 +22,10 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasOne(post => post.Author)
                 .WithMany(user => user.Posts)
                 .HasForeignKey(post => post.AuthorId);
+            builder.HasMany(post => post.Comments)
+                .WithOne(comment => comment.Post)
+                .HasForeignKey(comment => comment.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

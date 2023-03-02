@@ -24,6 +24,7 @@ import studyClubs from "@/store/modules/studyClubs";
 import infoPublics from "@/store/modules/infoPublics";
 import infoPosts from "@/store/modules/infoPosts";
 import clubTasks from "@/store/modules/clubTasks";
+import comments from "@/store/modules/comments";
 
 Vue.use(Vuex)
 
@@ -56,6 +57,7 @@ export default new Vuex.Store({
       studyClubs,
       infoPublics,
       infoPosts,
-      clubTasks
+      clubTasks,
+      comments
   }
 })

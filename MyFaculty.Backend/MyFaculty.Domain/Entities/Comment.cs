@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MyFaculty.Domain.Entities
 {
-    public class Post
+    public class Comment
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string TextContent { get; set; }
-        public Guid PostAttachmentsUid { get; set; }
+        public Guid CommentAttachmentsUid { get; set; }
         public string Attachments { get; set; }
+        public int PostId { get; set; }
+        public Post Post { get; set; }
         public int AuthorId { get; set; }
         public AppUser Author { get; set; }
-        public List<Comment> Comments { get; set; }
+        public int? ParentCommentId { get; set; }
+        public Comment ParentComment { get; set; }
+        public List<Comment> Replies { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
     }

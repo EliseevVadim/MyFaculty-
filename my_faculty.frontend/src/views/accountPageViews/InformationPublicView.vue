@@ -286,7 +286,7 @@
 			<v-container class="mt-4 text-left mx-0">
 				<InformationPostPresenter
 					v-for="infoPost in informationPosts"
-					:key="infoPost.id + infoPost.updated + infoPost.likedUsers.length"
+					:key="infoPost.id + infoPost.updated + infoPost.likedUsers.length + infoPost.commentsCount"
 					:post="infoPost"
 					@load="loadInfoPosts"
 				/>
@@ -298,7 +298,7 @@
 <script>
 import MassStudyClubDeletingForm from "@/components/AccountComponents/teacherComponents/MassStudyClubDeletingForm";
 import MassStudyClubAddingForm from "@/components/AccountComponents/teacherComponents/MassStudyClubAddingForm";
-import UsersListModal from "@/components/UsersListModal";
+import UsersListModal from "@/components/AccountComponents/UsersListModal";
 import UserInClubLookupPresenter from "@/components/presenters/UserInClubLookupPresenter";
 import TeacherVerificationMark from "@/components/AccountComponents/core/verificationMarks/TeacherVerificationMark";
 import ErrorPage from "@/components/AccountComponents/core/service-pages/ErrorPage";

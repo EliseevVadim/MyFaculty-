@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MyFaculty.Application.Features.ClubTasks.Commands.CreateClubTask;
-using MyFaculty.Application.Features.ClubTasks.Commands.DeleteClubTask;
-using MyFaculty.Application.Features.ClubTasks.Commands.UpdateClubTask;
-using MyFaculty.Application.Features.ClubTasks.Queries.GetClubTaskInfo;
-using MyFaculty.Application.Features.ClubTasks.Queries.GetClubTasksForStudyClub;
+using MyFaculty.Application.Features.Comments.Commands.CreateComment;
+using MyFaculty.Application.Features.Comments.Commands.DeleteComment;
+using MyFaculty.Application.Features.Comments.Commands.UpdateComment;
+using MyFaculty.Application.Features.Comments.Queries.GetCommentsForPost;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using MyFaculty.WebApi.Models;
@@ -24,14 +23,14 @@ namespace MyFaculty.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class ClubTasksController : BaseController
+    public class CommentsController : BaseController
     {
         private IMapper _mapper;
         private IWebHostEnvironment _webHostEnvironment;
         private IConfiguration _configuration;
         private string _appDomain;
 
-        public ClubTasksController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public CommentsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
@@ -40,168 +39,146 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of club tasks for a study club
+        /// Gets the list of comments for a specific post
         /// </summary>
         /// <remarks>
         /// Sample request: 
-        /// GET /clubtasks/study-club/1
+        /// GET /comments/post/1
         /// </remarks>
-        /// <param name="id">Specific faculty id (integer)</param>
-        /// <returns>ClubTasksListViewModel</returns>
+        /// <param name="id">Specific post id (integer)</param>
+        /// <returns>Returns InfoPostsListViewModel</returns>
         /// <response code="200">Success</response>
-        [HttpGet("study-club/{id}")]
+        [HttpGet("post/{id}")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ClubTasksListViewModel>> GetByStudyClubId(int id)
+        public async Task<ActionResult<CommentsListViewModel>> GetByPostId(int id)
         {
-            GetClubTasksForStudyClubQuery query = new GetClubTasksForStudyClubQuery()
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            GetCommentsForPostQuery query = new GetCommentsForPostQuery()
             {
-                StudyClubId = id
+                PostId = id,
+                IssuerId = requesterId
             };
-            ClubTasksListViewModel viewModel = await Mediator.Send(query);
+            CommentsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 
         /// <summary>
-        /// Gets the study club task by id
-        /// </summary>
-        /// <remarks>
-        /// Sample request: 
-        /// GET /clubtasks/1
-        /// </remarks>
-        /// <param name="id">Study club task's id (integer)</param>
-        /// <returns>Returns ClubTaskViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ClubTaskViewModel>> Get(int id)
-        {
-            GetClubTaskInfoQuery query = new GetClubTaskInfoQuery()
-            {
-                Id = id
-            };
-            ClubTaskViewModel viewModel = await Mediator.Send(query);
-            return Ok(viewModel);
-        }
-
-        /// <summary>
-        /// Creates the study club task
+        /// Creates the comment
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// POST /clubtasks
+        /// POST /comments
         /// {
         ///     "textContent": "string",
-        ///     "postAttachments": "list of files",
-        ///     "studyClubId": 1,
+        ///     "commentAttachments": "list of files",
+        ///     "postId": 1,
         ///     "authorId": 1,
-        ///     "deadLine": "future date time"
+        ///     "parentCommentId": null
         /// }
         /// </remarks>
-        /// <param name="createClubTaskDto">CreateClubTaskDto object</param>
-        /// <returns>Retruns ClubTaskViewModel</returns>
+        /// <param name="createCommentDto">CreateCommentDto object</param>
+        /// <returns>Retruns CommentViewModel</returns>
         /// <response code="201">Created</response>
         /// <response code="500">Server error</response>
         [HttpPost]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ClubTaskViewModel>> Create([FromForm] CreateClubTaskDto createClubTaskDto)
+        public async Task<ActionResult<CommentViewModel>> Create([FromForm] CreateCommentDto createCommentDto)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (requesterId != createClubTaskDto.AuthorId)
+            if (requesterId != createCommentDto.AuthorId)
                 return Forbid();
-            List<Attachment> postAttachments = new List<Attachment>();
-            Guid postAttachmentsUid = Guid.NewGuid();
-            List<Attachment> newFiles = ProcessNewFiles(createClubTaskDto.PostAttachments, postAttachmentsUid);
+            List<Attachment> commentAttachments = new List<Attachment>();
+            Guid commentAttachmentsUid = Guid.NewGuid();
+            List<Attachment> newFiles = ProcessNewFiles(createCommentDto.CommentAttachments, commentAttachmentsUid);
             if (newFiles != null)
-                postAttachments.AddRange(newFiles);
-            CreateClubTaskCommand command = _mapper.Map<CreateClubTaskCommand>(createClubTaskDto);
-            command.Attachments = postAttachments.Count > 0 ? JsonConvert.SerializeObject(postAttachments) : null;
-            command.PostAttachmentsUid = postAttachmentsUid;
-            ClubTaskViewModel task = await Mediator.Send(command);
-            return Created(nameof(ClubTasksController), task);
+                commentAttachments.AddRange(newFiles);
+            CreateCommentCommand command = _mapper.Map<CreateCommentCommand>(createCommentDto);
+            command.Attachments = commentAttachments.Count > 0 ? JsonConvert.SerializeObject(commentAttachments) : null;
+            command.CommentAttachmentsUid = commentAttachmentsUid;
+            CommentViewModel comment = await Mediator.Send(command);
+            return Created(nameof(InfoPostsController), comment);
         }
 
         /// <summary>
-        /// Updates the study club task
+        /// Updates the comment
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// PUT /clubtasks
+        /// PUT /comments
         /// {
-        ///     "id": 1,
+        ///     "commentId": 1,
         ///     "textContent": "string",
         ///     "oldAttachments": "json",
         ///     "actualAttachments": "json",
         ///     "newFiles": "list of files",
-        ///     "postAttachmentsUid": "guid"
-        ///     "issuerId": 1,
-        ///     "deadLine": "future date time"
+        ///     "commentAttachmentsUid": "guid"
+        ///     "issuerId": 1
         /// }
         /// </remarks>
-        /// <param name="updateClubTaskDto">UpdateClubTaskDto object</param>
-        /// <returns>Retruns ClubTaskViewModel</returns>
+        /// <param name="updateCommentDto">UpdateCommentDto object</param>
+        /// <returns>Retruns CommentViewModel</returns>
         /// <response code="201">Created</response>
         /// <response code="404">Not found</response>
         /// <response code="500">Server error</response>
         [HttpPut]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ClubTaskViewModel>> Update([FromForm] UpdateClubTaskDto updateClubTaskDto)
+        public async Task<ActionResult<CommentViewModel>> Update([FromForm] UpdateCommentDto updateCommentDto)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            if (requesterId != updateClubTaskDto.IssuerId)
+            if (requesterId != updateCommentDto.IssuerId)
                 return Forbid();
-            string oldAttachments = updateClubTaskDto.OldAttachments;
-            string actualAttachments = updateClubTaskDto.ActualAttachments;
-            List<Attachment> postAttachments = actualAttachments == null ? new List<Attachment>() : JsonConvert.DeserializeObject<List<Attachment>>(actualAttachments);
-            List<Attachment> newFiles = ProcessNewFiles(updateClubTaskDto.NewFiles, updateClubTaskDto.PostAttachmentsUid);
+            string oldAttachments = updateCommentDto.OldAttachments;
+            string actualAttachments = updateCommentDto.ActualAttachments;
+            List<Attachment> commentAttachments = actualAttachments == null ? new List<Attachment>() : JsonConvert.DeserializeObject<List<Attachment>>(actualAttachments);
+            List<Attachment> newFiles = ProcessNewFiles(updateCommentDto.NewFiles, updateCommentDto.CommentAttachmentsUid);
             if (newFiles != null)
-                postAttachments.AddRange(newFiles);
-            UpdateClubTaskCommand command = _mapper.Map<UpdateClubTaskCommand>(updateClubTaskDto);
-            command.Attachments = postAttachments.Count > 0 ? JsonConvert.SerializeObject(postAttachments) : null;
-            ClubTaskViewModel task = await Mediator.Send(command);
-            if (oldAttachments != null && task.Attachments != null)
+                commentAttachments.AddRange(newFiles);
+            UpdateCommentCommand command = _mapper.Map<UpdateCommentCommand>(updateCommentDto);
+            command.Attachments = commentAttachments.Count > 0 ? JsonConvert.SerializeObject(commentAttachments) : null;
+            CommentViewModel infoPost = await Mediator.Send(command);
+            if (oldAttachments != null && infoPost.Attachments != null)
             {
                 List<Attachment> oldFiles = JsonConvert.DeserializeObject<List<Attachment>>(oldAttachments);
                 List<Attachment> currentFiles = JsonConvert.DeserializeObject<List<Attachment>>(actualAttachments);
                 List<Attachment> filesToDelete = oldFiles.Except(currentFiles).ToList();
                 DeleteAttachments(filesToDelete);
             }
-            return Ok(task);
+            return Ok(infoPost);
         }
 
         /// <summary>
-        /// Deletes the study club task by id
+        /// Deletes the comment by id
         /// </summary>
         /// <remarks>
         /// Sample request:
-        /// DELETE /clubtasks/1
+        /// DELETE /comments/1
         /// </remarks>
-        /// <param name="id">Study club task id (integer)</param>
+        /// <param name="id">Comment id (integer)</param>
         /// <returns>Returns NoContent</returns>
         /// <response code="204">Success</response>
         /// <response code="404">Not found</response>
         /// <response code="500">Server error</response>
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            DeleteClubTaskCommand command = new DeleteClubTaskCommand()
+            DeleteCommentCommand command = new DeleteCommentCommand()
             {
                 Id = id,
                 IssuerId = requesterId
             };
-            ClubTaskViewModel task = await Mediator.Send(command);
-            string attachmetsData = task.Attachments;
+            CommentViewModel comment = await Mediator.Send(command);
+            string attachmetsData = comment.Attachments;
             if (attachmetsData != null)
             {
                 List<Attachment> filesToDelete = JsonConvert.DeserializeObject<List<Attachment>>(attachmetsData);
@@ -210,7 +187,7 @@ namespace MyFaculty.WebApi.Controllers
             return NoContent();
         }
 
-        private List<Attachment> ProcessNewFiles(List<IFormFile> files, Guid postAttachmentsUid)
+        private List<Attachment> ProcessNewFiles(List<IFormFile> files, Guid commentAttachmentsUid)
         {
             if (files == null)
                 return null;
@@ -220,9 +197,9 @@ namespace MyFaculty.WebApi.Controllers
             string savePathTargetDirectory = string.Empty;
             foreach (var file in files)
             {
-                filePath = $"post_{postAttachmentsUid}_{file.FileName}";
+                filePath = $"comment_{commentAttachmentsUid}_{file.FileName}";
                 savePathTargetDirectory = file.ContentType.ToLower().StartsWith("image") ? "images" : "miscellaneous";
-                savePath = Path.Combine(_webHostEnvironment.ContentRootPath, $"uploads/posts-media/{savePathTargetDirectory}", filePath);
+                savePath = Path.Combine(_webHostEnvironment.ContentRootPath, $"uploads/comments-media/{savePathTargetDirectory}", filePath);
                 using (FileStream stream = new FileStream(savePath, FileMode.Create))
                 {
                     file.CopyTo(stream);
@@ -232,7 +209,7 @@ namespace MyFaculty.WebApi.Controllers
                     FileName = file.FileName,
                     ContentType = file.ContentType,
                     Length = file.Length,
-                    Path = $"{_appDomain}uploads/posts-media/{savePathTargetDirectory}/{filePath}",
+                    Path = $"{_appDomain}uploads/comments-media/{savePathTargetDirectory}/{filePath}",
                     Extension = Path.GetExtension(filePath),
                 });
             }

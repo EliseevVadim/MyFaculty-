@@ -34,5 +34,6 @@ namespace MyFaculty.Domain.Entities
         public List<InformationPublic> BlockedPublics { get; set; } = new List<InformationPublic>();
         public List<Post> Posts { get; set; }
         public List<InfoPost> LikedPosts { get; set; } = new List<InfoPost>();
+        public List<Comment> Comments { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace MyFaculty.WebApi.Models
 {
-    public class PostAttachment
+    public class Attachment
     {
         public string FileName { get; set; }
         public string ContentType { get; set; }
@@ -10,7 +10,7 @@
 
         public override bool Equals(object obj)
         {
-            if (obj is PostAttachment attachment)
+            if (obj is Attachment attachment)
                 return Path == attachment.Path;
             return false;
         }

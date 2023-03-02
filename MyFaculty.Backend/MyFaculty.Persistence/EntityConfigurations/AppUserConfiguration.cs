@@ -41,6 +41,9 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasMany(user => user.OwnedInformationPublics)
                 .WithOne(infoPublic => infoPublic.Owner)
                 .HasForeignKey(infoPublic => infoPublic.OwnerId);
+            builder.HasMany(user => user.Comments)
+                .WithOne(comment => comment.Author)
+                .HasForeignKey(comment => comment.AuthorId);
             builder.Property(user => user.IsTeacher).HasDefaultValue(false);
             builder.Property(user => user.Website).IsRequired(false);
             builder.Property(user => user.VKLink).IsRequired(false);

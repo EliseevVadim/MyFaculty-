@@ -16,6 +16,7 @@ namespace MyFaculty.Application.ViewModels
         public string TextContent { get; set; }
         public Guid PostAttachmentsUid { get; set; }
         public string Attachments { get; set; }
+        public int CommentsCount { get; set; }
         public int AuthorId { get; set; }
         public UserLookupDto Author { get; set; }
         public DateTime Created { get; set; }
@@ -28,6 +29,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.TextContent, options => options.MapFrom(post => post.TextContent))
                 .ForMember(vm => vm.Attachments, options => options.MapFrom(post => post.Attachments))
                 .ForMember(vm => vm.PostAttachmentsUid, options => options.MapFrom(post => post.PostAttachmentsUid))
+                .ForMember(vm => vm.CommentsCount, options => options.MapFrom(post => post.Comments.Count))
                 .ForMember(vm => vm.AuthorId, options => options.MapFrom(post => post.AuthorId))
                 .ForMember(vm => vm.Author, options => options.MapFrom(post => post.Author))
                 .ForMember(vm => vm.Created, options => options.MapFrom(post => post.Created))

@@ -45,6 +45,7 @@ namespace MyFaculty.Persistence
         public DbSet<Post> Posts { get; set; } = null!;
         public DbSet<ClubTask> ClubTasks { get; set; } = null!;
         public DbSet<InfoPost> InfoPosts { get; set; } = null!;
+        public DbSet<Comment> Comments { get; set; } = null!;
         public DbSet<ExpertSystemState> ExpertSystemStates { get; set; } = null!;
         public DbSet<ExpertSystemStateTransition> ExpertSystemStateTransitions { get; set; } = null!;
         public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; } = null!;

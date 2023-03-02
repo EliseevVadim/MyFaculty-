@@ -289,7 +289,7 @@
 					</v-img>
 				</v-col>
 			</v-row>
-			<v-divider></v-divider>
+			<v-divider class="mb-4"></v-divider>
 			<v-row
 				v-if="currentUserIsModerator()"
 				class="my-1 d-flex justify-space-between"
@@ -378,7 +378,7 @@
 import ErrorPage from "@/components/AccountComponents/core/service-pages/ErrorPage";
 import TeacherVerificationMark from "@/components/AccountComponents/core/verificationMarks/TeacherVerificationMark";
 import UserInClubLookupPresenter from "@/components/presenters/UserInClubLookupPresenter";
-import UsersListModal from "@/components/UsersListModal";
+import UsersListModal from "@/components/AccountComponents/UsersListModal";
 import MassStudyClubAddingForm from "@/components/AccountComponents/teacherComponents/MassStudyClubAddingForm";
 import MassStudyClubDeletingForm from "@/components/AccountComponents/teacherComponents/MassStudyClubDeletingForm";
 import CreateInformationPostModal from "@/components/AccountComponents/CreateInformationPostModal";
