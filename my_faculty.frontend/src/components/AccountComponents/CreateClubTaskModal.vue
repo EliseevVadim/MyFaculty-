@@ -103,7 +103,8 @@ export default {
 				studyClubId: null,
 				attachments: [],
 				authorId: null,
-				deadLine: new Date()
+				deadLine: new Date(),
+				timezoneOffset: new Date().getTimezoneOffset()
 			},
 			photoRules: [
 				value => !value || value.size < 2000000 || 'Размер фото превышает 2 МБ!'

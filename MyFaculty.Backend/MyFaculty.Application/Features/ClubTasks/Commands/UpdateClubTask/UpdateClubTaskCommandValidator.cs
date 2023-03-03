@@ -9,7 +9,9 @@ namespace MyFaculty.Application.Features.ClubTasks.Commands.UpdateClubTask
         {
             RuleFor(command => command.TaskId).NotEmpty();
             RuleFor(command => command.IssuerId).NotEmpty();
-            RuleFor(command => command.DeadLine).NotEmpty().GreaterThan(DateTime.Now);
+            RuleFor(command => command.TimezoneOffset).NotEmpty();
+            RuleFor(command => command.DeadLine.AddMinutes(-command.TimezoneOffset))
+                .NotEmpty().GreaterThan(DateTime.Now);
         }
     }
 }

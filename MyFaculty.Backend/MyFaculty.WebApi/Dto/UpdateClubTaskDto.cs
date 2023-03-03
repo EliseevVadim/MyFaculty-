@@ -17,6 +17,7 @@ namespace MyFaculty.WebApi.Dto
         public string ActualAttachments { get; set; }
         public List<IFormFile> NewFiles { get; set; }
         public DateTime DeadLine { get; set; }
+        public int TimezoneOffset { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -24,7 +25,8 @@ namespace MyFaculty.WebApi.Dto
                 .ForMember(command => command.TaskId, options => options.MapFrom(dto => dto.Id))
                 .ForMember(command => command.IssuerId, options => options.MapFrom(dto => dto.IssuerId))
                 .ForMember(command => command.TextContent, options => options.MapFrom(dto => dto.TextContent))
-                .ForMember(command => command.DeadLine, options => options.MapFrom(dto => dto.DeadLine));
+                .ForMember(command => command.DeadLine, options => options.MapFrom(dto => dto.DeadLine))
+                .ForMember(command => command.TimezoneOffset, options => options.MapFrom(dto => dto.TimezoneOffset));
         }
     }
 }

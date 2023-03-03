@@ -103,7 +103,7 @@ export default {
 				attachments: [],
 				postAttachmentsUid: '',
 				authorId: null,
-				deadLine: new Date()
+				deadLine: new Date(),
 			},
 			extensions: [
 				History,
@@ -167,6 +167,7 @@ export default {
 				.filter(element => element instanceof File);
 			this.editingTask.deadLine = new Date(this.editingTask.deadLine).toISOString();
 			this.editingTask.issuerId = this.$oidc.currentUserId;
+			this.editingTask.timezoneOffset = new Date().getTimezoneOffset();
 			this.$loading(true);
 			this.$store.dispatch('updateClubTask', this.editingTask)
 				.then(() => {
