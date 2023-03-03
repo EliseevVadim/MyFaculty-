@@ -7,7 +7,14 @@
 			@load="reloadTasks"
 			ref="editingForm"
 		/>
-		<v-container fluid class="task-container mb-3">
+		<CommentsModal
+			v-if="showComments"
+			:show="showComments"
+			:post-id="task.id"
+			@close="showComments = false"
+			@load="reloadTasks"
+		/>
+		<v-container fluid class="task-container mb-3 px-0 pb-0">
 			<v-list-item
 				class="mb-3"
 				:key="task.studyClubName"
@@ -96,6 +103,21 @@
 			>
 				Задание необходимо выполнить до<wbr> {{prettifyDeadLine()}}
 			</h3>
+			<div>
+				<v-divider></v-divider>
+				<v-container
+					@click="showComments = true"
+					class="comments-invoker d-flex"
+					v-ripple
+					fluid
+				>
+					<span>{{prettifyCommentsCount()}}</span>
+					<v-spacer></v-spacer>
+					<v-icon color="primary">
+						mdi-chevron-right
+					</v-icon>
+				</v-container>
+			</div>
 		</v-container>
 	</div>
 </template>
@@ -103,14 +125,16 @@
 <script>
 import EditInformationPostModal from "@/components/AccountComponents/EditInformationPostModal";
 import EditClubTaskModal from "@/components/AccountComponents/EditClubTaskModal";
+import CommentsModal from "@/components/AccountComponents/CommentsModal";
 
 export default {
 	name: "ClubTaskPresenter",
-	components: {EditClubTaskModal, EditInformationPostModal},
+	components: {CommentsModal, EditClubTaskModal, EditInformationPostModal},
 	props: ['task'],
 	data() {
 		return {
 			showEditingForm: false,
+			showComments: false,
 			images: [],
 			otherFiles: [],
 			criticalHoursToDeadLine: 24
@@ -135,6 +159,26 @@ export default {
 				minute: 'numeric'
 			});
 			return `${creationDate} <wbr>(обновлено ${updateDate})`;
+		},
+		prettifyCommentsCount() {
+			if (this.task.commentsCount === 0)
+				return "Оставить комментарий...";
+			let  count = this.task.commentsCount;
+			let lastNumber = count % 100;
+			let variants = ['комментарий', 'комментария', 'комментариев'];
+			if (lastNumber > 10 && lastNumber < 20)
+				return `${count} ${variants[2]}`;
+			let lastDigit = lastNumber % 10;
+			switch (lastDigit) {
+				case 1:
+					return `${count} ${variants[0]}`;
+				case 2:
+				case 3:
+				case 4:
+					return `${count} ${variants[1]}`;
+				default:
+					return `${count} ${variants[2]}`;
+			}
 		},
 		prettifyDeadLine() {
 			return new Date(new Date(this.task.deadLine).getTime() - new Date().getTimezoneOffset() * 60000)
@@ -250,17 +294,17 @@ export default {
 			position: relative;
 			border-radius: 8%;
 		}
-		/*img:hover {
-			z-index: 1000;
-			transform: scale(1.3);
-			transition: transform ease 0.5s;
-		}*/
 	}
 	.task-context-menu-option {
 		text-align: left;
 		cursor: pointer;
 	}
 	.modal-invoker {
+		cursor: pointer;
+	}
+	.comments-invoker {
+		border-bottom-right-radius: 10px;
+		border-bottom-left-radius: 10px;
 		cursor: pointer;
 	}
 	@media only screen and (max-width: 600px) {
