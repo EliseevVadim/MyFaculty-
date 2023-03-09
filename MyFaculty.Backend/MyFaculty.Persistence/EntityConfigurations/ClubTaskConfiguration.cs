@@ -15,6 +15,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
         {
             builder.ToTable("clubTasks");
             builder.Property(task => task.DeadLine).IsRequired();
+            builder.Property(task => task.Cost).IsRequired();
             builder.HasOne(task => task.OwningStudyClub)
                 .WithMany(club => club.ClubTasks)
                 .HasForeignKey(task => task.StudyClubId);

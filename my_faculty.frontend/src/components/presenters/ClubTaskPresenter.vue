@@ -16,7 +16,7 @@
 		/>
 		<v-container fluid class="task-container mb-3 px-0 pb-0">
 			<v-list-item
-				class="mb-3"
+				class="mb-1"
 				:key="task.studyClubName"
 			>
 				<v-list-item-avatar>
@@ -68,6 +68,13 @@
 					</v-list>
 				</v-menu>
 			</v-list-item>
+			<v-col cols="12"
+				   class="pt-0 mb-2"
+			>
+				<span class="task-cost">
+					максимальное количество баллов - {{task.cost}}
+				</span>
+			</v-col>
 			<v-row
 				class="ml-3"
 				v-html="task.textContent"
@@ -306,6 +313,11 @@ export default {
 		border-bottom-right-radius: 10px;
 		border-bottom-left-radius: 10px;
 		cursor: pointer;
+	}
+	.task-cost {
+		font-weight: bolder;
+		font-style: italic;
+		color: black;
 	}
 	@media only screen and (max-width: 600px) {
 		.image-gallery {

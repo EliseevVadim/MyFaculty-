@@ -15,6 +15,7 @@ namespace MyFaculty.Application.ViewModels
         public string StudyClubName { get; set; }
         public string StudyClubImage { get; set; }
         public DateTime DeadLine { get; set; }
+        public int Cost { get; set; }
 
         public new void Mapping(Profile profile)
         {
@@ -24,6 +25,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.StudyClubId, options => options.MapFrom(task => task.StudyClubId))
                 .ForMember(vm => vm.StudyClubName, options => options.MapFrom(task => task.OwningStudyClub.ClubName))
                 .ForMember(vm => vm.StudyClubImage, options => options.MapFrom(task => task.OwningStudyClub.ImagePath))
+                .ForMember(vm => vm.Cost, options => options.MapFrom(task => task.Cost))
                 .ForMember(vm => vm.DeadLine, options => options.MapFrom(task => task.DeadLine));
         }
     }

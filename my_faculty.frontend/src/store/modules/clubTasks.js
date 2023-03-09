@@ -31,6 +31,7 @@ const actions = {
 			formData.append('studyClubId', payload.studyClubId);
 			formData.append('authorId', payload.authorId);
 			formData.append('deadLine', payload.deadLine);
+			formData.append('cost', payload.cost);
 			formData.append('timezoneOffset', payload.timezoneOffset)
 			if (payload.attachments.length === 0)
 				formData.append('postAttachments', payload.attachments);
@@ -59,6 +60,7 @@ const actions = {
 			formData.append('textContent', payload.textContent ? payload.textContent : '');
 			formData.append('actualAttachments', payload.attachments ? payload.attachments : '');
 			formData.append('deadLine', payload.deadLine);
+			formData.append('cost', payload.cost);
 			formData.append('timezoneOffset', payload.timezoneOffset)
 			formData.append('oldAttachments', payload.oldAttachments ? payload.oldAttachments : '');
 			if (payload.newFiles.length === 0)

@@ -32,6 +32,7 @@ namespace MyFaculty.Application.Features.ClubTasks.Commands.UpdateClubTask
             updatingTask.TextContent = request.TextContent;
             updatingTask.Attachments = request.Attachments;
             updatingTask.DeadLine = request.DeadLine;
+            updatingTask.Cost = request.Cost;
             updatingTask.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<ClubTaskViewModel>(updatingTask);

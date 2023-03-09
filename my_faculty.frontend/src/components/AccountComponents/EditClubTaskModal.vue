@@ -41,7 +41,18 @@
 								label="Укажите крайний срок выполнения задания"
 								format="DD-MM-YYYY HH:mm"
 								clear-text="Очистить"
+								:rules="commonRules"
 							></v-datetime-picker>
+						</v-col>
+						<v-col cols="12">
+							<v-text-field
+								label="Введите стоимость задания в баллах"
+								required
+								:rules="numberRules"
+								hide-details="auto"
+								v-model="editingTask.cost"
+								type="number"
+							></v-text-field>
 						</v-col>
 					</v-form>
 				</v-container>
@@ -103,8 +114,17 @@ export default {
 				attachments: [],
 				postAttachmentsUid: '',
 				authorId: null,
+				cost: null,
 				deadLine: new Date(),
 			},
+			commonRules: [
+				v => !!v || 'Поле является обязательным для заполнения'
+			],
+			numberRules: [
+				v => !!v || 'Поле является обязательным для заполнения',
+				v => Number.isInteger(Number(v)) || "Значение должно быть целым числом",
+				v => v > 0 || 'Значение должно быть больше 0'
+			],
 			extensions: [
 				History,
 				Blockquote,

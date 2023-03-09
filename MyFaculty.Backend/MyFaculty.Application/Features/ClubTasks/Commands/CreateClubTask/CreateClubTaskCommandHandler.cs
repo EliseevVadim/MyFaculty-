@@ -30,6 +30,7 @@ namespace MyFaculty.Application.Features.ClubTasks.Commands.CreateClubTask
                 StudyClubId = request.StudyClubId,
                 AuthorId = request.AuthorId,
                 DeadLine = request.DeadLine,
+                Cost = request.Cost,
                 Created = DateTime.Now
             };
             await _context.ClubTasks.AddAsync(task, cancellationToken);

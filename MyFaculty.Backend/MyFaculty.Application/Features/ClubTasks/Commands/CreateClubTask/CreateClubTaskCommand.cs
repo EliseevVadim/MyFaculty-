@@ -16,6 +16,7 @@ namespace MyFaculty.Application.Features.ClubTasks.Commands.CreateClubTask
         public int StudyClubId { get; set; }
         public int AuthorId { get; set; }
         public DateTime DeadLine { get; set; }
+        public int Cost { get; set; }
         public int TimezoneOffset { get; set; }
     }
 }

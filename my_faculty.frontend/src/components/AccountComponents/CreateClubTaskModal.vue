@@ -45,6 +45,16 @@
 								:rules="commonRules"
 							></v-datetime-picker>
 						</v-col>
+						<v-col cols="12">
+							<v-text-field
+								label="Введите стоимость задания в баллах"
+								required
+								:rules="numberRules"
+								hide-details="auto"
+								v-model="clubTask.cost"
+								type="number"
+							></v-text-field>
+						</v-col>
 					</v-form>
 				</v-container>
 			</v-card-text>
@@ -102,15 +112,18 @@ export default {
 				textContent: null,
 				studyClubId: null,
 				attachments: [],
+				cost: null,
 				authorId: null,
 				deadLine: new Date(),
 				timezoneOffset: new Date().getTimezoneOffset()
 			},
-			photoRules: [
-				value => !value || value.size < 2000000 || 'Размер фото превышает 2 МБ!'
-			],
 			commonRules: [
 				v => !!v || 'Поле является обязательным для заполнения'
+			],
+			numberRules: [
+				v => !!v || 'Поле является обязательным для заполнения',
+				v => Number.isInteger(Number(v)) || "Значение должно быть целым числом",
+				v => v > 0 || 'Значение должно быть больше 0'
 			],
 			extensions: [
 				History,
@@ -189,6 +202,7 @@ export default {
 			this.clubTask.studyClubId = null;
 			this.clubTask.attachments = [];
 			this.clubTask.authorId = null;
+			this.clubTask.cost = null;
 			this.clubTask.deadLine = new Date();
 			this.files = [];
 		},

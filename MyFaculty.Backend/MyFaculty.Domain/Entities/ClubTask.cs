@@ -11,5 +11,6 @@ namespace MyFaculty.Domain.Entities
         public int StudyClubId { get; set; }
         public StudyClub OwningStudyClub { get; set; }
         public DateTime DeadLine { get; set; }
+        public int Cost { get; set; }
     }
 }

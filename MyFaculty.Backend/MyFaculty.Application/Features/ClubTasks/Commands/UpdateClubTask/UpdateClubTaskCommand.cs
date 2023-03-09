@@ -11,6 +11,7 @@ namespace MyFaculty.Application.Features.ClubTasks.Commands.UpdateClubTask
         public string TextContent { get; set; }
         public string Attachments { get; set; }
         public DateTime DeadLine { get; set; }
+        public int Cost { get; set; }
         public int TimezoneOffset { get; set; }
     }
 }
