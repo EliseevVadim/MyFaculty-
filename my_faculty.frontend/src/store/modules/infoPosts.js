@@ -30,6 +30,14 @@ const actions = {
 				context.commit('setInfoPosts', response.data);
 			})
 	},
+	loadInfoPostsNewsfeed: async (context) => {
+		await axios.get(config.apiUrl + '/api/news/posts', {
+			headers: config.headers
+		})
+			.then((response) => {
+				context.commit('setInfoPosts', response.data)
+			})
+	},
 	addInfoPost: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			let formData = new FormData();

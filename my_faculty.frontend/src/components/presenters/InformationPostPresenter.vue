@@ -36,18 +36,24 @@
 				>
 					<v-list-item-avatar>
 						<v-img
-							class="author-avatar"
-							:src="post.author.avatarPath ? post.author.avatarPath : '../img/blank-club.png'"
+							class="owner-avatar"
+							:src="post.owner.ownerAvatar ? post.owner.ownerAvatar : '../img/blank-club.png'"
 						/>
 					</v-list-item-avatar>
 					<v-list-item-content class="post-metadata">
 						<v-list-item-title>
+							<router-link class="owner-name" :to="post.owner.ownerLink">
+								{{post.owner.ownerName}}
+							</router-link>
+						</v-list-item-title>
+						<v-list-item-subtitle>
+							<span>Автор:</span>
 							<router-link class="author-name" :to="'/id' + post.authorId">
 								{{getFullName(post.author)}}
 							</router-link>
 							<wbr>
 							<TeacherVerificationMark v-if="post.author.isTeacher"/>
-						</v-list-item-title>
+						</v-list-item-subtitle>
 						<v-list-item-subtitle v-html="prettifyPublishDate()">
 						</v-list-item-subtitle>
 					</v-list-item-content>
@@ -353,7 +359,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-	.author-avatar {
+	.owner-avatar {
 		margin: 0 auto;
 		border-radius: 50%;
 		border: double 3px transparent;
@@ -375,10 +381,13 @@ export default {
 		padding-right: 12px;
 		padding-left: 12px;
 	}
-	.author-name {
+	.owner-name {
 		font-weight: bolder;
 		font-size: 16px;
 		color: #4040c0;
+	}
+	.author-name {
+		color: rgba(0,0,0,.6);
 	}
 	.image-gallery {
 		display: grid;
