@@ -17,5 +17,7 @@ namespace MyFaculty.Domain.Entities
         public TaskSubmission TaskSubmission { get; set; }
         public int ReviewerId { get; set; }
         public AppUser Reviewer { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime? Updated { get; set; }
     }
 }

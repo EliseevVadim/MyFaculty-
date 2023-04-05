@@ -25,6 +25,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
                     value => value.ToString(),
                     value => (TaskSubmissionStatus)Enum.Parse(typeof(TaskSubmissionStatus), value)
                 );
+            builder.Property(submission => submission.ReviewId).IsRequired(false);
             builder.HasOne(submission => submission.ClubTask)
                 .WithMany(task => task.Submissions)
                 .HasForeignKey(submission => submission.ClubTaskId);
