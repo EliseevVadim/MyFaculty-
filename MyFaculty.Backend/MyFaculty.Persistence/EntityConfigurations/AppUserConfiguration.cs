@@ -44,6 +44,12 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasMany(user => user.Comments)
                 .WithOne(comment => comment.Author)
                 .HasForeignKey(comment => comment.AuthorId);
+            builder.HasMany(user => user.TaskSubmissions)
+                .WithOne(submission => submission.Author)
+                .HasForeignKey(submission => submission.AuthorId);
+            builder.HasMany(user => user.SubmissionReviews)
+                .WithOne(review => review.Reviewer)
+                .HasForeignKey(review => review.ReviewerId);
             builder.Property(user => user.IsTeacher).HasDefaultValue(false);
             builder.Property(user => user.Website).IsRequired(false);
             builder.Property(user => user.VKLink).IsRequired(false);

@@ -35,5 +35,7 @@ namespace MyFaculty.Domain.Entities
         public List<Post> Posts { get; set; }
         public List<InfoPost> LikedPosts { get; set; } = new List<InfoPost>();
         public List<Comment> Comments { get; set; }
+        public List<TaskSubmission> TaskSubmissions { get; set; }
+        public List<TaskSubmissionReview> SubmissionReviews { get; set; }
     }
 }

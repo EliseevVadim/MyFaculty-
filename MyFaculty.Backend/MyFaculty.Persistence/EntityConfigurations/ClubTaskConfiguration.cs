@@ -19,6 +19,9 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasOne(task => task.OwningStudyClub)
                 .WithMany(club => club.ClubTasks)
                 .HasForeignKey(task => task.StudyClubId);
+            builder.HasMany(task => task.Submissions)
+                .WithOne(submission => submission.ClubTask)
+                .HasForeignKey(submission => submission.ClubTaskId);
         }
     }
 }
