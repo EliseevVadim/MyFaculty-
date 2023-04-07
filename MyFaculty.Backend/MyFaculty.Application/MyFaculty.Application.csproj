@@ -18,13 +18,4 @@
     <ProjectReference Include="..\MyFaculty.Domain\MyFaculty.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\TaskSubmissionReviews\Commands\" />
-    <Folder Include="Features\TaskSubmissionReviews\Queries\" />
-    <Folder Include="Features\TaskSubmissions\Commands\CreateTaskSubmission\" />
-    <Folder Include="Features\TaskSubmissions\Commands\DeleteTaskSubmission\" />
-    <Folder Include="Features\TaskSubmissions\Commands\UpdateTaskSubmission\" />
-    <Folder Include="Features\TaskSubmissions\Queries\" />
-  </ItemGroup>
-
 </Project>

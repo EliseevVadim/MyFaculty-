@@ -22,9 +22,6 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasOne(review => review.Reviewer)
                 .WithMany(user => user.SubmissionReviews)
                 .HasForeignKey(review => review.ReviewerId);
-            builder.HasOne(review => review.TaskSubmission)
-                .WithOne(submission => submission.Review)
-                .HasForeignKey<TaskSubmission>(submission => submission.ReviewId);
         }
     }
 }

@@ -30,6 +30,10 @@
     <Folder Include="uploads\images\teachers\" />
     <Folder Include="uploads\posts-media\images\" />
     <Folder Include="uploads\posts-media\miscellaneous\" />
+    <Folder Include="uploads\task-submissions-media\images\" />
+    <Folder Include="uploads\task-submissions-media\miscellaneous\" />
+    <Folder Include="uploads\task-submissions-reviews-media\images\" />
+    <Folder Include="uploads\task-submissions-reviews-media\miscellaneous\" />
   </ItemGroup>
 
 </Project>

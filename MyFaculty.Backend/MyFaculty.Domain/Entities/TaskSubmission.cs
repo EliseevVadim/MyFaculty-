@@ -19,7 +19,6 @@ namespace MyFaculty.Domain.Entities
         public ClubTask ClubTask { get; set; }
         public int AuthorId { get; set; }
         public AppUser Author { get; set; }
-        public int? ReviewId { get; set; }
         public TaskSubmissionReview Review { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
