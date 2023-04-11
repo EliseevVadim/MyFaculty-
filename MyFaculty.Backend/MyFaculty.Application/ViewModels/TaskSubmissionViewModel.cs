@@ -21,6 +21,7 @@ namespace MyFaculty.Application.ViewModels
         public TaskSubmissionStatus Status { get; set; }
         public TaskSubmissionReviewViewModel Review { get; set; }
         public UserLookupDto Author { get; set; }
+        public int MaxRate { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
 
@@ -35,6 +36,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.Status, options => options.MapFrom(submission => submission.Status))
                 .ForMember(vm => vm.Review, options => options.MapFrom(submission => submission.Review))
                 .ForMember(vm => vm.Author, options => options.MapFrom(submission => submission.Author))
+                .ForMember(vm => vm.MaxRate, options => options.MapFrom(submission => submission.ClubTask.Cost))
                 .ForMember(vm => vm.Created, options => options.MapFrom(submission => submission.Created))
                 .ForMember(vm => vm.Updated, options => options.MapFrom(submission => submission.Updated));
         }

@@ -4,6 +4,7 @@ using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
+using MyFaculty.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,8 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Commands.DeleteTaskSubm
                 throw new EntityNotFoundException(nameof(TaskSubmission), request.Id);
             if (deletingSubmission.AuthorId != request.IssuerId)
                 throw new UnauthorizedActionException("Данное действие Вам запрещено.");
+            if (deletingSubmission.Status != TaskSubmissionStatus.SentForEvaluation)
+                throw new DestructiveActionException("Вы не можете удалить это решение, поскольку оно уже оценено.");
             _context.TaskSubmissions.Remove(deletingSubmission);
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<TaskSubmissionViewModel>(deletingSubmission);

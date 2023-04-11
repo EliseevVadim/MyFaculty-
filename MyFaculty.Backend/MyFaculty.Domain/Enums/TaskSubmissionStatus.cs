@@ -8,9 +8,8 @@ namespace MyFaculty.Domain.Enums
 {
     public enum TaskSubmissionStatus
     {
-        PendingSubmission = 1,
-        SentForEvaluation = 2,
-        SentBack = 3,
-        Evaluated = 4
+        SentForEvaluation = 1,
+        Evaluated = 2,
+        SentBack = 3
     }
 }

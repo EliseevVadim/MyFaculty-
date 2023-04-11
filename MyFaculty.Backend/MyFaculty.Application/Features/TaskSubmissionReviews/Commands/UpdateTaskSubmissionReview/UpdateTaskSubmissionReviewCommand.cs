@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MyFaculty.Application.ViewModels;
+using MyFaculty.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace MyFaculty.Application.Features.TaskSubmissionReviews.Commands.UpdateTa
         public string TextContent { get; set; }
         public string Attachments { get; set; }
         public int Rate { get; set; }
+        public TaskSubmissionStatus NewStatus { get; set; }
     }
 }

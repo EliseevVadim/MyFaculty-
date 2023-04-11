@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
-using MyFaculty.Application.Dto;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 using System;
@@ -40,7 +39,7 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Queries.GetSubmissionsF
             var submissions = await _context.TaskSubmissions
                 .Where(submission => submission.ClubTaskId == request.ClubTaskId)
                 .OrderBy(submission => submission.Created)
-                .ProjectTo<TaskSubmissionLookupDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<TaskSubmissionViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
             return new TaskSubmissionsListViewModel()
             {

@@ -47,6 +47,7 @@ namespace MyFaculty.WebApi.Controllers
         ///     "textContent": "string",
         ///     "submissionAttachments": "list of files",
         ///     "rate": 5,
+        ///     "newStatus": 2,
         ///     "submissionId": 1,
         ///     "reviewerId": 1
         /// }
@@ -86,6 +87,7 @@ namespace MyFaculty.WebApi.Controllers
         ///     "id": 1,
         ///     "textContent": "string",
         ///     "rate": 5,
+        ///     "newStatus": 2,
         ///     "oldAttachments": "json",
         ///     "actualAttachments": "json",
         ///     "newFiles": "list of files",
@@ -172,7 +174,7 @@ namespace MyFaculty.WebApi.Controllers
             string savePathTargetDirectory = string.Empty;
             foreach (var file in files)
             {
-                filePath = $"comment_{commentAttachmentsUid}_{file.FileName}";
+                filePath = $"submission_review{commentAttachmentsUid}_{file.FileName}";
                 savePathTargetDirectory = file.ContentType.ToLower().StartsWith("image") ? "images" : "miscellaneous";
                 savePath = Path.Combine(_webHostEnvironment.ContentRootPath, $"uploads/task-submissions-reviews-media/{savePathTargetDirectory}", filePath);
                 using (FileStream stream = new FileStream(savePath, FileMode.Create))

@@ -17,7 +17,6 @@ namespace MyFaculty.WebApi.Dto
         public string OldAttachments { get; set; }
         public string ActualAttachments { get; set; }
         public List<IFormFile> NewFiles { get; set; }
-        public string Status { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -25,8 +24,7 @@ namespace MyFaculty.WebApi.Dto
                 .ForMember(command => command.Title, options => options.MapFrom(dto => dto.Title))
                 .ForMember(command => command.TextContent, options => options.MapFrom(dto => dto.TextContent))
                 .ForMember(command => command.Id, options => options.MapFrom(dto => dto.Id))
-                .ForMember(command => command.IssuerId, options => options.MapFrom(dto => dto.IssuerId))
-                .ForMember(command => command.Status, options => options.MapFrom(dto => dto.Status));
+                .ForMember(command => command.IssuerId, options => options.MapFrom(dto => dto.IssuerId));
         }
     }
 }

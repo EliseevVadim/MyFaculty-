@@ -27,6 +27,7 @@ namespace MyFaculty.Application.Features.ClubTasks.Queries.GetClubTasksForStudyC
         public async Task<ClubTasksListViewModel> Handle(GetClubTasksForStudyClubQuery request, CancellationToken cancellationToken)
         {
             var clubTasks = await _context.ClubTasks
+                .Include(task => task.OwningStudyClub)
                 .Where(task => task.StudyClubId == request.StudyClubId)
                 .OrderByDescending(task => task.Created)
                 .ProjectTo<ClubTaskViewModel>(_mapper.ConfigurationProvider)

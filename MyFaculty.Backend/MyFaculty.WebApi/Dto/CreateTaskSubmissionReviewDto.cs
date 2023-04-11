@@ -11,8 +11,8 @@ namespace MyFaculty.WebApi.Dto
     {
         public string TextContent { get; set; }
         public List<IFormFile> Attachments { get; set; }
-        public Guid SubmissionReviewAttachmentsUid { get; set; }
         public int Rate { get; set; }
+        public int NewStatus { get; set; }
         public int SubmissionId { get; set; }
         public int ReviewerId { get; set; }
         
@@ -20,8 +20,8 @@ namespace MyFaculty.WebApi.Dto
         {
             profile.CreateMap<CreateTaskSubmissionReviewDto, CreateTaskSubmissionReviewCommand>()
                 .ForMember(command => command.TextContent, options => options.MapFrom(dto => dto.TextContent))
-                .ForMember(command => command.SubmissionReviewAttachmentsUid, options => options.MapFrom(dto => dto.SubmissionReviewAttachmentsUid))
                 .ForMember(command => command.Rate, options => options.MapFrom(dto => dto.Rate))
+                .ForMember(command => command.NewStatus, options => options.MapFrom(dto => dto.NewStatus))
                 .ForMember(command => command.SubmissionId, options => options.MapFrom(dto => dto.SubmissionId))
                 .ForMember(command => command.ReviewerId, options => options.MapFrom(dto => dto.ReviewerId));
         }

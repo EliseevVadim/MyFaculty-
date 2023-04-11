@@ -13,7 +13,8 @@ namespace MyFaculty.Application.Features.TaskSubmissionReviews.Commands.UpdateTa
         {
             RuleFor(command => command.Id).NotEmpty();
             RuleFor(command => command.IssuerId).NotEmpty();
-            RuleFor(command => command.Rate).NotEmpty().GreaterThanOrEqualTo(0);
+            RuleFor(command => command.Rate).GreaterThanOrEqualTo(0);
+            RuleFor(command => command.NewStatus).NotEmpty();
         }
     }
 }

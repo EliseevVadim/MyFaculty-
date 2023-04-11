@@ -14,7 +14,6 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Commands.UpdateTaskSubm
             RuleFor(command => command.Id).NotEmpty();
             RuleFor(command => command.IssuerId).NotEmpty();
             RuleFor(command => command.Title).NotEmpty();
-            RuleFor(command => command.Status).NotEmpty();
         }
     }
 }

@@ -93,7 +93,6 @@ export default {
 			this.$store.dispatch('loadInfoPostsNewsfeed')
 				.then(() => {
 					this.informationPosts = JSON.parse(JSON.stringify(this.INFO_POSTS.infoPosts));
-					console.log(this.informationPosts);
 				});
 		},
 		loadClubTasks() {

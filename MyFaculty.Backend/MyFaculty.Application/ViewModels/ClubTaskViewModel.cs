@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MyFaculty.Application.Common.Mappings;
+using MyFaculty.Application.Dto;
 using MyFaculty.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,7 @@ namespace MyFaculty.Application.ViewModels
 {
     public class ClubTaskViewModel : PostViewModel, IMapWith<ClubTask>
     {
-        public int StudyClubId { get; set; }
-        public string StudyClubName { get; set; }
-        public string StudyClubImage { get; set; }
+        public StudyClubLookupDto OwningStudyClub { get; set; }
         public string StudyClubLink { get; set; }
         public DateTime DeadLine { get; set; }
         public int Cost { get; set; }
@@ -23,9 +22,7 @@ namespace MyFaculty.Application.ViewModels
             profile.CreateMap<ClubTask, ClubTaskViewModel>()
                 .ForMember(e => e.Author, options => options.Ignore())
                 .IncludeBase<Post, PostViewModel>()
-                .ForMember(vm => vm.StudyClubId, options => options.MapFrom(task => task.StudyClubId))
-                .ForMember(vm => vm.StudyClubName, options => options.MapFrom(task => task.OwningStudyClub.ClubName))
-                .ForMember(vm => vm.StudyClubImage, options => options.MapFrom(task => task.OwningStudyClub.ImagePath))
+                .ForMember(vm => vm.OwningStudyClub, options => options.MapFrom(task => task.OwningStudyClub))
                 .ForMember(vm => vm.StudyClubLink, options => options.MapFrom(task => $"club/{task.OwningStudyClub.Id}"))
                 .ForMember(vm => vm.Cost, options => options.MapFrom(task => task.Cost))
                 .ForMember(vm => vm.DeadLine, options => options.MapFrom(task => task.DeadLine));

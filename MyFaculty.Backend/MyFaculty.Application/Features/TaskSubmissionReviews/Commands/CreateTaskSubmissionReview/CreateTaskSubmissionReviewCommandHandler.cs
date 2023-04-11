@@ -52,6 +52,9 @@ namespace MyFaculty.Application.Features.TaskSubmissionReviews.Commands.CreateTa
                 SubmissionId = request.SubmissionId,
                 Created = DateTime.Now
             };
+            reviewingSubmission.Status = request.NewStatus;
+            await _context.TaskSubmissionReviews.AddAsync(review, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<TaskSubmissionReviewViewModel>(review);
         }
     }

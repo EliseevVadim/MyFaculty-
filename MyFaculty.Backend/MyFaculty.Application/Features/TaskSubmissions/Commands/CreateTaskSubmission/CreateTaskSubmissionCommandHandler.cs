@@ -45,6 +45,8 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Commands.CreateTaskSubm
                 ClubTaskId = request.ClubTaskId,
                 Created = DateTime.Now
             };
+            await _context.TaskSubmissions.AddAsync(submission, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<TaskSubmissionViewModel>(submission);
         }
     }

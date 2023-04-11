@@ -14,21 +14,29 @@
 			@close="showComments = false"
 			@load="reloadTasks"
 		/>
+		<SubmissionsModal
+			v-if="showSubmissions"
+			:show="showSubmissions"
+			:task-id="task.id"
+			:current-user-is-task-moderator="currentUserIsTaskModerator"
+			@close="showSubmissions = false"
+			@load="reloadTasks"
+		/>
 		<v-container fluid class="task-container mb-3 px-0 pb-0">
 			<v-list-item
 				class="mb-1"
-				:key="task.studyClubName"
+				:key="task.owningStudyClub.clubName"
 			>
 				<v-list-item-avatar>
 					<v-img
 						class="author-avatar"
-						:src="task.studyClubImage ? task.studyClubImage : '../img/blank-club.png'"
+						:src="task.owningStudyClub.imagePath ? task.owningStudyClub.imagePath : '../img/blank-club.png'"
 					/>
 				</v-list-item-avatar>
 				<v-list-item-content class="club-lookup-content">
 					<v-list-item-title>
-						<router-link class="author-name" :to="'/clubs/' + task.studyClubId">
-							{{task.studyClubName}}
+						<router-link class="author-name" :to="'/clubs/' + task.owningStudyClub.id">
+							{{task.owningStudyClub.clubName}}
 						</router-link>
 					</v-list-item-title>
 					<v-list-item-subtitle v-html="prettifyPublishDate()">
@@ -113,6 +121,23 @@
 			<div>
 				<v-divider></v-divider>
 				<v-container
+					@click="showSubmissions = true"
+					class="submissions-invoker d-flex"
+					v-ripple
+					fluid
+				>
+					<span>
+						{{currentUserIsTaskModerator ? "Доступные решения" : "Мои решения"}}
+					</span>
+					<v-spacer></v-spacer>
+					<v-icon color="primary">
+						mdi-chevron-right
+					</v-icon>
+				</v-container>
+			</div>
+			<div>
+				<v-divider></v-divider>
+				<v-container
 					@click="showComments = true"
 					class="comments-invoker d-flex"
 					v-ripple
@@ -133,15 +158,18 @@
 import EditInformationPostModal from "@/components/AccountComponents/EditInformationPostModal";
 import EditClubTaskModal from "@/components/AccountComponents/EditClubTaskModal";
 import CommentsModal from "@/components/AccountComponents/CommentsModal";
-
+import SubmissionsModal from "@/components/AccountComponents/SubmissionsModal";
 export default {
 	name: "ClubTaskPresenter",
-	components: {CommentsModal, EditClubTaskModal, EditInformationPostModal},
+	components: {
+		SubmissionsModal, CommentsModal, EditClubTaskModal, EditInformationPostModal},
 	props: ['task'],
 	data() {
 		return {
+			currentUserIsTaskModerator: false,
 			showEditingForm: false,
 			showComments: false,
+			showSubmissions: false,
 			images: [],
 			otherFiles: [],
 			criticalHoursToDeadLine: 24
@@ -265,6 +293,9 @@ export default {
 		}
 	},
 	mounted() {
+		this.currentUserIsTaskModerator = this.task
+			.owningStudyClub
+			.moderators.find(user => user.id == this.$oidc.currentUserId) !== undefined;
 		this.processAttachments();
 	}
 }
@@ -312,6 +343,9 @@ export default {
 	.comments-invoker {
 		border-bottom-right-radius: 10px;
 		border-bottom-left-radius: 10px;
+		cursor: pointer;
+	}
+	.submissions-invoker {
 		cursor: pointer;
 	}
 	.task-cost {

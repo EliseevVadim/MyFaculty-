@@ -19,7 +19,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.Property(submission => submission.TextContent).IsRequired(false);
             builder.Property(submission => submission.Attachments).IsRequired(false);
             builder.Property(submission => submission.SubmissionAttachmentsUid).IsRequired();
-            builder.Property(submission => submission.Status).HasDefaultValue(TaskSubmissionStatus.PendingSubmission);
+            builder.Property(submission => submission.Status).HasDefaultValue(TaskSubmissionStatus.SentForEvaluation);
             builder.Property(submission => submission.Status)
                 .HasConversion(
                     value => value.ToString(),

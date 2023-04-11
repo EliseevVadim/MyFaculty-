@@ -5,7 +5,7 @@
 	>
 		<v-card>
 			<v-card-title class="d-flex justify-center">
-				<span class="text-h5">Редактировать комментарий</span>
+				<span class="text-h5">Редактировать решение</span>
 			</v-card-title>
 			<v-card-text class="pb-0">
 				<h2 class="text-center red--text">{{errorText}}</h2>
@@ -16,9 +16,18 @@
 						v-model="formValid"
 					>
 						<v-col cols="12">
+							<v-text-field
+								label="Имя решения*"
+								required
+								:rules="commonRules"
+								hide-details="auto"
+								v-model="editingSubmission.title"
+							></v-text-field>
+						</v-col>
+						<v-col cols="12">
 							<tiptap-vuetify
 								class="text-left"
-								v-model="editingComment.textContent"
+								v-model="editingSubmission.textContent"
 								placeholder="Введите текстовое содержимое..."
 								:extensions="extensions"
 								:toolbar-attributes="{ color: 'primary', dark: true }"
@@ -34,17 +43,6 @@
 								max-files="10"
 								@beforedelete="fileDeleted($event)"
 							/>
-						</v-col>
-						<v-col cols="12" v-if="commentsToReply">
-							<v-select
-								clearable
-								:items="commentsToReply"
-								:item-text="prettifyReplyVariant"
-								item-value="id"
-								label="Выберите комментарий, на который хотите ответить"
-								v-model="editingComment.parentCommentId"
-							>
-							</v-select>
 						</v-col>
 					</v-form>
 				</v-container>
@@ -63,10 +61,10 @@
 				<v-spacer></v-spacer>
 				<v-btn
 					color="success"
-					@click="editComment"
+					@click="editSubmission"
 					:disabled="!formValid"
 				>
-					Редактировать комментарий
+					Редактировать решение
 				</v-btn>
 			</v-card-actions>
 		</v-card>
@@ -88,24 +86,26 @@ import {
 	History
 } from "tiptap-vuetify"
 export default {
-	name: "EditCommentModal",
+	name: "EditTaskSubmissionModal",
 	components: {TiptapVuetify},
-	props: ['show', 'comment'],
+	props: ['show', 'submission'],
 	data() {
 		return {
+			commonRules: [
+				v => !!v || 'Поле является обязательным для заполнения'
+			],
 			formValid: false,
 			errorText: "",
 			files: [],
 			oldAttachments: '',
-			editingComment: {
+			editingSubmission: {
+				id: null,
+				title: null,
 				textContent: null,
 				attachments: [],
-				postAttachmentsUid: '',
-				authorId: null,
-				parentCommentId: '',
-				postId: null
+				submissionAttachmentsUid: '',
+				authorId: null
 			},
-			commentsToReply: null,
 			extensions: [
 				History,
 				Link,
@@ -125,14 +125,8 @@ export default {
 		close() {
 			this.$emit('close');
 		},
-		prettifyReplyVariant(comment) {
-			let commentText = comment.textContent ? new DOMParser()
-				.parseFromString(comment.textContent, "text/html")
-				.body.textContent : "*Медиа контент*";
-			return `${comment.author.firstName} ${comment.author.lastName}: ${commentText}`;
-		},
 		processAttachments() {
-			let attachments = JSON.parse(this.comment.attachments);
+			let attachments = JSON.parse(this.submission.attachments);
 			if (!attachments)
 				return;
 			this.files = attachments
@@ -152,24 +146,23 @@ export default {
 				return;
 			this.files.splice(index, 1);
 		},
-		loadComment(allComments) {
-			this.commentsToReply = allComments.filter(item => item.created < this.comment.created);
-			this.editingComment = JSON.parse(JSON.stringify(this.comment));
-			this.oldAttachments = this.comment.attachments;
+		loadSubmission() {
+			this.editingSubmission = JSON.parse(JSON.stringify(this.submission));
+			this.oldAttachments = this.submission.attachments;
 			this.processAttachments();
 		},
-		editComment() {
-			if (!this.editingComment.attachments && !this.editingComment.textContent) {
+		editSubmission() {
+			if (!this.editingSubmission.attachments && !this.editingSubmission.textContent) {
 				this.$notify({
 					group: 'admin-actions',
 					title: 'Ошибка',
-					text: 'Комментарий должен содержать хотя бы текстовый контент или прикрепленные файлы',
+					text: 'Решение должно содержать хотя бы текстовый контент или прикрепленные файлы',
 					type: 'error'
 				})
 				return;
 			}
-			this.editingComment.oldAttachments = this.oldAttachments;
-			this.editingComment.attachments = JSON.stringify(this.files
+			this.editingSubmission.oldAttachments = this.oldAttachments;
+			this.editingSubmission.attachments = JSON.stringify(this.files
 				.filter(element => !(element.file instanceof File))
 				.map(element => {
 					return element.file !== undefined ? {
@@ -186,14 +179,14 @@ export default {
 						Path: element.url
 					}
 				}));
-			this.editingComment.newFiles = this.files
+			this.editingSubmission.newFiles = this.files
 				.map(element => element.file)
 				.filter(element => element instanceof File);
-			this.editingComment.issuerId = this.$oidc.currentUserId;
+			this.editingSubmission.issuerId = this.$oidc.currentUserId;
 			this.$loading(true);
-			this.$store.dispatch('updateComment', this.editingComment)
+			this.$store.dispatch('updateTaskSubmission', this.editingSubmission)
 				.then(() => {
-					this.reloadCommentsWithMessage('Комментарий успешно обновлен');
+					this.reloadSubmissionsWithMessage('Решение успешно обновлено');
 				})
 				.catch((error) => {
 					this.$notify({
@@ -207,7 +200,7 @@ export default {
 					this.$loading(false);
 				})
 		},
-		reloadCommentsWithMessage(message) {
+		reloadSubmissionsWithMessage(message) {
 			this.$emit('load');
 			this.$notify({
 				group: 'admin-actions',
@@ -216,7 +209,7 @@ export default {
 				type: 'success'
 			});
 			this.close();
-		},
+		}
 	},
 	computed: {
 		displayModal: {

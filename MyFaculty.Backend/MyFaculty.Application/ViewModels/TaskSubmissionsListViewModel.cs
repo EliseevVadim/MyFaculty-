@@ -9,6 +9,6 @@ namespace MyFaculty.Application.ViewModels
 {
     public class TaskSubmissionsListViewModel
     {
-        public IList<TaskSubmissionLookupDto> TaskSubmissions { get; set; }
+        public IList<TaskSubmissionViewModel> TaskSubmissions { get; set; }
     }
 }

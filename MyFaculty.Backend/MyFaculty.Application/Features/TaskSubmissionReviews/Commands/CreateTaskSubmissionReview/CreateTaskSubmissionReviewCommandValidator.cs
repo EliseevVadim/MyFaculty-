@@ -14,7 +14,8 @@ namespace MyFaculty.Application.Features.TaskSubmissionReviews.Commands.CreateTa
             RuleFor(command => command.SubmissionReviewAttachmentsUid).NotEmpty();
             RuleFor(command => command.SubmissionId).NotEmpty();
             RuleFor(command => command.ReviewerId).NotEmpty();
-            RuleFor(command => command.Rate).NotEmpty().GreaterThanOrEqualTo(0);
+            RuleFor(command => command.Rate).GreaterThanOrEqualTo(0);
+            RuleFor(command => command.NewStatus).NotEmpty();
         }
     }
 }

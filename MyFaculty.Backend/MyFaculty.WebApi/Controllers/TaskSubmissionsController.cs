@@ -82,7 +82,7 @@ namespace MyFaculty.WebApi.Controllers
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<PersonalTaskSubmissionsListViewModel>> GetMineSubmissionsByTaskId(int id)
+        public async Task<ActionResult<TaskSubmissionsListViewModel>> GetMineSubmissionsByTaskId(int id)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             GetMineSubmissionsForTaskQuery query = new GetMineSubmissionsForTaskQuery()
@@ -90,7 +90,7 @@ namespace MyFaculty.WebApi.Controllers
                 ClubTaskId = id,
                 IssuerId = requesterId
             };
-            PersonalTaskSubmissionsListViewModel viewModel = await Mediator.Send(query);
+            TaskSubmissionsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
 
@@ -256,7 +256,7 @@ namespace MyFaculty.WebApi.Controllers
             string savePathTargetDirectory = string.Empty;
             foreach (var file in files)
             {
-                filePath = $"comment_{commentAttachmentsUid}_{file.FileName}";
+                filePath = $"submission_{commentAttachmentsUid}_{file.FileName}";
                 savePathTargetDirectory = file.ContentType.ToLower().StartsWith("image") ? "images" : "miscellaneous";
                 savePath = Path.Combine(_webHostEnvironment.ContentRootPath, $"uploads/task-submissions-media/{savePathTargetDirectory}", filePath);
                 using (FileStream stream = new FileStream(savePath, FileMode.Create))

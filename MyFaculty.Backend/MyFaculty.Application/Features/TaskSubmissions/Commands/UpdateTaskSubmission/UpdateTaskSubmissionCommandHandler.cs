@@ -5,6 +5,7 @@ using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
+using MyFaculty.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,10 +33,11 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Commands.UpdateTaskSubm
                 throw new EntityNotFoundException(nameof(TaskSubmission), request.Id);
             if (updatingSubmission.AuthorId != request.IssuerId)
                 throw new UnauthorizedActionException("Данное действие Вам запрещено.");
+            if (updatingSubmission.Status != TaskSubmissionStatus.SentForEvaluation)
+                throw new DestructiveActionException("Вы не можете редактировать это решение, поскольку оно уже оценено. Если это возможно, отправьте новое.");
             updatingSubmission.Title = request.Title;
             updatingSubmission.TextContent = request.TextContent;
             updatingSubmission.Attachments = request.Attachments;
-            updatingSubmission.Status = request.Status;
             updatingSubmission.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<TaskSubmissionViewModel>(updatingSubmission);

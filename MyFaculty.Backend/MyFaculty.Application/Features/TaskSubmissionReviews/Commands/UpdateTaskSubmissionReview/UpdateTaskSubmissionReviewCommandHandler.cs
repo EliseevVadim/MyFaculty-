@@ -27,7 +27,9 @@ namespace MyFaculty.Application.Features.TaskSubmissionReviews.Commands.UpdateTa
 
         public async Task<TaskSubmissionReviewViewModel> Handle(UpdateTaskSubmissionReviewCommand request, CancellationToken cancellationToken)
         {
-            TaskSubmissionReview updatingReview = await _context.TaskSubmissionReviews.FirstOrDefaultAsync(review => review.Id == request.Id, cancellationToken);
+            TaskSubmissionReview updatingReview = await _context.TaskSubmissionReviews
+                .Include(review => review.TaskSubmission)
+                .FirstOrDefaultAsync(review => review.Id == request.Id, cancellationToken);
             if (updatingReview == null)
                 throw new EntityNotFoundException(nameof(TaskSubmissionReview), request.Id);
             if (updatingReview.ReviewerId != request.IssuerId)
@@ -36,6 +38,7 @@ namespace MyFaculty.Application.Features.TaskSubmissionReviews.Commands.UpdateTa
             updatingReview.Attachments = request.Attachments;
             updatingReview.Rate = request.Rate;
             updatingReview.Updated = DateTime.Now;
+            updatingReview.TaskSubmission.Status = request.NewStatus;
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<TaskSubmissionReviewViewModel>(updatingReview);
         }

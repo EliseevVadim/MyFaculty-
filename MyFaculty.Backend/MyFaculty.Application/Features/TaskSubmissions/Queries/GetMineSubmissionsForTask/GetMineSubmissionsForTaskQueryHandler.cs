@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.TaskSubmissions.Queries.GetMineSubmissionsForTask
 {
-    public class GetMineSubmissionsForTaskQueryHandler : IRequestHandler<GetMineSubmissionsForTaskQuery, PersonalTaskSubmissionsListViewModel>
+    public class GetMineSubmissionsForTaskQueryHandler : IRequestHandler<GetMineSubmissionsForTaskQuery, TaskSubmissionsListViewModel>
     {
         private IMFDbContext _context;
         private IMapper _mapper;
@@ -27,7 +27,7 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Queries.GetMineSubmissi
             _mapper = mapper;
         }
 
-        public async Task<PersonalTaskSubmissionsListViewModel> Handle(GetMineSubmissionsForTaskQuery request, CancellationToken cancellationToken)
+        public async Task<TaskSubmissionsListViewModel> Handle(GetMineSubmissionsForTaskQuery request, CancellationToken cancellationToken)
         {
             ClubTask owningTask = await _context.ClubTasks.FirstOrDefaultAsync(task => task.Id == request.ClubTaskId, cancellationToken);
             if (owningTask == null)
@@ -37,7 +37,7 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Queries.GetMineSubmissi
                 .OrderByDescending(submission => submission.Created)
                 .ProjectTo<TaskSubmissionViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-            return new PersonalTaskSubmissionsListViewModel()
+            return new TaskSubmissionsListViewModel()
             {
                 TaskSubmissions = submissions
             };

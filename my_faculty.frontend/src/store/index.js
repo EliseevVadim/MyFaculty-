@@ -25,6 +25,8 @@ import infoPublics from "@/store/modules/infoPublics";
 import infoPosts from "@/store/modules/infoPosts";
 import clubTasks from "@/store/modules/clubTasks";
 import comments from "@/store/modules/comments";
+import taskSubmissions from "@/store/modules/taskSubmissions";
+import taskSubmissionReviews from "@/store/modules/taskSubmissionReviews";
 
 Vue.use(Vuex)
 
@@ -58,6 +60,8 @@ export default new Vuex.Store({
       infoPublics,
       infoPosts,
       clubTasks,
-      comments
+      comments,
+      taskSubmissions,
+      taskSubmissionReviews
   }
 })

@@ -5,7 +5,7 @@
 	>
 		<v-card>
 			<v-card-title class="d-flex justify-center">
-				<span class="text-h5">Редактировать комментарий</span>
+				<span class="text-h5">Редактировать отзыв на решение</span>
 			</v-card-title>
 			<v-card-text class="pb-0">
 				<h2 class="text-center red--text">{{errorText}}</h2>
@@ -18,7 +18,7 @@
 						<v-col cols="12">
 							<tiptap-vuetify
 								class="text-left"
-								v-model="editingComment.textContent"
+								v-model="editingReview.textContent"
 								placeholder="Введите текстовое содержимое..."
 								:extensions="extensions"
 								:toolbar-attributes="{ color: 'primary', dark: true }"
@@ -35,14 +35,24 @@
 								@beforedelete="fileDeleted($event)"
 							/>
 						</v-col>
-						<v-col cols="12" v-if="commentsToReply">
+						<v-col cols="12">
+							<v-text-field
+								type="number"
+								:rules="rateRules"
+								:label="`Укажите оценку (максимум ${maxRate})*`"
+								v-model.number="editingReview.rate"
+							>
+							</v-text-field>
+						</v-col>
+						<v-col cols="12">
 							<v-select
-								clearable
-								:items="commentsToReply"
-								:item-text="prettifyReplyVariant"
-								item-value="id"
-								label="Выберите комментарий, на который хотите ответить"
-								v-model="editingComment.parentCommentId"
+								:items="submissionStatuses"
+								:rules="selectRules"
+								item-text="text"
+								item-value="value"
+								label="Выберите итоговый статус решения*"
+								v-model="editingReview.newStatus"
+								required
 							>
 							</v-select>
 						</v-col>
@@ -63,10 +73,10 @@
 				<v-spacer></v-spacer>
 				<v-btn
 					color="success"
-					@click="editComment"
+					@click="editReview"
 					:disabled="!formValid"
 				>
-					Редактировать комментарий
+					Редактировать отзыв
 				</v-btn>
 			</v-card-actions>
 		</v-card>
@@ -88,24 +98,34 @@ import {
 	History
 } from "tiptap-vuetify"
 export default {
-	name: "EditCommentModal",
+	name: "EditTaskSubmissionReviewModal",
 	components: {TiptapVuetify},
-	props: ['show', 'comment'],
+	props: ['show', 'review', 'maxRate', 'submissionStatus'],
 	data() {
 		return {
 			formValid: false,
 			errorText: "",
 			files: [],
 			oldAttachments: '',
-			editingComment: {
+			editingReview: {
+				id: null,
+				reviewerId: null,
 				textContent: null,
 				attachments: [],
-				postAttachmentsUid: '',
-				authorId: null,
-				parentCommentId: '',
-				postId: null
+				rate: null,
+				newStatus: 2,
+				submissionReviewAttachmentsUid: ''
 			},
-			commentsToReply: null,
+			selectRules: [
+				v => this.submissionStatuses
+					.map(status => status.value)
+					.indexOf(v) >= 0 || 'Поле является обязательным для заполнения'
+			],
+			rateRules: [
+				v => v !== null || "Поле является обязательным для заполнения",
+				v => v >= 0 || "Оценка должна быть не меньше 0",
+				v => v <= this.maxRate || `Оценка должна быть не больше ${this.maxRate}`,
+			],
 			extensions: [
 				History,
 				Link,
@@ -118,6 +138,16 @@ export default {
 				Bold,
 				Link,
 				HardBreak
+			],
+			submissionStatuses: [
+				{
+					text: "Оценено",
+					value: 2
+				},
+				{
+					text: "Возвращено для доработки",
+					value: 3
+				}
 			]
 		}
 	},
@@ -125,14 +155,8 @@ export default {
 		close() {
 			this.$emit('close');
 		},
-		prettifyReplyVariant(comment) {
-			let commentText = comment.textContent ? new DOMParser()
-				.parseFromString(comment.textContent, "text/html")
-				.body.textContent : "*Медиа контент*";
-			return `${comment.author.firstName} ${comment.author.lastName}: ${commentText}`;
-		},
 		processAttachments() {
-			let attachments = JSON.parse(this.comment.attachments);
+			let attachments = JSON.parse(this.review.attachments);
 			if (!attachments)
 				return;
 			this.files = attachments
@@ -152,24 +176,15 @@ export default {
 				return;
 			this.files.splice(index, 1);
 		},
-		loadComment(allComments) {
-			this.commentsToReply = allComments.filter(item => item.created < this.comment.created);
-			this.editingComment = JSON.parse(JSON.stringify(this.comment));
-			this.oldAttachments = this.comment.attachments;
+		loadReview() {
+			this.editingReview = JSON.parse(JSON.stringify(this.review));
+			this.editingReview.newStatus = this.submissionStatus;
+			this.oldAttachments = this.review.attachments;
 			this.processAttachments();
 		},
-		editComment() {
-			if (!this.editingComment.attachments && !this.editingComment.textContent) {
-				this.$notify({
-					group: 'admin-actions',
-					title: 'Ошибка',
-					text: 'Комментарий должен содержать хотя бы текстовый контент или прикрепленные файлы',
-					type: 'error'
-				})
-				return;
-			}
-			this.editingComment.oldAttachments = this.oldAttachments;
-			this.editingComment.attachments = JSON.stringify(this.files
+		editReview() {
+			this.editingReview.oldAttachments = this.oldAttachments;
+			this.editingReview.attachments = JSON.stringify(this.files
 				.filter(element => !(element.file instanceof File))
 				.map(element => {
 					return element.file !== undefined ? {
@@ -186,14 +201,14 @@ export default {
 						Path: element.url
 					}
 				}));
-			this.editingComment.newFiles = this.files
+			this.editingReview.newFiles = this.files
 				.map(element => element.file)
 				.filter(element => element instanceof File);
-			this.editingComment.issuerId = this.$oidc.currentUserId;
+			this.editingReview.issuerId = this.$oidc.currentUserId;
 			this.$loading(true);
-			this.$store.dispatch('updateComment', this.editingComment)
+			this.$store.dispatch('updateTaskSubmissionReview', this.editingReview)
 				.then(() => {
-					this.reloadCommentsWithMessage('Комментарий успешно обновлен');
+					this.reloadReviewsWithMessage('Отзыв успешно обновлен');
 				})
 				.catch((error) => {
 					this.$notify({
@@ -207,7 +222,7 @@ export default {
 					this.$loading(false);
 				})
 		},
-		reloadCommentsWithMessage(message) {
+		reloadReviewsWithMessage(message) {
 			this.$emit('load');
 			this.$notify({
 				group: 'admin-actions',
@@ -216,7 +231,7 @@ export default {
 				type: 'success'
 			});
 			this.close();
-		},
+		}
 	},
 	computed: {
 		displayModal: {

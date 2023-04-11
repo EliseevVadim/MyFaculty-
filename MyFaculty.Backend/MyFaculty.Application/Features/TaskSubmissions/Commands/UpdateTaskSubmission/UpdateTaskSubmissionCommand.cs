@@ -16,6 +16,5 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Commands.UpdateTaskSubm
         public string Title { get; set; }
         public string TextContent { get; set; }
         public string Attachments { get; set; }
-        public TaskSubmissionStatus Status { get; set; }
     }
 }
