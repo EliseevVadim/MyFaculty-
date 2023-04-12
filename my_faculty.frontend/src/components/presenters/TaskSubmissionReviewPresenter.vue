@@ -79,7 +79,7 @@
 				</span>
 				</v-row>
 				<h3
-					v-if="review.textContent || review.attachments"
+					v-if="getPureText(review.textContent) || review.attachments"
 					class="black--text text-left ml-3 mb-5"
 				>
 					Комментарий преподавателя:
@@ -133,6 +133,11 @@ export default {
 		}
 	},
 	methods: {
+		getPureText(htmlContent) {
+			return new DOMParser()
+				.parseFromString(htmlContent, "text/html")
+				.body.textContent;
+		},
 		reloadSubmissions() {
 			this.$emit('load');
 		},
@@ -213,6 +218,7 @@ export default {
 		}
 	},
 	mounted() {
+		console.log(this.review);
 		this.processAttachments();
 	}
 }

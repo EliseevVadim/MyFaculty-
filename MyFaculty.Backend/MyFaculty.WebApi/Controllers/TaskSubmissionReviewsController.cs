@@ -119,7 +119,7 @@ namespace MyFaculty.WebApi.Controllers
             UpdateTaskSubmissionReviewCommand command = _mapper.Map<UpdateTaskSubmissionReviewCommand>(updateTaskSubmissionReviewDto);
             command.Attachments = commentAttachments.Count > 0 ? JsonConvert.SerializeObject(commentAttachments) : null;
             TaskSubmissionReviewViewModel submission = await Mediator.Send(command);
-            if (oldAttachments != null && submission.Attachments != null)
+            if (oldAttachments != null)
             {
                 List<Attachment> oldFiles = JsonConvert.DeserializeObject<List<Attachment>>(oldAttachments);
                 List<Attachment> currentFiles = JsonConvert.DeserializeObject<List<Attachment>>(actualAttachments);

@@ -141,15 +141,15 @@ namespace MyFaculty.WebApi.Controllers
                 commentAttachments.AddRange(newFiles);
             UpdateCommentCommand command = _mapper.Map<UpdateCommentCommand>(updateCommentDto);
             command.Attachments = commentAttachments.Count > 0 ? JsonConvert.SerializeObject(commentAttachments) : null;
-            CommentViewModel infoPost = await Mediator.Send(command);
-            if (oldAttachments != null && infoPost.Attachments != null)
+            CommentViewModel comment = await Mediator.Send(command);
+            if (oldAttachments != null)
             {
                 List<Attachment> oldFiles = JsonConvert.DeserializeObject<List<Attachment>>(oldAttachments);
                 List<Attachment> currentFiles = JsonConvert.DeserializeObject<List<Attachment>>(actualAttachments);
                 List<Attachment> filesToDelete = oldFiles.Except(currentFiles).ToList();
                 DeleteAttachments(filesToDelete);
             }
-            return Ok(infoPost);
+            return Ok(comment);
         }
 
         /// <summary>

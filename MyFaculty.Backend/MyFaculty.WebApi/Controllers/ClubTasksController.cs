@@ -165,7 +165,7 @@ namespace MyFaculty.WebApi.Controllers
             UpdateClubTaskCommand command = _mapper.Map<UpdateClubTaskCommand>(updateClubTaskDto);
             command.Attachments = postAttachments.Count > 0 ? JsonConvert.SerializeObject(postAttachments) : null;
             ClubTaskViewModel task = await Mediator.Send(command);
-            if (oldAttachments != null && task.Attachments != null)
+            if (oldAttachments != null)
             {
                 List<Attachment> oldFiles = JsonConvert.DeserializeObject<List<Attachment>>(oldAttachments);
                 List<Attachment> currentFiles = JsonConvert.DeserializeObject<List<Attachment>>(actualAttachments);

@@ -254,7 +254,7 @@ namespace MyFaculty.WebApi.Controllers
             UpdateInfoPostCommand command = _mapper.Map<UpdateInfoPostCommand>(updateInfoPostDto);
             command.Attachments = postAttachments.Count > 0 ? JsonConvert.SerializeObject(postAttachments) : null;
             InfoPostViewModel infoPost = await Mediator.Send(command);
-            if (oldAttachments != null && infoPost.Attachments != null)
+            if (oldAttachments != null)
             {
                 List<Attachment> oldFiles = JsonConvert.DeserializeObject<List<Attachment>>(oldAttachments);
                 List<Attachment> currentFiles = JsonConvert.DeserializeObject<List<Attachment>>(actualAttachments);

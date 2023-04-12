@@ -160,7 +160,6 @@ export default {
 			this.$store.dispatch('addTaskSubmissionReview', this.review)
 				.then(() => {
 					this.$emit('load');
-					this.resetInput();
 				})
 				.catch((error) => {
 					this.$notify({
@@ -171,6 +170,7 @@ export default {
 					})
 				})
 				.finally(() => {
+					this.resetInput();
 					this.$emit('close');
 				})
 		},
@@ -186,6 +186,7 @@ export default {
 			this.review.attachments = [];
 			this.review.reviewerId = null;
 			this.review.newStatus = 2;
+			this.review.rate = null;
 			this.files = [];
 		}
 	},
