@@ -63,6 +63,17 @@ const actions = {
 				context.commit('setGroups', response.data);
 			})
 	},
+	loadGroupsByCourseIdStateless: (context, id) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.get(config.apiUrl + '/api/groups/course/' + id)
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
 	updateGroup: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.put(config.apiUrl + '/api/groups', {

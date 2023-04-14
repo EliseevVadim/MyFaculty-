@@ -38,6 +38,12 @@ const actions = {
 				context.commit('setUsers', response.data);
 			})
 	},
+	loadUsersByGroupId: async (context, id) => {
+		await axios.get(config.apiUrl + '/api/users/group/' + id)
+			.then((response) => {
+				context.commit('setUsers', response.data);
+			})
+	},
 	loadUserById: (context, id) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.get(config.apiUrl + '/api/users/' + id)
@@ -84,6 +90,22 @@ const actions = {
 				.catch((error) => {
 					reject(error);
 				})
+		})
+	},
+	transferUsersToAnotherGroup: (context, payload) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.put(config.apiUrl + '/api/users/groupTransfer', {
+				'sourceGroupId': payload.sourceGroupId,
+				'destinationGroupId': payload.destinationGroupId
+			}, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error)
+				});
 		})
 	}
 };

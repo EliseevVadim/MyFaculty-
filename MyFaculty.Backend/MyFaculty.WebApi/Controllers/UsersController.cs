@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyFaculty.Application.Features.Users.Commands.TransferUsersToAnotherGroup;
 using MyFaculty.Application.Features.Users.Commands.UpdateUser;
 using MyFaculty.Application.Features.Users.Queries.GetUserInfo;
 using MyFaculty.Application.Features.Users.Queries.GetUsers;
+using MyFaculty.Application.Features.Users.Queries.GetUsersForGroup;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using System;
@@ -48,6 +50,27 @@ namespace MyFaculty.WebApi.Controllers
         public async Task<ActionResult<UsersListViewModel>> GetAll()
         {
             GetUsersQuery query = new GetUsersQuery();
+            UsersListViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the list of users for a specific group
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /users/group/1
+        /// </remarks>
+        /// <returns>Returns UsersListViewModel</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("group/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<UsersListViewModel>> GetByGroupId(int id)
+        {
+            GetUsersForGroupQuery query = new GetUsersForGroupQuery()
+            {
+                GroupId = id
+            };
             UsersListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
@@ -124,8 +147,38 @@ namespace MyFaculty.WebApi.Controllers
             }
             UpdateUserCommand command = _mapper.Map<UpdateUserCommand>(updateUserDto);
             command.AvatarPath = String.IsNullOrEmpty(photoPath) ? string.Empty : _appDomain + "uploads/images/user_avatars/" + photoPath;
-            UserViewModel teacher = await Mediator.Send(command);
-            return Ok(teacher);
+            UserViewModel user = await Mediator.Send(command);
+            return Ok(user);
+        }
+
+        /// <summary>
+        /// Transfers the users from one group to another
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// PUT /users/groupTransfer
+        /// {
+        ///     "sourceGroupId": 1,
+        ///     "destinationGroupId": 2
+        /// }
+        /// </remarks>
+        /// <param name="transferUsersToAnotherGroupDto">TransferUsersToAnotherGroupDto object</param>
+        /// <returns>Retruns UserViewModel</returns>
+        /// <response code="200">Success</response>
+        /// /// <response code="401">Unauthorized</response>
+        /// <response code="404">Not found</response>
+        /// <response code="500">Server error</response>
+        [HttpPut("groupTransfer")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> TransferUsersToGroup([FromBody] TransferUsersToAnotherGroupDto transferUsersToAnotherGroupDto)
+        {
+            TransferUsersToAnotherGroupCommand command = _mapper.Map<TransferUsersToAnotherGroupCommand>(transferUsersToAnotherGroupDto);
+            await Mediator.Send(command);
+            return Ok();
         }
     }
 }

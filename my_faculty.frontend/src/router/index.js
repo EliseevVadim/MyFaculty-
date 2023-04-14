@@ -136,7 +136,12 @@ const routes = [
                 path: '/adminPanel/cities',
                 name: 'cities',
                 component: () => import('../views/adminPageViews/CitiesView')
-            }
+            },
+            {
+                path: '/adminPanel/usersGroups',
+                name: 'usersGroups',
+                component: () => import('../views/adminPageViews/UsersGroupsView')
+            },
         ]
     },
     {

@@ -76,7 +76,7 @@
                         :value="false"
                         prepend-icon="mdi-tools"
                     >
-                            <v-subheader>Служебные</v-subheader>
+						<v-subheader>Служебные</v-subheader>
                         <v-list-item
                                 v-for="([title, icon, path], i) in services"
                                 :key="i"
@@ -90,6 +90,25 @@
                             <v-list-item-title class="text-left" v-text="title"></v-list-item-title>
                         </v-list-item>
                     </v-list-item-group>
+					<v-divider></v-divider>
+					<v-list-item-group
+						:value="false"
+						prepend-icon="mdi-tools"
+					>
+						<v-subheader>Работа с пользователями</v-subheader>
+						<v-list-item
+							v-for="([title, icon, path], i) in usersActions"
+							:key="i"
+							link
+							:to="path"
+							@click="hideSidebar"
+						>
+							<v-list-item-icon>
+								<v-icon v-text="icon"></v-icon>
+							</v-list-item-icon>
+							<v-list-item-title class="text-left" v-text="title"></v-list-item-title>
+						</v-list-item>
+					</v-list-item-group>
                 </v-list>
             </v-navigation-drawer>
             <v-main>
@@ -128,7 +147,10 @@ export default {
 				['Страны', 'mdi-earth', '/adminPanel/countries'],
 				['Регионы', 'mdi-earth-box', '/adminPanel/regions'],
 				['Города', 'mdi-city', '/adminPanel/cities'],
-            ]
+            ],
+			usersActions: [
+				['Работа с группами', 'mdi-account-multiple', '/adminPanel/usersGroups']
+			]
         }
     },
     async mounted() {

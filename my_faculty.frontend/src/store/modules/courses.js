@@ -58,6 +58,17 @@ const actions = {
 				context.commit('setCourses', response.data);
 			})
 	},
+	loadCoursesByFacultyIdStateless: (context, id) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.get(config.apiUrl + '/api/courses/faculty/' + id)
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
 	updateCourse: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.put(config.apiUrl + '/api/courses', {

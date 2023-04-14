@@ -24,6 +24,17 @@ const actions = {
 				context.commit('setFaculties', response.data);
 			})
 	},
+	loadAllFacultiesStateless: (context) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.get(config.apiUrl + '/api/faculties')
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
 	addFaculty: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			await axios.post(config.apiUrl + '/api/faculties', {
