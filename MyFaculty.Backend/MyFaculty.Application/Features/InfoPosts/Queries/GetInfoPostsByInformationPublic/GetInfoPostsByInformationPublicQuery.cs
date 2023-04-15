@@ -11,5 +11,6 @@ namespace MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPostsByInforma
     public class GetInfoPostsByInformationPublicQuery : IRequest<InfoPostsListViewModel>
     {
         public int PublicId { get; set; }
+        public int IssuerId { get; set; }
     }
 }

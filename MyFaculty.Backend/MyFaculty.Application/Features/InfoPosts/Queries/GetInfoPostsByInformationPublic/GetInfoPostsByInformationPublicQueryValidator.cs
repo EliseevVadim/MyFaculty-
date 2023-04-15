@@ -12,6 +12,7 @@ namespace MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPostsByInforma
         public GetInfoPostsByInformationPublicQueryValidator()
         {
             RuleFor(query => query.PublicId).NotEmpty();
+            RuleFor(query => query.IssuerId).NotEmpty();
         }
     }
 }

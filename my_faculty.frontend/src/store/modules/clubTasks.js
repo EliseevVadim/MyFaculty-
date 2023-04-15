@@ -32,6 +32,19 @@ const actions = {
 				context.commit('setClubTasks', response.data)
 			})
 	},
+	loadClubTaskById: (context, id) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.get(config.apiUrl + '/api/clubtasks/' + id, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
 	addClubTask: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			let formData = new FormData();

@@ -203,6 +203,16 @@ const routes = [
                 path: '/schedule',
                 name: 'Просмотр расписания',
                 component: () => import('../views/accountPageViews/ScheduleView')
+            },
+            {
+                path: '/post:id',
+                name: 'Просмотр записи',
+                component: () => import('../views/accountPageViews/InformationPostView')
+            },
+            {
+                path: '/task:id',
+                name: 'Просмотр задания',
+                component: () => import('../views/accountPageViews/ClubTaskView')
             }
         ]
     },

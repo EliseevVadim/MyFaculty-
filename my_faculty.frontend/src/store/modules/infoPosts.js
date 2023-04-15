@@ -38,6 +38,19 @@ const actions = {
 				context.commit('setInfoPosts', response.data)
 			})
 	},
+	loadInfoPostById: (context, id) => {
+		return new Promise(async (resolve, reject) => {
+			await axios.get(config.apiUrl + '/api/infoposts/' + id, {
+				headers: config.headers
+			})
+				.then((response) => {
+					resolve(response);
+				})
+				.catch((error) => {
+					reject(error);
+				})
+		})
+	},
 	addInfoPost: (context, payload) => {
 		return new Promise(async (resolve, reject) => {
 			let formData = new FormData();

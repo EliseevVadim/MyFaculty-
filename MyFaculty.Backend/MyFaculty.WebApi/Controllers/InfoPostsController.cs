@@ -56,9 +56,11 @@ namespace MyFaculty.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<InfoPostsListViewModel>> GetByInfoPublic(int id)
         {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             GetInfoPostsByInformationPublicQuery query = new GetInfoPostsByInformationPublicQuery()
             {
-                PublicId = id
+                PublicId = id,
+                IssuerId = requesterId
             };
             InfoPostsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
@@ -102,9 +104,11 @@ namespace MyFaculty.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<InfoPostViewModel>> Get(int id)
         {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             GetInfoPostQuery query = new GetInfoPostQuery()
             {
-                Id = id
+                Id = id,
+                IssuerId = requesterId
             };
             InfoPostViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);

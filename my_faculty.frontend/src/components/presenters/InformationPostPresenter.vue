@@ -54,8 +54,13 @@
 							<wbr>
 							<TeacherVerificationMark v-if="post.author.isTeacher"/>
 						</v-list-item-subtitle>
-						<v-list-item-subtitle v-html="prettifyPublishDate()">
-						</v-list-item-subtitle>
+						<router-link
+							:to="`/post${post.id}`"
+							class="publish-date"
+						>
+							<v-list-item-subtitle v-html="prettifyPublishDate()">
+							</v-list-item-subtitle>
+						</router-link>
 					</v-list-item-content>
 					<v-menu
 						v-if="currentUserIsPostAuthor()"
@@ -411,6 +416,14 @@ export default {
 	}
 	.modal-invoker {
 		cursor: pointer;
+	}
+	.publish-date {
+		text-decoration: none;
+		color: rgba(0,0,0,.6);
+	}
+	.publish-date:hover {
+		text-decoration: underline;
+		color: rgba(0,0,0,.6);
 	}
 	@media only screen and (max-width: 600px) {
 		.image-gallery {

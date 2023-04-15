@@ -27,9 +27,19 @@ namespace MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPost
 
         public async Task<InfoPostViewModel> Handle(GetInfoPostQuery request, CancellationToken cancellationToken)
         {
-            InfoPost infoPost = await _context.InfoPosts.FirstOrDefaultAsync(infoPost => infoPost.Id == request.Id, cancellationToken);
+            InfoPost infoPost = await _context.InfoPosts
+                .Include(post => post.OwningInformationPublic)
+                    .ThenInclude(infoPublic => infoPublic.BlockedUsers)
+                .Include(post => post.OwningStudyClub)
+                .Include(post => post.LikedUsers)
+                .Include(post => post.Author)
+                .FirstOrDefaultAsync(infoPost => infoPost.Id == request.Id, cancellationToken);
             if (infoPost == null)
                 throw new EntityNotFoundException(nameof(InfoPost), request.Id);
+            if (infoPost.OwningInformationPublic != null)
+                if (infoPost.OwningInformationPublic.BlockedUsers.Select(user => user.Id).Contains(request.IssuerId))
+                    throw new DestructiveActionException("Вы не можете просмотреть эту запись, так как были заблокированы " +
+                        "в сообществе, содержащем ее");
             return _mapper.Map<InfoPostViewModel>(infoPost);
         }
     }

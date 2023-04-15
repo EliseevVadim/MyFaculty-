@@ -39,8 +39,13 @@
 							{{task.owningStudyClub.clubName}}
 						</router-link>
 					</v-list-item-title>
-					<v-list-item-subtitle v-html="prettifyPublishDate()">
-					</v-list-item-subtitle>
+					<router-link
+						:to="`/task${task.id}`"
+						class="publish-date"
+					>
+						<v-list-item-subtitle v-html="prettifyPublishDate()">
+						</v-list-item-subtitle>
+					</router-link>
 				</v-list-item-content>
 				<v-menu
 					v-if="currentUserIsTaskAuthor()"
@@ -77,7 +82,7 @@
 				</v-menu>
 			</v-list-item>
 			<v-col cols="12"
-				   class="pt-0 mb-2"
+				class="pt-0 mb-2"
 			>
 				<span class="task-cost">
 					максимальное количество баллов - {{task.cost}}
@@ -352,6 +357,14 @@ export default {
 		font-weight: bolder;
 		font-style: italic;
 		color: black;
+	}
+	.publish-date {
+		text-decoration: none;
+		color: rgba(0,0,0,.6);
+	}
+	.publish-date:hover {
+		text-decoration: underline;
+		color: rgba(0,0,0,.6);
 	}
 	@media only screen and (max-width: 600px) {
 		.image-gallery {

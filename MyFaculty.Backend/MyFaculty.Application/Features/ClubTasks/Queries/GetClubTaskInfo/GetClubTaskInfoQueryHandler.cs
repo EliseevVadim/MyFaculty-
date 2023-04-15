@@ -27,7 +27,10 @@ namespace MyFaculty.Application.Features.ClubTasks.Queries.GetClubTaskInfo
 
         public async Task<ClubTaskViewModel> Handle(GetClubTaskInfoQuery request, CancellationToken cancellationToken)
         {
-            ClubTask task = await _context.ClubTasks.FirstOrDefaultAsync(task => task.Id == request.Id, cancellationToken);
+            ClubTask task = await _context.ClubTasks
+                .Include(task => task.OwningStudyClub)
+                    .ThenInclude(club => club.Moderators)
+                .FirstOrDefaultAsync(task => task.Id == request.Id, cancellationToken);
             if (task == null)
                 throw new EntityNotFoundException(nameof(ClubTask), request.Id);
             return _mapper.Map<ClubTaskViewModel>(task);
