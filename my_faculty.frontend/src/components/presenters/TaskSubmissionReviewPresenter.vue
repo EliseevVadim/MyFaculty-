@@ -134,9 +134,9 @@ export default {
 	},
 	methods: {
 		getPureText(htmlContent) {
-			return new DOMParser()
+			return htmlContent ? new DOMParser()
 				.parseFromString(htmlContent, "text/html")
-				.body.textContent;
+				.body.textContent : htmlContent;
 		},
 		reloadSubmissions() {
 			this.$emit('load');
@@ -218,7 +218,6 @@ export default {
 		}
 	},
 	mounted() {
-		console.log(this.review);
 		this.processAttachments();
 	}
 }
