@@ -37,5 +37,6 @@ namespace MyFaculty.Domain.Entities
         public List<Comment> Comments { get; set; }
         public List<TaskSubmission> TaskSubmissions { get; set; }
         public List<TaskSubmissionReview> SubmissionReviews { get; set; }
+        public List<Notification> Notifications { get; set; }
     }
 }

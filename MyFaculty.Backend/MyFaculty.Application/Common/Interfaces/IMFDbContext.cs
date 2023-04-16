@@ -41,6 +41,7 @@ namespace MyFaculty.Application.Common.Interfaces
         public DbSet<Comment> Comments { get; set; }
         public DbSet<TaskSubmission> TaskSubmissions { get; set; }
         public DbSet<TaskSubmissionReview> TaskSubmissionReviews { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<ExpertSystemState> ExpertSystemStates { get; set; }
         public DbSet<ExpertSystemStateTransition> ExpertSystemStateTransitions { get; set; }
         public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; }

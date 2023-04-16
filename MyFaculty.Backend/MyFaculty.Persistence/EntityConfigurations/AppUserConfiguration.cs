@@ -50,6 +50,9 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasMany(user => user.SubmissionReviews)
                 .WithOne(review => review.Reviewer)
                 .HasForeignKey(review => review.ReviewerId);
+            builder.HasMany(user => user.Notifications)
+                .WithOne(notification => notification.NotifiedUser)
+                .HasForeignKey(notification => notification.UserId);
             builder.Property(user => user.IsTeacher).HasDefaultValue(false);
             builder.Property(user => user.Website).IsRequired(false);
             builder.Property(user => user.VKLink).IsRequired(false);
