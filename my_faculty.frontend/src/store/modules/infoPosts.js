@@ -19,7 +19,9 @@ const mutations = {
 
 const actions = {
 	loadInfoPostsByInfoPublicId: async (context, infoPublicId) => {
-		await axios.get(config.apiUrl + '/api/infoposts/info-public/' + infoPublicId)
+		await axios.get(config.apiUrl + '/api/infoposts/info-public/' + infoPublicId, {
+			headers: config.headers
+		})
 			.then((response) => {
 				context.commit('setInfoPosts', response.data);
 			})
