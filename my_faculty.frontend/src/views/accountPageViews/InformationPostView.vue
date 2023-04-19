@@ -22,6 +22,12 @@
 			error-code="404"
 			message="Запись не найдена"
 		/>
+		<h3
+			v-else-if="postOwnerBlockedUser"
+			class="black--text mt-5"
+		>
+			Вы были заблокированы в сообществе, содержащем эту запись. Просмотр контента недоступен.
+		</h3>
 		<div
 			v-else-if="Object.keys(watchingPost).length !== 0"
 		>
@@ -191,6 +197,7 @@ export default {
 			images: [],
 			otherFiles: [],
 			postNotFound: null,
+			postOwnerBlockedUser: null,
 			showLikedUsers: false,
 			showEditingForm: false,
 			likedUsersActions: [],
@@ -211,9 +218,15 @@ export default {
 					document.title = "Просмотр записи";
 				})
 				.catch((error) => {
-					if (error.response.status === 404) {
-						document.title = "Запись не найдена";
-						this.postNotFound = true;
+					switch (error.response.status) {
+						case 404:
+							document.title = "Запись не найдена";
+							this.postNotFound = true;
+							break;
+						case 409:
+							document.title = "Ошибка доступа";
+							this.postOwnerBlockedUser = true;
+							break;
 					}
 				})
 				.finally(() => {
