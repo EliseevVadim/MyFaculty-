@@ -230,6 +230,14 @@ export default {
 					this.comments = JSON.parse(JSON.stringify(this.COMMENTS.comments));
 				})
 		},
+		jumpToReply() {
+			try {
+				let jumpToId = this.$route.hash;
+				if (jumpToId)
+					document.getElementById(jumpToId.substring(1)).scrollIntoView();
+			}
+			catch (e) {}
+		},
 		getFullName(user) {
 			return user.firstName + " " + user.lastName;
 		},
@@ -375,6 +383,9 @@ export default {
 	mounted() {
 		let id = this.$route.params.id;
 		this.loadPost(id);
+	},
+	updated() {
+		this.jumpToReply();
 	},
 	computed: {
 		...mapGetters(['COMMENTS'])

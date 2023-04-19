@@ -27,6 +27,7 @@ import clubTasks from "@/store/modules/clubTasks";
 import comments from "@/store/modules/comments";
 import taskSubmissions from "@/store/modules/taskSubmissions";
 import taskSubmissionReviews from "@/store/modules/taskSubmissionReviews";
+import notifications from "@/store/modules/notifications";
 
 Vue.use(Vuex)
 
@@ -62,6 +63,7 @@ export default new Vuex.Store({
       clubTasks,
       comments,
       taskSubmissions,
-      taskSubmissionReviews
+      taskSubmissionReviews,
+      notifications
   }
 })

@@ -35,48 +35,7 @@
 				>
 					<v-icon>mdi-home</v-icon>
 				</v-btn>
-				<v-menu
-					bottom
-					left
-					offset-y
-					origin="top right"
-					transition="scale-transition"
-				>
-					<template v-slot:activator="{ attrs, on }">
-						<v-btn
-							class="ml-2"
-							min-width="0"
-							text
-							v-bind="attrs"
-							v-on="on"
-						>
-							<v-badge
-								color="red"
-								overlap
-								bordered
-							>
-								<template v-slot:badge>
-									<span>5</span>
-								</template>
-
-								<v-icon>mdi-bell</v-icon>
-							</v-badge>
-						</v-btn>
-					</template>
-					<v-list
-						:tile="false"
-						nav
-					>
-						<div>
-							<app-bar-item
-								v-for="(n, i) in notifications"
-								:key="`item-${i}`"
-							>
-								<v-list-item-title v-text="n" />
-							</app-bar-item>
-						</div>
-					</v-list>
-				</v-menu>
+				<NotificationsList/>
 				<v-btn
 					class="ml-2"
 					min-width="0"
@@ -174,7 +133,7 @@
 					fluid
 					class="personal-page-content main-content-page"
 				>
-					<router-view v-if="isFullyMounted" />
+					<router-view :key="$route.path + $route.hash" v-if="isFullyMounted" />
 				</v-container>
 				<PagesFooter />
 			</v-main>
@@ -184,39 +143,17 @@
 <script>
 import ItemGroup from "@/components/AccountComponents/base/ItemGroup";
 import Item from "@/components/AccountComponents/base/Item";
-import {VHover, VListItem} from "vuetify/lib/components";
 import PagesFooter from "@/components/AccountComponents/core/PagesFooter";
 import {mapGetters} from "vuex";
 import ErrorPage from "@/components/AccountComponents/core/service-pages/ErrorPage";
+import NotificationsList from "@/components/AccountComponents/NotificationsList";
 export default {
 	name: "AccountPageView",
 	components: {
+		NotificationsList,
 		ErrorPage,
 		PagesFooter,
-		Item, ItemGroup,
-		AppBarItem: {
-			render(h) {
-				return h(VHover, {
-					scopedSlots: {
-						default: ({hover}) => {
-							return h(VListItem, {
-								attrs: this.$attrs,
-								class: {
-									'black--text': !hover,
-									'white--text secondary elevation-12': hover,
-								},
-								props: {
-									activeClass: '',
-									dark: hover,
-									link: true,
-									...this.$attrs,
-								},
-							}, this.$slots.default)
-						},
-					},
-				})
-			},
-		},
+		Item, ItemGroup
 	},
 	data() {
 		return {
@@ -227,13 +164,6 @@ export default {
 				firstName: 'Загрузка',
 				lastName: '...',
 			},
-			notifications: [
-				'Mike John Responded to your email',
-				'You have 5 new tasks',
-				'You\'re now friends with Andrew',
-				'Another Notification',
-				'Another one',
-			],
 			items: [
 				{
 					icon: 'mdi-home',

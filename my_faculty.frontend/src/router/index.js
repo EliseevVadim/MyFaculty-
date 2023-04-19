@@ -6,6 +6,8 @@ import SignInCallback from "@/components/SignInCallback";
 import SignOutCallback from "@/components/SignOutCallback";
 import RedirectSilentRenew from "@/components/RedirectSilentRenew";
 import AccountPageView from "@/views/AccountPageView";
+import InformationPostView from "@/views/accountPageViews/InformationPostView";
+import ClubTaskView from "@/views/accountPageViews/ClubTaskView";
 
 Vue.use(VueRouter)
 
@@ -207,12 +209,12 @@ const routes = [
             {
                 path: '/post:id',
                 name: 'Просмотр записи',
-                component: () => import('../views/accountPageViews/InformationPostView')
+                component: InformationPostView
             },
             {
                 path: '/task:id',
                 name: 'Просмотр задания',
-                component: () => import('../views/accountPageViews/ClubTaskView')
+                component: ClubTaskView
             }
         ]
     },

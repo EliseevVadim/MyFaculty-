@@ -57,7 +57,7 @@ namespace MyFaculty.Application.Features.TaskSubmissionReviews.Commands.CreateTa
             Notification notification = new Notification()
             {
                 UserId = reviewingSubmission.AuthorId,
-                TextContent = $"{string.Concat(new string[] { reviewer.FirstName, reviewer.LastName })} дал отзыв на Ваше решение...",
+                TextContent = $"{string.Join(" ", new string[] { reviewer.FirstName, reviewer.LastName })} дал отзыв на Ваше решение...",
                 ReturnUrl = $"/task{reviewingSubmission.ClubTaskId}",
                 Created = actionDate
             };

@@ -212,6 +212,14 @@ export default {
 					this.comments = JSON.parse(JSON.stringify(this.COMMENTS.comments));
 				})
 		},
+		jumpToReply() {
+			try {
+				let jumpToId = this.$route.hash;
+				if (jumpToId)
+					document.getElementById(jumpToId.substring(1)).scrollIntoView();
+			}
+			catch (e) {}
+		},
 		prettifyPublishDate() {
 			let creationDate = new Date(this.watchingTask.created).toLocaleString('ru-RU', {
 				year: 'numeric',
@@ -311,6 +319,9 @@ export default {
 	mounted() {
 		let id = this.$route.params.id;
 		this.loadClubTask(id);
+	},
+	updated() {
+		this.jumpToReply();
 	},
 	computed: {
 		...mapGetters(['COMMENTS'])

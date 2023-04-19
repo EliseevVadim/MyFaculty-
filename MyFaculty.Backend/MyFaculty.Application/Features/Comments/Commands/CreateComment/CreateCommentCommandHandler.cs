@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,33 +42,11 @@ namespace MyFaculty.Application.Features.Comments.Commands.CreateComment
                     && infoPost
                         .OwningInformationPublic
                         .BlockedUsers
-                        .Select(user => user.Id)
-                        .Contains(request.AuthorId))
+                        .Any(user => user.Id == request.AuthorId))
                     throw new DestructiveActionException("Вы не можете прокомментировать эту запись, так как были заблокированы " +
                         "в сообществе, содержащем ее");
             }
             DateTime actionsDate = DateTime.Now;
-            if (request.ParentCommentId != null)
-            {
-                Comment parentComment = await _context.Comments
-                    .Include(comment => comment.Post)
-                    .Include(comment => comment.Author)
-                    .FirstOrDefaultAsync(comment => comment.Id == request.ParentCommentId, cancellationToken);
-                if (parentComment == null)
-                    throw new EntityNotFoundException(nameof(Comment), request.PostId);
-                Notification notification = new Notification()
-                {
-                    UserId = parentComment.AuthorId,
-                    TextContent = $"{string.Concat(new string[] {parentComment.Author.FirstName, parentComment.Author.LastName})} ответил на Ваш комментарий...",
-                    ReturnUrl = parentComment.Post == null ? $"/task{parentComment.PostId}" : $"/post{parentComment.PostId}",
-                    MetaInfo = JsonConvert.SerializeObject(new
-                    {
-                        JumpToId = $"comment_{parentComment.Id}" 
-                    }),
-                    Created = actionsDate
-                };
-                await _context.Notifications.AddAsync(notification);
-            }
             Comment comment = new Comment()
             {
                 TextContent = request.TextContent,
@@ -80,6 +59,31 @@ namespace MyFaculty.Application.Features.Comments.Commands.CreateComment
             };
             await _context.Comments.AddAsync(comment, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+            if (request.ParentCommentId != null)
+            {
+                Comment parentComment = await _context.Comments.FindAsync(new object[] { request.ParentCommentId }, cancellationToken);
+                if (parentComment == null)
+                    throw new EntityNotFoundException(nameof(Comment), request.PostId);
+                AppUser currentAuthor = await _context.Users.FindAsync(new object[] { request.AuthorId }, cancellationToken);
+                if (currentAuthor == null)
+                    throw new EntityNotFoundException(nameof(AppUser), request.PostId);
+                if (parentComment.AuthorId != request.AuthorId)
+                {
+                    Notification notification = new Notification()
+                    {
+                        UserId = parentComment.AuthorId,
+                        TextContent = $"{string.Join(" ", new string[] { currentAuthor.FirstName, currentAuthor.LastName })} ответил на Ваш комментарий...",
+                        ReturnUrl = parentComment.Post is ClubTask ? $"/task{parentComment.PostId}" : $"/post{parentComment.PostId}",
+                        MetaInfo = JsonConvert.SerializeObject(new
+                        {
+                            JumpToId = $"comment_{comment.Id}"
+                        }),
+                        Created = actionsDate
+                    };
+                    await _context.Notifications.AddAsync(notification);
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+            }
             return _mapper.Map<CommentViewModel>(comment);
         }
     }
