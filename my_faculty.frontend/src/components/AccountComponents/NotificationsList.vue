@@ -84,6 +84,15 @@ export default {
 					this.notifications = this.NOTIFICATIONS.notifications;
 				});
 		},
+		receiveNewNotification() {
+			this.loadNotifications();
+			this.$notify({
+				group: 'admin-actions',
+				title: 'Информация',
+				text: 'Получено новое уведомление!',
+				type: 'success'
+			});
+		},
 		clearAllNotifications() {
 			this.$store.dispatch('deleteNotifications')
 				.then(() => {
@@ -93,6 +102,7 @@ export default {
 	},
 	mounted() {
 		this.loadNotifications();
+		this.$signalRHub.$on('loadNotifications', this.receiveNewNotification);
 	},
 	computed: {
 		...mapGetters(['NOTIFICATIONS'])

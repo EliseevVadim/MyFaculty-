@@ -19,6 +19,7 @@ namespace MyFaculty.Application.ViewModels
         public int Rate { get; set; }
         public UserLookupDto Reviewer { get; set; }
         public int SubmissionId { get; set; }
+        public int SubmissionAuthorId { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
 
@@ -32,6 +33,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.Rate, options => options.MapFrom(review => review.Rate))
                 .ForMember(vm => vm.Reviewer, options => options.MapFrom(review => review.Reviewer))
                 .ForMember(vm => vm.SubmissionId, options => options.MapFrom(review => review.SubmissionId))
+                .ForMember(vm => vm.SubmissionAuthorId, options => options.MapFrom(review => review.TaskSubmission.AuthorId))
                 .ForMember(vm => vm.Created, options => options.MapFrom(review => review.Created))
                 .ForMember(vm => vm.Updated, options => options.MapFrom(review => review.Updated));
         }

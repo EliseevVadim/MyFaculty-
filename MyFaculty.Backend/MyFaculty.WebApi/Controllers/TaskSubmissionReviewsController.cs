@@ -9,6 +9,7 @@ using MyFaculty.Application.Features.TaskSubmissionReviews.Commands.DeleteTaskSu
 using MyFaculty.Application.Features.TaskSubmissionReviews.Commands.UpdateTaskSubmissionReview;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
+using MyFaculty.WebApi.Hubs;
 using MyFaculty.WebApi.Models;
 using Newtonsoft.Json;
 using System;
@@ -27,13 +28,15 @@ namespace MyFaculty.WebApi.Controllers
         private IMapper _mapper;
         private IWebHostEnvironment _webHostEnvironment;
         private IConfiguration _configuration;
+        private NotificationsHub _notificationsHub;
         private string _appDomain;
 
-        public TaskSubmissionReviewsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public TaskSubmissionReviewsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, NotificationsHub notificationsHub)
         {
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
+            _notificationsHub = notificationsHub;
             _appDomain = configuration["AppDomain"];
         }
 
@@ -73,8 +76,9 @@ namespace MyFaculty.WebApi.Controllers
             CreateTaskSubmissionReviewCommand command = _mapper.Map<CreateTaskSubmissionReviewCommand>(createTaskSubmissionReviewDto);
             command.Attachments = sumbissionAttachments.Count > 0 ? JsonConvert.SerializeObject(sumbissionAttachments) : null;
             command.SubmissionReviewAttachmentsUid = sumbissionReviewAttachmentsUid;
-            TaskSubmissionReviewViewModel submission = await Mediator.Send(command);
-            return Created(nameof(TaskSubmissionReviewsController), submission);
+            TaskSubmissionReviewViewModel review = await Mediator.Send(command);
+            await _notificationsHub.MakeUserLoadNotificationsAsync(review.SubmissionAuthorId);
+            return Created(nameof(TaskSubmissionReviewsController), review);
         }
 
         /// <summary>
@@ -118,7 +122,7 @@ namespace MyFaculty.WebApi.Controllers
                 commentAttachments.AddRange(newFiles);
             UpdateTaskSubmissionReviewCommand command = _mapper.Map<UpdateTaskSubmissionReviewCommand>(updateTaskSubmissionReviewDto);
             command.Attachments = commentAttachments.Count > 0 ? JsonConvert.SerializeObject(commentAttachments) : null;
-            TaskSubmissionReviewViewModel submission = await Mediator.Send(command);
+            TaskSubmissionReviewViewModel review = await Mediator.Send(command);
             if (oldAttachments != null)
             {
                 List<Attachment> oldFiles = JsonConvert.DeserializeObject<List<Attachment>>(oldAttachments);
@@ -126,7 +130,8 @@ namespace MyFaculty.WebApi.Controllers
                 List<Attachment> filesToDelete = oldFiles.Except(currentFiles).ToList();
                 DeleteAttachments(filesToDelete);
             }
-            return Ok(submission);
+            await _notificationsHub.MakeUserLoadNotificationsAsync(review.SubmissionAuthorId);
+            return Ok(review);
         }
 
         /// <summary>
@@ -154,13 +159,14 @@ namespace MyFaculty.WebApi.Controllers
                 Id = id,
                 IssuerId = requesterId
             };
-            TaskSubmissionReviewViewModel submission = await Mediator.Send(command);
-            string attachmetsData = submission.Attachments;
+            TaskSubmissionReviewViewModel review = await Mediator.Send(command);
+            string attachmetsData = review.Attachments;
             if (attachmetsData != null)
             {
                 List<Attachment> filesToDelete = JsonConvert.DeserializeObject<List<Attachment>>(attachmetsData);
                 DeleteAttachments(filesToDelete);
             }
+            await _notificationsHub.MakeUserLoadNotificationsAsync(review.SubmissionAuthorId);
             return NoContent();
         }
 

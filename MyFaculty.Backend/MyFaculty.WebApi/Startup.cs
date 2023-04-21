@@ -6,11 +6,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Models;
 using MyFaculty.Application;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.Common.Mappings;
 using MyFaculty.Persistence;
+using MyFaculty.WebApi.Hubs;
+using MyFaculty.WebApi.Hubs.Management;
 using MyFaculty.WebApi.Middleware;
 using System;
 using System.Collections.Generic;
@@ -37,16 +40,20 @@ namespace MyFaculty.WebApi
                 config.AddProfile(new AssemblyMappingProfile(Assembly.GetExecutingAssembly()));
                 config.AddProfile(new AssemblyMappingProfile(typeof(IMFDbContext).Assembly));
             });
+            services.AddSingleton<OnlineUsers>();
+            services.AddSingleton<NotificationsHub>();
             services.AddApplication();
             services.AddPersistence(_configuration);
             services.AddControllers();
             services.AddCors(options =>
             {
-                options.AddPolicy("InintalPolicy", policy =>
+                options.AddPolicy("InintalPolicy", buidler =>
                 {
-                    policy.AllowAnyHeader();
-                    policy.AllowAnyMethod();
-                    policy.AllowAnyOrigin();
+                    buidler
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                        .SetIsOriginAllowed(origin => true);
                 });
             });
             services.AddAuthentication(config =>
@@ -59,7 +66,25 @@ namespace MyFaculty.WebApi
                     options.Authority = _configuration["IdentityServer"];
                     options.Audience = "MyFacultyWebAPI";
                     options.RequireHttpsMetadata = false;
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            if ((context.Request.Path.Value!.StartsWith("/notifications"))
+                                && context.Request.Query.TryGetValue("access_token", out StringValues token))
+                            {
+                                context.Token = token;
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
+            services.AddSignalR(options =>
+            {
+                options.ClientTimeoutInterval = TimeSpan.FromMinutes(5);
+                options.KeepAliveInterval = TimeSpan.FromSeconds(1);
+                options.EnableDetailedErrors = true;
+            });
             services.AddSwaggerGen(config =>
             {
                 string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -103,6 +128,7 @@ namespace MyFaculty.WebApi
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotificationsHub>("/notifications");
                 endpoints.MapControllers();
             });
         }

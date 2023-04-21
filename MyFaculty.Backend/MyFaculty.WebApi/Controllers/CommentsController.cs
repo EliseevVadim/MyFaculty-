@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using MyFaculty.Application.Features.Comments.Commands.CreateComment;
 using MyFaculty.Application.Features.Comments.Commands.DeleteComment;
@@ -10,6 +11,7 @@ using MyFaculty.Application.Features.Comments.Commands.UpdateComment;
 using MyFaculty.Application.Features.Comments.Queries.GetCommentsForPost;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
+using MyFaculty.WebApi.Hubs;
 using MyFaculty.WebApi.Models;
 using Newtonsoft.Json;
 using System;
@@ -28,14 +30,16 @@ namespace MyFaculty.WebApi.Controllers
         private IMapper _mapper;
         private IWebHostEnvironment _webHostEnvironment;
         private IConfiguration _configuration;
+        private NotificationsHub _notificationsHub;
         private string _appDomain;
 
-        public CommentsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public CommentsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, NotificationsHub notificationsHub)
         {
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
             _appDomain = configuration["AppDomain"];
+            _notificationsHub = notificationsHub;
         }
 
         /// <summary>
@@ -99,6 +103,8 @@ namespace MyFaculty.WebApi.Controllers
             command.Attachments = commentAttachments.Count > 0 ? JsonConvert.SerializeObject(commentAttachments) : null;
             command.CommentAttachmentsUid = commentAttachmentsUid;
             CommentViewModel comment = await Mediator.Send(command);
+            if (comment.ParentComment != null) 
+                await _notificationsHub.MakeUserLoadNotificationsAsync(comment.ParentComment.AuthorId);
             return Created(nameof(InfoPostsController), comment);
         }
 

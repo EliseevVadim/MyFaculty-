@@ -19,11 +19,13 @@ import VueFileAgentStyles from 'vue-file-agent/dist/vue-file-agent.css';
 import 'viewerjs/dist/viewer.css';
 import VueViewer from "v-viewer";
 import DateTimePicker from 'vuetify2-datetime-picker';
+import NotificationsHub from './services/notificationsHub';
 
 Vue.config.productionTip = false;
 Vue.prototype.$oidc = SecurityService;
 Vue.prototype.$d3 = d3;
 Vue.prototype.$backgroundColorService = BackgroundColorService;
+Vue.prototype.$notificationsConnection = NotificationsHub;
 
 Vue.use(VueLoading, {
     customLoader: LoadingScreen,
@@ -53,6 +55,8 @@ Vue.use(VueFileAgent);
 Vue.use(VueViewer);
 
 Vue.use(DateTimePicker);
+
+Vue.use(NotificationsHub);
 
 new Vue({
     router,
