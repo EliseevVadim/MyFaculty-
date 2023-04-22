@@ -1,5 +1,6 @@
 import Oidc from "oidc-client";
 import {config} from "@/config/config";
+import notificationsHub from "@/services/notificationsHub";
 
 let oidcClient = new Oidc.UserManager({
     userStore: new Oidc.WebStorageStateStore(),
@@ -23,9 +24,15 @@ Oidc.Log.logger = console;
 Oidc.Log.level = Oidc.Log.INFO;
 
 oidcClient.events.addUserLoaded((user) => {
-    localStorage.setItem('apiKey', user.access_token);
-    config.headers = {
-        'Authorization': 'Bearer ' + localStorage.getItem('apiKey')
+    try {
+        localStorage.setItem('apiKey', user.access_token);
+        config.headers = {
+            'Authorization': 'Bearer ' + localStorage.getItem('apiKey')
+        }
+        notificationsHub.recreateConnection();
+    }
+    catch (e) {
+        console.log(e);
     }
 });
 

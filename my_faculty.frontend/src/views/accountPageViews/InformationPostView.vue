@@ -396,6 +396,9 @@ export default {
 	mounted() {
 		let id = this.$route.params.id;
 		this.loadPost(id);
+		this.$notificationsHub.$on('loadNotifications', () => {
+			this.loadComments(id);
+		});
 	},
 	updated() {
 		this.jumpToReply();

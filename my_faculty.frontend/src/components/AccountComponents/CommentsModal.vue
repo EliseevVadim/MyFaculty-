@@ -72,6 +72,9 @@ export default {
 	mounted() {
 		document.documentElement.style.overflowY = "hidden";
 		this.loadComments();
+		this.$notificationsHub.$on('loadNotifications', () => {
+			this.loadComments();
+		});
 	},
 	destroyed() {
 		document.documentElement.style.removeProperty("overflow-y");

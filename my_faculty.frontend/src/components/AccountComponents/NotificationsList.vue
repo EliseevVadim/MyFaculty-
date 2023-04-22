@@ -42,6 +42,8 @@
 			</v-btn>
 		</template>
 		<v-list
+			max-height="316"
+			class="notifications-list"
 			v-if="notifications.length > 0"
 			:tile="false"
 			nav
@@ -67,6 +69,7 @@
 <script>
 import {mapGetters} from "vuex";
 import NotificationPresenter from "@/components/presenters/NotificationPresenter";
+import sound from "@/assets/audio/notification.mp3";
 export default {
 	name: "NotificationsList",
 	components: {
@@ -86,6 +89,8 @@ export default {
 		},
 		receiveNewNotification() {
 			this.loadNotifications();
+			let audio = new Audio(sound);
+			audio.play();
 			this.$notify({
 				group: 'admin-actions',
 				title: 'Информация',
@@ -102,7 +107,7 @@ export default {
 	},
 	mounted() {
 		this.loadNotifications();
-		this.$signalRHub.$on('loadNotifications', this.receiveNewNotification);
+		this.$notificationsHub.$on('loadNotifications', this.receiveNewNotification);
 	},
 	computed: {
 		...mapGetters(['NOTIFICATIONS'])
@@ -111,5 +116,18 @@ export default {
 </script>
 
 <style scoped>
-
+	.notifications-list {
+		overflow-y: auto;
+	}
+	.notifications-list::-webkit-scrollbar {
+		width: 10px;
+	}
+	.notifications-list::-webkit-scrollbar-track {
+		background-color: transparent;
+		border-radius: 100px;
+	}
+	.notifications-list::-webkit-scrollbar-thumb {
+		background-color: hsla(0, 18%, 3%, 0.2);
+		border-radius: 100px;
+	}
 </style>
