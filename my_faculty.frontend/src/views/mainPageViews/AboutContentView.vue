@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style scoped>
-    .info-text {
-        padding: 20px;
-    }
+.info-text {
+    padding: 20px;
+}
 </style>

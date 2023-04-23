@@ -20,10 +20,11 @@
         >
             <v-card>
                 <v-card-title>
-                    <span class="text-h5">{{updating ? 'Обновить информацию о типе объекта' : 'Добавить тип объекта'}}</span>
+                    <span
+                        class="text-h5">{{ updating ? 'Обновить информацию о типе объекта' : 'Добавить тип объекта' }}</span>
                 </v-card-title>
                 <v-card-text>
-                    <h2 class="text-center red--text">{{errorText}}</h2>
+                    <h2 class="text-center red--text">{{ errorText }}</h2>
                     <v-container>
                         <v-form
                             lazy-validation
@@ -94,10 +95,10 @@
                     <tbody>
                     <tr v-for="(item,index) in items" :key="index">
                         <td>
-                            {{item.objectTypeName}}
+                            {{ item.objectTypeName }}
                         </td>
                         <td>
-                            {{item.typePath}}
+                            {{ item.typePath }}
                         </td>
                         <td>
                             <v-btn
@@ -134,108 +135,108 @@
 
 <script>
 import {mapGetters} from "vuex";
+
 export default {
     name: "SecondaryObjectTypesView",
     data() {
-		return {
-			showAddingForm: false,
-			search: '',
-			formValid: true,
-			updating: false,
-			errorText: "",
-			object_type: {
-				object_type_name: "",
-				type_path: ""
-			},
-			commonRules: [
-				v => !!v || 'Поле является обязательным для заполнения'
-			],
-			headers: [
-				{
-					text: 'Название типа',
-					align: 'start',
-					value: 'objectTypeName',
-				},
-				{ text: 'Содержимое svg-изображения', value: 'typePath' },
-				{ text: 'Действия', value: 'actions', sortable: false }
-			],
+        return {
+            showAddingForm: false,
+            search: '',
+            formValid: true,
+            updating: false,
+            errorText: "",
+            object_type: {
+                object_type_name: "",
+                type_path: ""
+            },
+            commonRules: [
+                v => !!v || 'Поле является обязательным для заполнения'
+            ],
+            headers: [
+                {
+                    text: 'Название типа',
+                    align: 'start',
+                    value: 'objectTypeName',
+                },
+                {text: 'Содержимое svg-изображения', value: 'typePath'},
+                {text: 'Действия', value: 'actions', sortable: false}
+            ],
         }
     },
-	mounted() {
-		this.$store.dispatch('loadAllObjectTypes');
-	},
+    mounted() {
+        this.$store.dispatch('loadAllObjectTypes');
+    },
     methods: {
-		openAddingForm() {
-			this.errorText = "";
-			this.resetObjectType();
-			this.updating = false;
-			this.showAddingForm = true;
-		},
-		sendData() {
-			this.formValid = this.$refs.submitForm.validate();
-			if(!this.formValid)
-				return;
-			this.errorText = "";
-			if(!this.updating) {
-				this.$store.dispatch('addObjectType', this.object_type)
-					.then(() => {
-						this.resetObjectType();
-						this.showAddingForm = false;
-						this.$store.dispatch('loadAllObjectTypes');
-					})
-					.catch(() => {
-						this.errorText = "Произошла ошибка добавления записи.";
-					});
-			}
-			else {
-				this.$store.dispatch('updateObjectType', this.object_type)
-					.then(() => {
-						this.resetObjectType();
-						this.showAddingForm = false;
-						this.$store.dispatch('loadAllObjectTypes');
-					})
-					.catch(() => {
-						this.errorText = "Произошла ошибка обновления записи.";
-					});
-			}
-		},
-		resetObjectType() {
-			this.object_type.object_type_name = "";
-			this.object_type.type_path = "";
-		},
-		deleteObjectType(id) {
-			this.$confirm("Вы действительно хотите удалить данную запись?")
-				.then((result) => {
-					if (result) {
-						this.$store.dispatch('deleteObjectType', id)
-							.then(() => {
-								this.resetObjectType();
-								this.$store.dispatch('loadAllObjectTypes');
-							})
-							.catch(() => {
-								this.resetObjectType();
-								this.$notify({
-									group: 'admin-actions',
-									title: 'Ошибка',
-									text: 'Невозможно удалить запись',
-									type: 'error'
-								});
-							})
-					}
-				});
-		},
-		startUpdatingObjectType(id) {
-			this.errorText = "";
-			this.object_type.id = id;
-			this.$store.dispatch('loadObjectTypeById', id)
-				.then((response) => {
-					this.object_type.id = response.data.id;
-					this.object_type.object_type_name = response.data.objectTypeName;
-					this.object_type.type_path = response.data.typePath;
-					this.updating = true;
-					this.showAddingForm = true;
-				})
-		}
+        openAddingForm() {
+            this.errorText = "";
+            this.resetObjectType();
+            this.updating = false;
+            this.showAddingForm = true;
+        },
+        sendData() {
+            this.formValid = this.$refs.submitForm.validate();
+            if (!this.formValid)
+                return;
+            this.errorText = "";
+            if (!this.updating) {
+                this.$store.dispatch('addObjectType', this.object_type)
+                    .then(() => {
+                        this.resetObjectType();
+                        this.showAddingForm = false;
+                        this.$store.dispatch('loadAllObjectTypes');
+                    })
+                    .catch(() => {
+                        this.errorText = "Произошла ошибка добавления записи.";
+                    });
+            } else {
+                this.$store.dispatch('updateObjectType', this.object_type)
+                    .then(() => {
+                        this.resetObjectType();
+                        this.showAddingForm = false;
+                        this.$store.dispatch('loadAllObjectTypes');
+                    })
+                    .catch(() => {
+                        this.errorText = "Произошла ошибка обновления записи.";
+                    });
+            }
+        },
+        resetObjectType() {
+            this.object_type.object_type_name = "";
+            this.object_type.type_path = "";
+        },
+        deleteObjectType(id) {
+            this.$confirm("Вы действительно хотите удалить данную запись?")
+                .then((result) => {
+                    if (result) {
+                        this.$store.dispatch('deleteObjectType', id)
+                            .then(() => {
+                                this.resetObjectType();
+                                this.$store.dispatch('loadAllObjectTypes');
+                            })
+                            .catch(() => {
+                                this.resetObjectType();
+                                this.$notify({
+                                    group: 'admin-actions',
+                                    title: 'Ошибка',
+                                    text: 'Невозможно удалить запись',
+                                    type: 'error'
+                                });
+                            })
+                    }
+                });
+        },
+        startUpdatingObjectType(id) {
+            this.errorText = "";
+            this.object_type.id = id;
+            this.$store.dispatch('loadObjectTypeById', id)
+                .then((response) => {
+                    this.object_type.id = response.data.id;
+                    this.object_type.object_type_name = response.data.objectTypeName;
+                    this.object_type.type_path = response.data.typePath;
+                    this.updating = true;
+                    this.showAddingForm = true;
+                })
+        }
     },
     computed: {
         ...mapGetters(['OBJECT_TYPES'])

@@ -6,10 +6,10 @@
 export default {
     name: "SignInCallback",
     created() {
-		this.$loading(true);
+        this.$loading(true);
         this.$oidc.completeLogin()
             .then(() => {
-				this.$loading(false);
+                this.$loading(false);
                 this.$router.push('/personal');
             })
             .catch((error) => {

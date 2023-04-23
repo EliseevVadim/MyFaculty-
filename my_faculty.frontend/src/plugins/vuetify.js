@@ -7,12 +7,12 @@ import ru from 'vuetify/lib/locale/ru.js'
 Vue.use(Vuetify);
 
 const options = {
-	lang: {
-		locales: {
-			ru
-		},
-		current: 'ru'
-	}
+    lang: {
+        locales: {
+            ru
+        },
+        current: 'ru'
+    }
 };
 
 export default new Vuetify(options);

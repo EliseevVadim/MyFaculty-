@@ -21,10 +21,11 @@
         >
             <v-card>
                 <v-card-title>
-                    <span class="text-h5">{{updating ? 'Обновить информацию об ученом звании' : 'Добавить ученое звание'}}</span>
+                    <span
+                        class="text-h5">{{ updating ? 'Обновить информацию об ученом звании' : 'Добавить ученое звание' }}</span>
                 </v-card-title>
                 <v-card-text>
-                    <h2 class="text-center red--text">{{errorText}}</h2>
+                    <h2 class="text-center red--text">{{ errorText }}</h2>
                     <v-container>
                         <v-form
                             lazy-validation
@@ -86,10 +87,10 @@
                     <tbody>
                     <tr v-for="(item,index) in items" :key="index">
                         <td>
-                            {{item.id}}
+                            {{ item.id }}
                         </td>
                         <td>
-                            {{item.rankName}}
+                            {{ item.rankName }}
                         </td>
                         <td>
                             <v-btn
@@ -149,8 +150,8 @@ export default {
                     align: 'start',
                     value: 'id',
                 },
-                { text: 'Название ученого звания', value: 'rankName' },
-                { text: 'Действия', value: 'actions', sortable: false }
+                {text: 'Название ученого звания', value: 'rankName'},
+                {text: 'Действия', value: 'actions', sortable: false}
             ],
         }
     },
@@ -166,10 +167,10 @@ export default {
         },
         sendData() {
             this.formValid = this.$refs.submitForm.validate();
-            if(!this.formValid)
+            if (!this.formValid)
                 return;
             this.errorText = "";
-            if(!this.updating) {
+            if (!this.updating) {
                 this.$store.dispatch('addScienceRank', this.rank)
                     .then(() => {
                         this.resetRank();
@@ -179,8 +180,7 @@ export default {
                     .catch(() => {
                         this.errorText = "Произошла ошибка добавления записи.";
                     });
-            }
-            else {
+            } else {
                 this.$store.dispatch('updateScienceRank', this.rank)
                     .then(() => {
                         this.resetRank();
@@ -197,25 +197,25 @@ export default {
             this.rank.id = null;
         },
         deleteScienceRank(id) {
-			this.$confirm("Вы действительно хотите удалить данную запись?")
-				.then((result) => {
-					if (result) {
-						this.$store.dispatch('deleteScienceRank', id)
-							.then(() => {
-								this.resetRank();
-								this.$store.dispatch('loadAllRanks');
-							})
-							.catch(() => {
-								this.resetRank();
-								this.$notify({
-									group: 'admin-actions',
-									title: 'Ошибка',
-									text: 'Невозможно удалить запись',
-									type: 'error'
-								});
-							})
-					}
-				});
+            this.$confirm("Вы действительно хотите удалить данную запись?")
+                .then((result) => {
+                    if (result) {
+                        this.$store.dispatch('deleteScienceRank', id)
+                            .then(() => {
+                                this.resetRank();
+                                this.$store.dispatch('loadAllRanks');
+                            })
+                            .catch(() => {
+                                this.resetRank();
+                                this.$notify({
+                                    group: 'admin-actions',
+                                    title: 'Ошибка',
+                                    text: 'Невозможно удалить запись',
+                                    type: 'error'
+                                });
+                            })
+                    }
+                });
         },
         startUpdatingScienceRank(id) {
             this.errorText = "";

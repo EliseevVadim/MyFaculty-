@@ -1,13 +1,13 @@
 <template>
-	<div>silent renew component</div>
+    <div>silent renew component</div>
 </template>
 
 <script>
 export default {
-	name: "RedirectSilentRenew",
-	created() {
-		this.$oidc.handleSilentCallback();
-	}
+    name: "RedirectSilentRenew",
+    created() {
+        this.$oidc.handleSilentCallback();
+    }
 }
 </script>
 

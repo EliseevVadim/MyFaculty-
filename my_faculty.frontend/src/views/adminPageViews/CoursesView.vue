@@ -20,10 +20,10 @@
         >
             <v-card>
                 <v-card-title>
-                    <span class="text-h5">{{updating ? 'Обновить информацию о курсе' : 'Добавить курс'}}</span>
+                    <span class="text-h5">{{ updating ? 'Обновить информацию о курсе' : 'Добавить курс' }}</span>
                 </v-card-title>
                 <v-card-text>
-                    <h2 class="text-center red--text">{{errorText}}</h2>
+                    <h2 class="text-center red--text">{{ errorText }}</h2>
                     <v-container>
                         <v-form
                             lazy-validation
@@ -48,18 +48,18 @@
                                     v-model="course.course_name"
                                 ></v-text-field>
                             </v-col>
-							<v-col cols="12">
-								<v-autocomplete
-									label="Название факультета*"
-									required
-									:rules="commonRules"
-									:items="this.FACULTIES.faculties"
-									item-text="facultyName"
-									item-value="id"
-									hide-details="auto"
-									v-model="course.faculty_id"
-								></v-autocomplete>
-							</v-col>
+                            <v-col cols="12">
+                                <v-autocomplete
+                                    label="Название факультета*"
+                                    required
+                                    :rules="commonRules"
+                                    :items="this.FACULTIES.faculties"
+                                    item-text="facultyName"
+                                    item-value="id"
+                                    hide-details="auto"
+                                    v-model="course.faculty_id"
+                                ></v-autocomplete>
+                            </v-col>
                         </v-form>
                     </v-container>
                     <small>Поля, помеченные * обязательны к заполнению</small>
@@ -106,13 +106,13 @@
                     <tbody>
                     <tr v-for="(item,index) in items" :key="index">
                         <td>
-                            {{item.courseNumber}}
+                            {{ item.courseNumber }}
                         </td>
-						<td>
-							{{item.facultyName}}
-						</td>
                         <td>
-                            {{item.courseName}}
+                            {{ item.facultyName }}
+                        </td>
+                        <td>
+                            {{ item.courseName }}
                         </td>
                         <td>
                             <v-btn
@@ -149,122 +149,122 @@
 
 <script>
 import {mapGetters} from "vuex"
+
 export default {
     name: "CoursesView",
-	data () {
-		return {
-			showAddingForm: false,
-			search: '',
-			formValid: true,
-			updating: false,
-			errorText: "",
-			course: {
-				course_number: null,
-				course_name: "",
-				faculty_id: null
-			},
-			numberRules: [
-				v => !!v || 'Поле является обязательным для заполнения',
-				v => Number.isInteger(Number(v)) || "Значение должно быть целым числом"
-			],
-			commonRules: [
-				v => !!v || 'Поле является обязательным для заполнения'
-			],
-			headers: [
-				{
-					text: 'Номер курса',
-					align: 'start',
-					value: 'courseNumber',
-				},
-				{ text: 'Название факультета', value: 'facultyName' },
-				{ text: 'Название курса', value: 'courseName' },
-				{ text: 'Действия', value: 'actions', sortable: false }
-			],
-		}
-	},
-	mounted() {
-		this.$store.dispatch('loadAllCourses');
-		this.$store.dispatch('loadAllFaculties');
-	},
-	methods: {
-		openAddingForm() {
-			this.errorText = "";
-			this.resetCourse();
-			this.updating = false;
-			this.showAddingForm = true;
-		},
-		sendData() {
-			this.formValid = this.$refs.submitForm.validate();
-			if(!this.formValid)
-				return;
-			this.errorText = "";
-			if(!this.updating) {
-				this.$store.dispatch('addCourse', this.course)
-					.then(() => {
-						this.resetCourse();
-						this.showAddingForm = false;
-						this.$store.dispatch('loadAllCourses');
-					})
-					.catch(() => {
-						this.errorText = "Произошла ошибка добавления записи.";
-					});
-			}
-			else {
-				this.$store.dispatch('updateCourse', this.course)
-					.then(() => {
-						this.resetCourse();
-						this.showAddingForm = false;
-						this.$store.dispatch('loadAllCourses');
-					})
-					.catch(() => {
-						this.errorText = "Произошла ошибка обновления записи.";
-					});
-			}
-		},
-		resetCourse() {
-			this.course.course_name = "";
-			this.course.course_number = null;
-			this.course.faculty_id = null;
-		},
-		deleteCourse(id) {
-			this.$confirm("Вы действительно хотите удалить данную запись?")
-				.then((result) => {
-					if (result) {
-						this.$store.dispatch('deleteCourse', id)
-							.then(() => {
-								this.resetCourse();
-								this.$store.dispatch('loadAllCourses');
-							})
-							.catch(() => {
-								this.resetCourse();
-								this.$notify({
-									group: 'admin-actions',
-									title: 'Ошибка',
-									text: 'Невозможно удалить запись',
-									type: 'error'
-								});
-							})
-					}
-				});
-		},
-		startUpdatingCourse(id) {
-			this.errorText = "";
-			this.course.id = id;
-			this.$store.dispatch('loadCourseById', id)
-				.then((response) => {
-					this.course.id = response.data.id;
-					this.course.course_name = response.data.courseName;
-					this.course.course_number = response.data.courseNumber;
-					this.course.faculty_id = response.data.facultyId;
-					this.updating = true;
-					this.showAddingForm = true;
-				})
-		}
-	},
-	computed: {
-		...mapGetters(['COURSES']),
-		...mapGetters(['FACULTIES'])
-	}
+    data() {
+        return {
+            showAddingForm: false,
+            search: '',
+            formValid: true,
+            updating: false,
+            errorText: "",
+            course: {
+                course_number: null,
+                course_name: "",
+                faculty_id: null
+            },
+            numberRules: [
+                v => !!v || 'Поле является обязательным для заполнения',
+                v => Number.isInteger(Number(v)) || "Значение должно быть целым числом"
+            ],
+            commonRules: [
+                v => !!v || 'Поле является обязательным для заполнения'
+            ],
+            headers: [
+                {
+                    text: 'Номер курса',
+                    align: 'start',
+                    value: 'courseNumber',
+                },
+                {text: 'Название факультета', value: 'facultyName'},
+                {text: 'Название курса', value: 'courseName'},
+                {text: 'Действия', value: 'actions', sortable: false}
+            ],
+        }
+    },
+    mounted() {
+        this.$store.dispatch('loadAllCourses');
+        this.$store.dispatch('loadAllFaculties');
+    },
+    methods: {
+        openAddingForm() {
+            this.errorText = "";
+            this.resetCourse();
+            this.updating = false;
+            this.showAddingForm = true;
+        },
+        sendData() {
+            this.formValid = this.$refs.submitForm.validate();
+            if (!this.formValid)
+                return;
+            this.errorText = "";
+            if (!this.updating) {
+                this.$store.dispatch('addCourse', this.course)
+                    .then(() => {
+                        this.resetCourse();
+                        this.showAddingForm = false;
+                        this.$store.dispatch('loadAllCourses');
+                    })
+                    .catch(() => {
+                        this.errorText = "Произошла ошибка добавления записи.";
+                    });
+            } else {
+                this.$store.dispatch('updateCourse', this.course)
+                    .then(() => {
+                        this.resetCourse();
+                        this.showAddingForm = false;
+                        this.$store.dispatch('loadAllCourses');
+                    })
+                    .catch(() => {
+                        this.errorText = "Произошла ошибка обновления записи.";
+                    });
+            }
+        },
+        resetCourse() {
+            this.course.course_name = "";
+            this.course.course_number = null;
+            this.course.faculty_id = null;
+        },
+        deleteCourse(id) {
+            this.$confirm("Вы действительно хотите удалить данную запись?")
+                .then((result) => {
+                    if (result) {
+                        this.$store.dispatch('deleteCourse', id)
+                            .then(() => {
+                                this.resetCourse();
+                                this.$store.dispatch('loadAllCourses');
+                            })
+                            .catch(() => {
+                                this.resetCourse();
+                                this.$notify({
+                                    group: 'admin-actions',
+                                    title: 'Ошибка',
+                                    text: 'Невозможно удалить запись',
+                                    type: 'error'
+                                });
+                            })
+                    }
+                });
+        },
+        startUpdatingCourse(id) {
+            this.errorText = "";
+            this.course.id = id;
+            this.$store.dispatch('loadCourseById', id)
+                .then((response) => {
+                    this.course.id = response.data.id;
+                    this.course.course_name = response.data.courseName;
+                    this.course.course_number = response.data.courseNumber;
+                    this.course.faculty_id = response.data.facultyId;
+                    this.updating = true;
+                    this.showAddingForm = true;
+                })
+        }
+    },
+    computed: {
+        ...mapGetters(['COURSES']),
+        ...mapGetters(['FACULTIES'])
+    }
 }
 </script>
 

@@ -17,7 +17,7 @@ let oidcClient = new Oidc.UserManager({
     silent_redirect_uri: "http://localhost:8080/silent-renew.html",
     monitorSession: false,
     silentRequestTimeout: 10000000000,
-	revokeAccessTokenOnSignout: true
+    revokeAccessTokenOnSignout: true
 });
 
 Oidc.Log.logger = console;
@@ -30,8 +30,7 @@ oidcClient.events.addUserLoaded((user) => {
             'Authorization': 'Bearer ' + localStorage.getItem('apiKey')
         }
         notificationsHub.recreateConnection();
-    }
-    catch (e) {
+    } catch (e) {
         console.log(e);
     }
 });

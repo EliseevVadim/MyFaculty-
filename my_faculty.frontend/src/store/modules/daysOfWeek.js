@@ -2,33 +2,33 @@ import axios from "axios";
 import {config} from "@/config/config";
 
 const state = {
-	daysOfWeek : []
+    daysOfWeek: []
 };
 
 const getters = {
-	DAYS_OF_WEEK: state => {
-		return state.daysOfWeek;
-	}
+    DAYS_OF_WEEK: state => {
+        return state.daysOfWeek;
+    }
 };
 
 const mutations = {
-	setDaysOfWeek(state, payload) {
-		state.daysOfWeek = payload;
-	}
+    setDaysOfWeek(state, payload) {
+        state.daysOfWeek = payload;
+    }
 };
 
 const actions = {
-	loadAllDaysOfWeek: async (context) => {
-		await axios.get(config.apiUrl + '/api/daysOfWeek')
-			.then((response) => {
-				context.commit('setDaysOfWeek', response.data);
-			})
-	}
+    loadAllDaysOfWeek: async (context) => {
+        await axios.get(config.apiUrl + '/api/daysOfWeek')
+            .then((response) => {
+                context.commit('setDaysOfWeek', response.data);
+            })
+    }
 };
 
 export default {
-	state,
-	getters,
-	mutations,
-	actions,
+    state,
+    getters,
+    mutations,
+    actions,
 };

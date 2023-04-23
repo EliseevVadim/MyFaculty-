@@ -20,10 +20,11 @@
         >
             <v-card>
                 <v-card-title>
-                    <span class="text-h5">{{updating ? 'Обновить мета-информацию о паре' : 'Добавить мета-информацию о паре'}}</span>
+                    <span
+                        class="text-h5">{{ updating ? 'Обновить мета-информацию о паре' : 'Добавить мета-информацию о паре' }}</span>
                 </v-card-title>
                 <v-card-text>
-                    <h2 class="text-center red--text">{{errorText}}</h2>
+                    <h2 class="text-center red--text">{{ errorText }}</h2>
                     <v-container>
                         <v-form
                             lazy-validation
@@ -103,13 +104,13 @@
                     <tbody>
                     <tr v-for="(item,index) in items" :key="index">
                         <td>
-                            {{item.pairNumber}}
+                            {{ item.pairNumber }}
                         </td>
                         <td>
-                            {{item.startTime}}
+                            {{ item.startTime }}
                         </td>
                         <td>
-                            {{item.endTime}}
+                            {{ item.endTime }}
                         </td>
                         <td>
                             <v-btn
@@ -146,118 +147,118 @@
 
 <script>
 import {mapGetters} from "vuex";
+
 export default {
     name: "PairInfosView",
     data() {
-		return {
-			showAddingForm: false,
-			search: '',
-			formValid: true,
-			updating: false,
-			errorText: "",
-			pairInfo: {
-				pair_number: null,
-				start_time: "",
-				end_time: ""
-			},
-			commonRules: [
-				v => !!v || 'Поле является обязательным для заполнения'
-			],
-			numberRules: [
-				v => !!v || 'Поле является обязательным для заполнения',
-				v => Number.isInteger(Number(v)) || "Значение должно быть целым числом"
-			],
-			headers: [
-				{
-					text: 'Номер пары',
-					align: 'start',
-					value: 'pairNumber',
-				},
-				{ text: 'Начало', value: 'startTime' },
-				{ text: 'Конец', value: 'endTime' },
-				{ text: 'Действия ', value: 'actions', sortable: false }
-			]
+        return {
+            showAddingForm: false,
+            search: '',
+            formValid: true,
+            updating: false,
+            errorText: "",
+            pairInfo: {
+                pair_number: null,
+                start_time: "",
+                end_time: ""
+            },
+            commonRules: [
+                v => !!v || 'Поле является обязательным для заполнения'
+            ],
+            numberRules: [
+                v => !!v || 'Поле является обязательным для заполнения',
+                v => Number.isInteger(Number(v)) || "Значение должно быть целым числом"
+            ],
+            headers: [
+                {
+                    text: 'Номер пары',
+                    align: 'start',
+                    value: 'pairNumber',
+                },
+                {text: 'Начало', value: 'startTime'},
+                {text: 'Конец', value: 'endTime'},
+                {text: 'Действия ', value: 'actions', sortable: false}
+            ]
         }
     },
-	mounted() {
-		this.$store.dispatch('loadAllPairInfos');
-	},
-	methods: {
-		openAddingForm() {
-			this.errorText = "";
-			this.resetPairInfo();
-			this.updating = false;
-			this.showAddingForm = true;
-		},
-		sendData() {
-			this.formValid = this.$refs.submitForm.validate();
-			if(!this.formValid)
-				return;
-			this.errorText = "";
-			if(!this.updating) {
-				this.$store.dispatch('addPairInfo', this.pairInfo)
-					.then(() => {
-						this.resetPairInfo();
-						this.showAddingForm = false;
-						this.$store.dispatch('loadAllPairInfos');
-					})
-					.catch(() => {
-						this.errorText = "Произошла ошибка добавления записи.";
-					});
-			}
-			else {
-				this.$store.dispatch('updatePairInfo', this.pairInfo)
-					.then(() => {
-						this.resetPairInfo();
-						this.showAddingForm = false;
-						this.$store.dispatch('loadAllPairInfos');
-					})
-					.catch(() => {
-						this.errorText = "Произошла ошибка обновления записи.";
-					});
-			}
-		},
-		resetPairInfo() {
-			this.pairInfo.pair_number = null;
-			this.pairInfo.start_time = "";
-			this.pairInfo.end_time = "";
-		},
-		deletePairInfo(id) {
-			this.$confirm("Вы действительно хотите удалить данную запись?")
-				.then((result) => {
-					if (result) {
-						this.$store.dispatch('deletePairInfo', id)
-							.then(() => {
-								this.resetPairInfo();
-								this.$store.dispatch('loadAllPairInfos');
-							})
-							.catch(() => {
-								this.resetPairInfo();
-								this.$notify({
-									group: 'admin-actions',
-									title: 'Ошибка',
-									text: 'Невозможно удалить запись',
-									type: 'error'
-								});
-							})
-					}
-				});
-		},
-		startUpdatingPairInfo(id) {
-			this.errorText = "";
-			this.pairInfo.id = id;
-			this.$store.dispatch('loadPairInfoById', id)
-				.then((response) => {
-					this.pairInfo.pair_number = response.data.pairNumber;
-					this.pairInfo.start_time = response.data.startTime;
-					this.pairInfo.end_time = response.data.endTime;
-					this.updating = true;
-					this.showAddingForm = true;
-				})
-		}
-	},
+    mounted() {
+        this.$store.dispatch('loadAllPairInfos');
+    },
+    methods: {
+        openAddingForm() {
+            this.errorText = "";
+            this.resetPairInfo();
+            this.updating = false;
+            this.showAddingForm = true;
+        },
+        sendData() {
+            this.formValid = this.$refs.submitForm.validate();
+            if (!this.formValid)
+                return;
+            this.errorText = "";
+            if (!this.updating) {
+                this.$store.dispatch('addPairInfo', this.pairInfo)
+                    .then(() => {
+                        this.resetPairInfo();
+                        this.showAddingForm = false;
+                        this.$store.dispatch('loadAllPairInfos');
+                    })
+                    .catch(() => {
+                        this.errorText = "Произошла ошибка добавления записи.";
+                    });
+            } else {
+                this.$store.dispatch('updatePairInfo', this.pairInfo)
+                    .then(() => {
+                        this.resetPairInfo();
+                        this.showAddingForm = false;
+                        this.$store.dispatch('loadAllPairInfos');
+                    })
+                    .catch(() => {
+                        this.errorText = "Произошла ошибка обновления записи.";
+                    });
+            }
+        },
+        resetPairInfo() {
+            this.pairInfo.pair_number = null;
+            this.pairInfo.start_time = "";
+            this.pairInfo.end_time = "";
+        },
+        deletePairInfo(id) {
+            this.$confirm("Вы действительно хотите удалить данную запись?")
+                .then((result) => {
+                    if (result) {
+                        this.$store.dispatch('deletePairInfo', id)
+                            .then(() => {
+                                this.resetPairInfo();
+                                this.$store.dispatch('loadAllPairInfos');
+                            })
+                            .catch(() => {
+                                this.resetPairInfo();
+                                this.$notify({
+                                    group: 'admin-actions',
+                                    title: 'Ошибка',
+                                    text: 'Невозможно удалить запись',
+                                    type: 'error'
+                                });
+                            })
+                    }
+                });
+        },
+        startUpdatingPairInfo(id) {
+            this.errorText = "";
+            this.pairInfo.id = id;
+            this.$store.dispatch('loadPairInfoById', id)
+                .then((response) => {
+                    this.pairInfo.pair_number = response.data.pairNumber;
+                    this.pairInfo.start_time = response.data.startTime;
+                    this.pairInfo.end_time = response.data.endTime;
+                    this.updating = true;
+                    this.showAddingForm = true;
+                })
+        }
+    },
     computed: {
-		...mapGetters(['PAIR_INFOS'])
+        ...mapGetters(['PAIR_INFOS'])
     }
 }
 </script>

@@ -12,7 +12,7 @@ import SecurityService from './services/authService';
 import * as d3 from "d3";
 import LoadingScreen from "@/components/LoadingScreen";
 import BackgroundColorService from './services/backgroundColorService';
-import { TiptapVuetifyPlugin } from 'tiptap-vuetify'
+import {TiptapVuetifyPlugin} from 'tiptap-vuetify'
 import 'tiptap-vuetify/dist/main.css';
 import VueFileAgent from 'vue-file-agent';
 import VueFileAgentStyles from 'vue-file-agent/dist/vue-file-agent.css';

@@ -1,6 +1,6 @@
 <template>
     <div>
-		<NotAuthorizedAdminPage v-if="!userAuthorized"/>
+        <NotAuthorizedAdminPage v-if="!userAuthorized"/>
         <v-app v-else>
             <v-app-bar
                 color="deep-purple accent-4"
@@ -17,19 +17,19 @@
                 >
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn
-							tile
-							v-bind="attrs"
-							v-on="on"
+                            tile
+                            v-bind="attrs"
+                            v-on="on"
                         >
                             <v-icon left>
                                 mdi-account-circle
                             </v-icon>
-                            Добро пожаловать, {{userName}}
+                            Добро пожаловать, {{ userName }}
                         </v-btn>
                     </template>
                     <v-list>
                         <v-list-item-group
-							active-class="deep-purple--text text--accent-4"
+                            active-class="deep-purple--text text--accent-4"
                         >
                             <v-list-item @click="logout">
                                 <v-list-item-icon>
@@ -60,9 +60,9 @@
                         active-class="deep-purple--text text--accent-4"
                     >
                         <v-list-item @click="hideSidebar"
-                            v-for="(item, i) in items"
-                            :key="i"
-                            :to="item.path">
+                                     v-for="(item, i) in items"
+                                     :key="i"
+                                     :to="item.path">
                             <v-list-item-icon>
                                 <v-icon v-text="item.icon"></v-icon>
                             </v-list-item-icon>
@@ -76,13 +76,13 @@
                         :value="false"
                         prepend-icon="mdi-tools"
                     >
-						<v-subheader>Служебные</v-subheader>
+                        <v-subheader>Служебные</v-subheader>
                         <v-list-item
-                                v-for="([title, icon, path], i) in services"
-                                :key="i"
-                                link
-                                :to="path"
-                                @click="hideSidebar"
+                            v-for="([title, icon, path], i) in services"
+                            :key="i"
+                            link
+                            :to="path"
+                            @click="hideSidebar"
                         >
                             <v-list-item-icon>
                                 <v-icon v-text="icon"></v-icon>
@@ -90,25 +90,25 @@
                             <v-list-item-title class="text-left" v-text="title"></v-list-item-title>
                         </v-list-item>
                     </v-list-item-group>
-					<v-divider></v-divider>
-					<v-list-item-group
-						:value="false"
-						prepend-icon="mdi-tools"
-					>
-						<v-subheader>Работа с пользователями</v-subheader>
-						<v-list-item
-							v-for="([title, icon, path], i) in usersActions"
-							:key="i"
-							link
-							:to="path"
-							@click="hideSidebar"
-						>
-							<v-list-item-icon>
-								<v-icon v-text="icon"></v-icon>
-							</v-list-item-icon>
-							<v-list-item-title class="text-left" v-text="title"></v-list-item-title>
-						</v-list-item>
-					</v-list-item-group>
+                    <v-divider></v-divider>
+                    <v-list-item-group
+                        :value="false"
+                        prepend-icon="mdi-tools"
+                    >
+                        <v-subheader>Работа с пользователями</v-subheader>
+                        <v-list-item
+                            v-for="([title, icon, path], i) in usersActions"
+                            :key="i"
+                            link
+                            :to="path"
+                            @click="hideSidebar"
+                        >
+                            <v-list-item-icon>
+                                <v-icon v-text="icon"></v-icon>
+                            </v-list-item-icon>
+                            <v-list-item-title class="text-left" v-text="title"></v-list-item-title>
+                        </v-list-item>
+                    </v-list-item-group>
                 </v-list>
             </v-navigation-drawer>
             <v-main>
@@ -120,44 +120,45 @@
 
 <script>
 import NotAuthorizedAdminPage from "@/components/AccountComponents/core/service-pages/NotAuthorizedAdminPage";
+
 export default {
     name: "AdminPageView",
-	components: {NotAuthorizedAdminPage},
-	data() {
+    components: {NotAuthorizedAdminPage},
+    data() {
         return {
             userAuthorized: null,
-			userName: null,
+            userName: null,
             drawer: false,
             items: [
-				{text : "Факультеты", icon : "mdi-floor-plan", path: '/adminPanel/faculties'},
-                {text : "Этажи", icon : "mdi-floor-plan", path: '/adminPanel/floors'},
-                {text : "Преподаватели", icon : "mdi-account-school", path: '/adminPanel/teachers'},
-                {text : "Аудитории", icon : "mdi-cellphone-link", path: '/adminPanel/auditoriums'},
-                {text : "Вторичные объекты", icon : "mdi-stairs", path: '/adminPanel/secondaryObjects'},
-                {text : "Пары", icon : "mdi-calendar-check", path: '/adminPanel/pairs'},
-                {text : "Дисциплины", icon : "mdi-playlist-check", path: '/adminPanel/disciplines'},
-                {text : "Курсы", icon : "mdi-star", path: '/adminPanel/courses'},
-                {text : "Группы", icon : "mdi-account-multiple", path: '/adminPanel/groups'}
+                {text: "Факультеты", icon: "mdi-floor-plan", path: '/adminPanel/faculties'},
+                {text: "Этажи", icon: "mdi-floor-plan", path: '/adminPanel/floors'},
+                {text: "Преподаватели", icon: "mdi-account-school", path: '/adminPanel/teachers'},
+                {text: "Аудитории", icon: "mdi-cellphone-link", path: '/adminPanel/auditoriums'},
+                {text: "Вторичные объекты", icon: "mdi-stairs", path: '/adminPanel/secondaryObjects'},
+                {text: "Пары", icon: "mdi-calendar-check", path: '/adminPanel/pairs'},
+                {text: "Дисциплины", icon: "mdi-playlist-check", path: '/adminPanel/disciplines'},
+                {text: "Курсы", icon: "mdi-star", path: '/adminPanel/courses'},
+                {text: "Группы", icon: "mdi-account-multiple", path: '/adminPanel/groups'}
             ],
             services: [
                 ['Ученые звания', 'mdi-trophy-award', '/adminPanel/scienceRanks'],
                 ['Информация о парах', 'mdi-information-variant', '/adminPanel/pairInfos'],
                 ['Типы вторичных объектов', 'mdi-map-legend', '/adminPanel/secondaryObjectTypes'],
                 ['Назначение дисциплин', 'mdi-clipboard-check', '/adminPanel/teachersDisciplines'],
-				['Страны', 'mdi-earth', '/adminPanel/countries'],
-				['Регионы', 'mdi-earth-box', '/adminPanel/regions'],
-				['Города', 'mdi-city', '/adminPanel/cities'],
+                ['Страны', 'mdi-earth', '/adminPanel/countries'],
+                ['Регионы', 'mdi-earth-box', '/adminPanel/regions'],
+                ['Города', 'mdi-city', '/adminPanel/cities'],
             ],
-			usersActions: [
-				['Работа с группами', 'mdi-account-multiple', '/adminPanel/usersGroups']
-			]
+            usersActions: [
+                ['Работа с группами', 'mdi-account-multiple', '/adminPanel/usersGroups']
+            ]
         }
     },
     async mounted() {
-		document.title = "Страница администратора";
+        document.title = "Страница администратора";
         this.userAuthorized = await this.$oidc.isAdmin();
-		let profile = await this.$oidc.getUserProfile();
-		this.userName = profile.FirstName;
+        let profile = await this.$oidc.getUserProfile();
+        this.userName = profile.FirstName;
     },
     async updated() {
         this.userAuthorized = await this.$oidc.isAdmin();
@@ -174,7 +175,7 @@ export default {
 </script>
 
 <style scoped>
-    v-list-item-title {
-        text-align: left;
-    }
+v-list-item-title {
+    text-align: left;
+}
 </style>
