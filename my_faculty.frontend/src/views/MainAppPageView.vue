@@ -11,7 +11,7 @@
                 class="d-flex d-md-none">
             </v-app-bar-nav-icon>
             <a href="/">
-                <img :src="'img/icons/logo.ico'" alt="#" width="50" height="50">
+                <img :src="'img/icons/logo.svg'" alt="#" width="70" height="70">
             </a>
             <v-toolbar-title class="ml-2">MyFaculty</v-toolbar-title>
             <v-spacer></v-spacer>
