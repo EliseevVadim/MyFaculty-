@@ -1,4 +1,4 @@
-import {HubConnectionBuilder, LogLevel} from "@aspnet/signalr";
+import {HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
 import {config} from "@/config/config";
 
 function createConnection() {
@@ -10,40 +10,49 @@ function createConnection() {
         .build();
 }
 
-const connection = createConnection();
+let connection = createConnection();
+let hub = null;
 
 export default {
-    connection,
     install(Vue) {
-        const hub = new Vue();
+        hub = new Vue();
         Vue.prototype.$notificationsHub = hub;
-        this.startConnection();
-        connection.on('loadNotifications', () => {
-            hub.$emit('loadNotifications');
-        });
+        this.startConnection(hub);
     },
     startConnection() {
         let connectionPromise = null;
-        connectionPromise = connection.start().catch((error) => {
-            console.log('cannot connect to the hub', error);
-            console.log('Reconnecting...');
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    this.startConnection().then(resolve).catch(reject);
-                }, 5000);
+        connectionPromise = connection.start()
+            .then(() => {
+                this.initializeListeners();
             })
-        });
+            .catch((error) => {
+                console.log('cannot connect to the hub', error);
+                console.log('Reconnecting...');
+                return new Promise((resolve, reject) => {
+                    console.log(connection.state);
+                    if (connection.state === HubConnectionState.Connected)
+                        return;
+                    setTimeout(() => {
+                        this.startConnection().then(resolve).catch(reject);
+                    }, 5000);
+                })
+            });
         return connectionPromise;
     },
     recreateConnection() {
         try {
             connection.stop()
                 .then(() => {
-                    this.connection = createConnection();
+                    connection = createConnection();
                     this.startConnection();
                 });
         } catch (e) {
             console.log(e);
         }
+    },
+    initializeListeners() {
+        connection.on('loadNotifications', () => {
+            hub.$emit('loadNotifications');
+        });
     }
 }

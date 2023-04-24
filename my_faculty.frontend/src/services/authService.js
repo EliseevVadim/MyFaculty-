@@ -82,7 +82,11 @@ export default new class SecurityService {
     }
 
     logout() {
-        oidcClient.signoutRedirect();
+        oidcClient.signoutRedirect()
+            .then(() => {
+                localStorage.removeItem('apiKey');
+                notificationsHub.recreateConnection();
+            });
     }
 
     completeLogout() {

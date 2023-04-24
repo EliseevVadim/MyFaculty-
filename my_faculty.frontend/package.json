@@ -7,8 +7,8 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@aspnet/signalr": "^1.0.27",
     "@mdi/font": "^7.0.96",
+    "@microsoft/signalr": "^7.0.5",
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "d3": "^7.6.1",
