@@ -26,6 +26,7 @@ namespace MyFaculty.Application.Dto
         public string FacultyName { get; set; }
         public string CourseName { get; set; }
         public string GroupName { get; set; }
+        public bool IsBanned { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -44,7 +45,8 @@ namespace MyFaculty.Application.Dto
                 .ForMember(dto => dto.CountryName, options => options.MapFrom(user => user.City.Region.Country.CountryName))
                 .ForMember(dto => dto.FacultyName, options => options.MapFrom(user => user.Faculty.FacultyName))
                 .ForMember(dto => dto.CourseName, options => options.MapFrom(user => user.Course.CourseName))
-                .ForMember(dto => dto.GroupName, options => options.MapFrom(user => user.Group.GroupName));
+                .ForMember(dto => dto.GroupName, options => options.MapFrom(user => user.Group.GroupName))
+                .ForMember(dto => dto.IsBanned, options => options.MapFrom(user => user.IsBanned));
         }
     }
 }

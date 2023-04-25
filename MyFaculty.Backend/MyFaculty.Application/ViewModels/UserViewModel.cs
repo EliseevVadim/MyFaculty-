@@ -32,6 +32,7 @@ namespace MyFaculty.Application.ViewModels
         public string Website { get; set; }
         public string VKLink { get; set; }
         public string TelegramLink { get; set; }
+        public bool IsBanned { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -55,7 +56,8 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.InformationPublicsAtMembership, options => options.MapFrom(user => user.InformationPublics))
                 .ForMember(vm => vm.Website, options => options.MapFrom(user => user.Website))
                 .ForMember(vm => vm.VKLink, options => options.MapFrom(user => user.VKLink))
-                .ForMember(vm => vm.TelegramLink, options => options.MapFrom(user => user.TelegramLink));
+                .ForMember(vm => vm.TelegramLink, options => options.MapFrom(user => user.TelegramLink))
+                .ForMember(vm => vm.IsBanned, options => options.MapFrom(user => user.IsBanned));
         }
     }
 }

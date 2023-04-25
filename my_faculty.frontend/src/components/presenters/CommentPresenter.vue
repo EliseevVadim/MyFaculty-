@@ -10,6 +10,12 @@
         <div class="d-flex" :id="'comment_' + comment.id">
             <v-list-item-avatar class="align-self-end">
                 <v-img
+                    v-if="comment.author.isBanned"
+                    class="author-avatar"
+                    src="../img/banned.jpg"
+                />
+                <v-img
+                    v-else
                     class="author-avatar"
                     :src="comment.author.avatarPath ? comment.author.avatarPath : '../img/blank-club.png'"
                 />

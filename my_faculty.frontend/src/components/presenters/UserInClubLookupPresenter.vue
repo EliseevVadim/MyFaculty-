@@ -5,6 +5,17 @@
             class="text-decoration-none"
         >
             <v-img
+                v-if="user.isBanned"
+                aspect-ratio="1"
+                min-width="150"
+                min-height="150"
+                max-width="150"
+                max-height="150"
+                class="user-image"
+                src="../img/banned.jpg"
+            />
+            <v-img
+                v-else
                 aspect-ratio="1"
                 min-width="150"
                 min-height="150"

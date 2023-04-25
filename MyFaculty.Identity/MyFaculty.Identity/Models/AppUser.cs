@@ -13,5 +13,6 @@ namespace MyFaculty.Identity.Models
         public string Website { get; set; }
         public string VKLink { get; set; }
         public string TelegramLink { get; set; }
+        public bool IsBanned { get; set; }
     }
 }

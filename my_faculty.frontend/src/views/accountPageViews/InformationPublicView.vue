@@ -239,6 +239,12 @@
                                     contain
                                 >
                                     <v-img
+                                        v-if="watchingPublic.owner.isBanned"
+                                        class="user-image"
+                                        src="../img/banned.jpg"
+                                    />
+                                    <v-img
+                                        v-else
                                         class="user-image"
                                         :src="watchingPublic.owner.avatarPath ? watchingPublic.owner.avatarPath : '../img/blank-item.png'"
                                     />

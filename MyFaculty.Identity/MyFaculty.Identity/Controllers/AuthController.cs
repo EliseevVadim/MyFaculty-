@@ -49,6 +49,11 @@ namespace MyFaculty.Identity.Controllers
                 viewModel.ErrorMessage = "Пользователь с введенными параметрами не найден.";
                 return View(viewModel);
             }
+            if (user.IsBanned)
+            {
+                viewModel.ErrorMessage = "Пользователь с введенными параметрами заблокирован за нарушение правил сайта.";
+                return View(viewModel);
+            }
             var result = await _signInManager.PasswordSignInAsync(user, viewModel.Password, false, false);
             if (result.Succeeded)
             {

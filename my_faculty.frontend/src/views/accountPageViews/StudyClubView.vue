@@ -260,6 +260,12 @@
                                     contain
                                 >
                                     <v-img
+                                        v-if="watchingClub.owner.isBanned"
+                                        class="user-image"
+                                        src="../img/banned.jpg"
+                                    />
+                                    <v-img
+                                        v-else
                                         class="user-image"
                                         :src="watchingClub.owner.avatarPath ? watchingClub.owner.avatarPath : '../img/blank-item.png'"
                                     />

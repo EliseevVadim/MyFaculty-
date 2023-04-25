@@ -2,10 +2,9 @@
     <div>
         <ErrorPage v-if="userNotFound" errorCode="404" message="Пользователь не найден"></ErrorPage>
         <v-container
-            v-else
             fluid
             class="h-100"
-            v-if="Object.keys(watchingProfile).length !== 0"
+            v-else-if="Object.keys(watchingProfile).length !== 0 && !watchingProfile.isBanned"
         >
             <v-row class="d-flex justify-center">
                 <h1
@@ -161,6 +160,43 @@
                             </v-col>
                         </v-col>
                     </v-row>
+                </v-col>
+            </v-row>
+        </v-container>
+        <v-container
+            fluid
+            class="h-100"
+            v-else
+        >
+            <v-row class="d-flex justify-center">
+                <h1
+                    class="pb-5"
+                >
+                    {{ getFullName() }}
+                </h1>
+            </v-row>
+            <v-row
+                class="d-flex"
+            >
+                <v-col
+                    class="d-flex d-sm-block col-sm-3 col-12 justify-center"
+                >
+                    <v-img
+                        contain
+                        max-width="200"
+                        src="img/banned.jpg"
+                        class="text-center profile-avatar"
+                    >
+                    </v-img>
+                </v-col>
+                <v-col
+                    class="d-flex flex-column justify-center col-sm-9 col-12"
+                >
+                    <h2
+                        class="mt-2 black--text"
+                    >
+                        Пользователь был заблокирован за нарушение правил сайта.
+                    </h2>
                 </v-col>
             </v-row>
         </v-container>

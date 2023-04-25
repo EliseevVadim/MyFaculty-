@@ -57,6 +57,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.Property(user => user.Website).IsRequired(false);
             builder.Property(user => user.VKLink).IsRequired(false);
             builder.Property(user => user.TelegramLink).IsRequired(false);
+            builder.Property(user => user.IsBanned).HasDefaultValue(false);
         }
     }
 }
