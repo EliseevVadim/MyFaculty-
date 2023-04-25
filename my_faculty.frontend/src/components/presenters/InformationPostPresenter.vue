@@ -153,6 +153,24 @@
             </div>
             <div v-if="post.commentsAllowed">
                 <v-divider></v-divider>
+                <v-row
+                    v-if="currentUserCanLoadExcelDumpOfComments()"
+                    class="d-flex justify-center my-1"
+                >
+                    <v-btn
+                        :x-small="$vuetify.breakpoint.mobile"
+                        color="success"
+                        class="ma-2 white--text"
+                        @click="downloadCommentsAsExcelDump"
+                    >
+                        <v-icon
+                            left
+                        >
+                            mdi-cloud-download
+                        </v-icon>
+                        Скачать комментарии как Excel
+                    </v-btn>
+                </v-row>
                 <v-container
                     @click="showComments = true"
                     class="comments-invoker d-flex"
@@ -239,6 +257,10 @@ export default {
         },
         currentUserLikesPost() {
             return this.post.likedUsers.find(user => user.id == this.$oidc.currentUserId) !== undefined;
+        },
+        currentUserCanLoadExcelDumpOfComments() {
+            return this.post.owner.moderatorsIds && this.post.owner.moderatorsIds
+                .indexOf(parseInt(this.$oidc.currentUserId)) !== -1;
         },
         processAttachments() {
             let attachments = JSON.parse(this.post.attachments);
@@ -345,13 +367,39 @@ export default {
                                     title: 'Ошибка',
                                     text: error.response.data.error,
                                     type: 'error'
-                                })
+                                });
                             })
                             .finally(() => {
                                 this.$loading(false);
                             })
                     }
                 })
+        },
+        downloadCommentsAsExcelDump() {
+            this.$store.dispatch('loadExcelDumpOfCommentsByPostId', this.post.id)
+                .then((response) => {
+                    let blob = new Blob([response.data]);
+                    let filename = `comments_for_post_${this.post.id}_at_${new Date().toLocaleString()}.xlsx`;
+                    let a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = filename;
+                    a.dispatchEvent(new MouseEvent('click'));
+                    this.$notify({
+                        group: 'admin-actions',
+                        title: 'Успешная операция',
+                        text: 'Комментарии успешно выгружены',
+                        type: 'success'
+                    });
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.$notify({
+                        group: 'admin-actions',
+                        title: 'Ошибка',
+                        text: error.response.data.error,
+                        type: 'error'
+                    });
+                });
         },
         reloadPosts() {
             this.$emit('load');

@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
+using MyFaculty.Application.Dto;
 using MyFaculty.Application.Features.Comments.Commands.CreateComment;
 using MyFaculty.Application.Features.Comments.Commands.DeleteComment;
 using MyFaculty.Application.Features.Comments.Commands.UpdateComment;
 using MyFaculty.Application.Features.Comments.Queries.GetCommentsForPost;
+using MyFaculty.Application.Features.Comments.Queries.GetExcelDumpOfCommentsForPost;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using MyFaculty.WebApi.Hubs;
@@ -65,6 +67,31 @@ namespace MyFaculty.WebApi.Controllers
             };
             CommentsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the excel dump from the list of comments for a specific post
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /comments/excel/post/1
+        /// </remarks>
+        /// <param name="id">Specific post id (integer)</param>
+        /// <returns>Returns File</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("excel/post/{id}")]
+        [Authorize(Roles = "Teacher")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAsExcelDumpByPostId(int id)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            GetExcelDumpOfCommentsForPostQuery query = new GetExcelDumpOfCommentsForPostQuery()
+            {
+                PostId = id,
+                IssuerId = requesterId
+            };
+            ExcelFileInfoDto dto = await Mediator.Send(query);
+            return File(dto.Content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "result.xlsx");
         }
 
         /// <summary>

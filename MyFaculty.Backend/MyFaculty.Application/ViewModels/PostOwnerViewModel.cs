@@ -14,5 +14,6 @@ namespace MyFaculty.Application.ViewModels
         public string OwnerName { get; set; }
         public string OwnerAvatar { get; set; }
         public string OwnerLink { get; set; }
+        public List<int> ModeratorsIds { get; set; }
     }
 }

@@ -26,6 +26,20 @@ const actions = {
                 context.commit('setComments', response.data);
             })
     },
+    loadExcelDumpOfCommentsByPostId: async (context, postId) => {
+        return new Promise(async (resolve, reject) => {
+            await axios.get(config.apiUrl + '/api/comments/excel/post/' + postId, {
+                headers: config.headers,
+                responseType: "blob"
+            })
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+        })
+    },
     addComment: (context, payload) => {
         return new Promise(async (resolve, reject) => {
             let formData = new FormData();

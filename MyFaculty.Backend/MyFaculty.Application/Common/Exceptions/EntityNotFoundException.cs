@@ -10,5 +10,8 @@ namespace MyFaculty.Application.Common.Exceptions
     {
         public EntityNotFoundException(string name, object key)
             :base($"Entity \"{name}\" ({key}) not found") { }
+
+        public EntityNotFoundException(string message)
+            :base(message) { }
     }
 }

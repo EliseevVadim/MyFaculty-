@@ -43,6 +43,8 @@ namespace MyFaculty.Application.Features.Newsfeed.Queries.GeneratePostsNewsfeedF
                     .ThenInclude(infoPublic => infoPublic.InfoPosts)
                         .ThenInclude(infoPost => infoPost.LikedUsers)
                 .Include(user => user.StudyClubs)
+                    .ThenInclude(club => club.Moderators)
+                .Include(user => user.StudyClubs)
                     .ThenInclude(club => club.InfoPosts)
                         .ThenInclude(infoPost => infoPost.OwningStudyClub)
                 .Include(user => user.StudyClubs)
@@ -53,7 +55,7 @@ namespace MyFaculty.Application.Features.Newsfeed.Queries.GeneratePostsNewsfeedF
                         .ThenInclude(infoPost => infoPost.Comments)
                 .Include(user => user.StudyClubs)
                     .ThenInclude(club => club.InfoPosts)
-                        .ThenInclude(infoPost => infoPost.LikedUsers)
+                        .ThenInclude(infoPost => infoPost.LikedUsers)             
                 .FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
             if (user == null)
                 throw new EntityNotFoundException(nameof(AppUser), request.UserId);

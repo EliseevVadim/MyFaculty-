@@ -35,7 +35,8 @@ namespace MyFaculty.Application.ViewModels
                 {
                     OwnerName = infoPost.OwningStudyClub.ClubName,
                     OwnerAvatar = infoPost.OwningStudyClub.ImagePath,
-                    OwnerLink = $"clubs/{infoPost.OwningStudyClub.Id}"
+                    OwnerLink = $"clubs/{infoPost.OwningStudyClub.Id}",
+                    ModeratorsIds = infoPost.OwningStudyClub.Moderators.Select(user => user.Id).ToList()
                 }))
                 .ForMember(vm => vm.LikedUsers, options => options.MapFrom(infoPost => infoPost.LikedUsers))
                 .ForMember(vm => vm.CommentsAllowed, options => options.MapFrom(infoPost => infoPost.CommentsAllowed));
