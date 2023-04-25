@@ -107,6 +107,39 @@ const actions = {
                     reject(error)
                 });
         })
+    },
+    banUser: (context, payload) => {
+        return new Promise(async (resolve, reject) => {
+            await axios.post(config.apiUrl + '/api/users/ban', {
+                'bannedUserId': payload.targetUserId,
+                'reason': payload.reason
+            }, {
+                headers: config.headers
+            })
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+        })
+    },
+    unbanUser: (context, payload) => {
+        return new Promise(async (resolve, reject) => {
+            console.log(payload);
+            await axios.post(config.apiUrl + '/api/users/unban', {
+                'unbannedUserId': payload.targetUserId,
+                'reason': payload.reason
+            }, {
+                headers: config.headers
+            })
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+        })
     }
 };
 

@@ -39,5 +39,7 @@ namespace MyFaculty.Domain.Entities
         public List<TaskSubmission> TaskSubmissions { get; set; }
         public List<TaskSubmissionReview> SubmissionReviews { get; set; }
         public List<Notification> Notifications { get; set; }
+        public List<UserBanReport> AppliedBanActions { get; set; }
+        public List<UserBanReport> PerformedBanActions { get; set; }
     }
 }

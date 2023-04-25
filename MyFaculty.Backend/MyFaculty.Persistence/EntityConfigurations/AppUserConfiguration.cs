@@ -53,6 +53,12 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasMany(user => user.Notifications)
                 .WithOne(notification => notification.NotifiedUser)
                 .HasForeignKey(notification => notification.UserId);
+            builder.HasMany(user => user.AppliedBanActions)
+                .WithOne(banReport => banReport.AffectedUser)
+                .HasForeignKey(banReport => banReport.AffectedUserId);
+            builder.HasMany(user => user.PerformedBanActions)
+                .WithOne(banReport => banReport.Administrator)
+                .HasForeignKey(banReport => banReport.AdministratorId);
             builder.Property(user => user.IsTeacher).HasDefaultValue(false);
             builder.Property(user => user.Website).IsRequired(false);
             builder.Property(user => user.VKLink).IsRequired(false);

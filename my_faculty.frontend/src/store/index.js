@@ -28,6 +28,7 @@ import comments from "@/store/modules/comments";
 import taskSubmissions from "@/store/modules/taskSubmissions";
 import taskSubmissionReviews from "@/store/modules/taskSubmissionReviews";
 import notifications from "@/store/modules/notifications";
+import administrativeReports from "@/store/modules/administrativeReports";
 
 Vue.use(Vuex)
 
@@ -64,6 +65,7 @@ export default new Vuex.Store({
         comments,
         taskSubmissions,
         taskSubmissionReviews,
-        notifications
+        notifications,
+        administrativeReports
     }
 })
