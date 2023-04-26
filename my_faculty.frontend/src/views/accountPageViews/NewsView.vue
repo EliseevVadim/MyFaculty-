@@ -103,6 +103,7 @@ export default {
         }
     },
     mounted() {
+        document.title = this.$route.name;
         this.displayingContent = this.newsfeedContentType.InfoPosts;
         this.loadInfoPosts();
     },

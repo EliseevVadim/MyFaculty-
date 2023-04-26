@@ -116,6 +116,7 @@ export default {
         }
     },
     async mounted() {
+        document.title = this.$route.name;
         this.userAuthorized = await this.$oidc.isTeacher();
     },
     async updated() {

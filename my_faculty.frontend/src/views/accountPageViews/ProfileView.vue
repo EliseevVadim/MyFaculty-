@@ -548,6 +548,9 @@ export default {
                 });
         }
     },
+    mounted() {
+        document.title = this.$route.name;
+    },
     computed: {
         ...mapGetters(['CURRENT_USER']),
         ...mapGetters(['COUNTRIES']),

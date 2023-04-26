@@ -111,6 +111,9 @@ export default {
             this.infoPublic.image = null;
             this.infoPublic.ownerId = null;
         }
+    },
+    mounted() {
+        document.title = this.$route.name;
     }
 }
 </script>
