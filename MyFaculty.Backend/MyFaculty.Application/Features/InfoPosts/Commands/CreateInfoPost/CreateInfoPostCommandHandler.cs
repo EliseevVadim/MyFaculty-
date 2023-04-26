@@ -32,7 +32,20 @@ namespace MyFaculty.Application.Features.InfoPosts.Commands.CreateInfoPost
                 StudyClub studyClub = await _context.StudyClubs
                     .Include(club => club.Moderators)
                     .FirstOrDefaultAsync(club => club.Id == request.StudyClubId);
+                if (studyClub == null)
+                    throw new EntityNotFoundException(nameof(StudyClub), request.StudyClubId);
                 if (!studyClub.Moderators.Select(user => user.Id).Contains(request.AuthorId))
+                    throw new UnauthorizedAccessException("Данное действие Вам запрещено.");
+            }
+            else
+            {
+                InformationPublic informationPublic = await _context.InformationPublics
+                    .FirstOrDefaultAsync(infoPublic => infoPublic.Id == request.InfoPublicId);
+                if (informationPublic == null)
+                    throw new EntityNotFoundException(nameof(InformationPublic), request.InfoPublicId);
+                if (informationPublic.IsBanned)
+                    throw new DestructiveActionException("Вы не можете выложить запись в это сообщество, поскольку оно заблокировано.");
+                if (informationPublic.OwnerId != request.AuthorId)
                     throw new UnauthorizedAccessException("Данное действие Вам запрещено.");
             }
             InfoPost infoPost = new InfoPost()

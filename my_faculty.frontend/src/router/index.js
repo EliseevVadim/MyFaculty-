@@ -149,6 +149,11 @@ const routes = [
                 name: 'banUsers',
                 component: () => import('../views/adminPageViews/UsersBansView')
             },
+            {
+                path: '/adminPanel/banPublics',
+                name: 'banPublics',
+                component: () => import('../views/adminPageViews/PublicsBansView')
+            }
         ]
     },
     {

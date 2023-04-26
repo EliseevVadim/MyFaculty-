@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFaculty.Domain.Enums
 {
-    public enum UserBanAction
+    public enum BanAction
     {
         Banned = 1,
         Unbanned = 2

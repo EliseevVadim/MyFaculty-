@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace MyFaculty.Persistence.EntityConfigurations
 {
-    public class UserBanReportConfiguration : IEntityTypeConfiguration<UserBanReport>
+    public class InformationPublicBanReportConfiguration : IEntityTypeConfiguration<InformationPublicBanReport>
     {
-        public void Configure(EntityTypeBuilder<UserBanReport> builder)
+        public void Configure(EntityTypeBuilder<InformationPublicBanReport> builder)
         {
             builder.HasKey(banReport => banReport.Id);
             builder.Property(banReport => banReport.Id).ValueGeneratedOnAdd();
@@ -23,11 +23,11 @@ namespace MyFaculty.Persistence.EntityConfigurations
                     value => value.ToString(),
                     value => (BanAction)Enum.Parse(typeof(BanAction), value)
                 );
-            builder.HasOne(banReport => banReport.AffectedUser)
-                .WithMany(user => user.AppliedBanActions)
-                .HasForeignKey(banReport => banReport.AffectedUserId);
+            builder.HasOne(banReport => banReport.AffectedPublic)
+                .WithMany(infoPublic => infoPublic.AppliedBanReports)
+                .HasForeignKey(banReport => banReport.PublicId);
             builder.HasOne(banReport => banReport.Administrator)
-                .WithMany(user => user.PerformedBanActions)
+                .WithMany(user => user.InformationsPublicBanReports)
                 .HasForeignKey(banReport => banReport.AdministratorId);
         }
     }

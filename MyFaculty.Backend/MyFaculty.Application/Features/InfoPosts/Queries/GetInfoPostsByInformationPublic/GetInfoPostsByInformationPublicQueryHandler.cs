@@ -31,7 +31,7 @@ namespace MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPostsByInforma
             InformationPublic informationPublic = await _context.InformationPublics
                 .Include(infoPublic => infoPublic.BlockedUsers)
                 .FirstOrDefaultAsync(infoPublic => infoPublic.Id == request.PublicId);
-            if (informationPublic == null)
+            if (informationPublic == null || informationPublic.IsBanned)
                 throw new EntityNotFoundException(nameof(InformationPublic), request.PublicId);
             if (informationPublic.BlockedUsers.Select(user => user.Id).Contains(request.IssuerId))
                 throw new DestructiveActionException("Вы не можете просмотреть записи сообщества, в котором были заблокированы");

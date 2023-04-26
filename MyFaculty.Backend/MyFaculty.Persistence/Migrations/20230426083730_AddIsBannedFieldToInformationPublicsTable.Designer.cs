@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyFaculty.Persistence;
 
 namespace MyFaculty.Persistence.Migrations
 {
     [DbContext(typeof(MFDbContext))]
-    partial class MFDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230426083730_AddIsBannedFieldToInformationPublicsTable")]
+    partial class AddIsBannedFieldToInformationPublicsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -500,11 +502,6 @@ namespace MyFaculty.Persistence.Migrations
                     b.Property<string>("ImagePath")
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("IsBanned")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
-                        .HasDefaultValue(false);
-
                     b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
@@ -523,38 +520,6 @@ namespace MyFaculty.Persistence.Migrations
                         .IsUnique();
 
                     b.ToTable("InformationPublics");
-                });
-
-            modelBuilder.Entity("MyFaculty.Domain.Entities.InformationPublicBanReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("AdministratorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("PerformedAction")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("PublicId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdministratorId");
-
-                    b.HasIndex("PublicId");
-
-                    b.ToTable("InformationPublicsBansReports");
                 });
 
             modelBuilder.Entity("MyFaculty.Domain.Entities.Notification", b =>
@@ -690,19 +655,19 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 4, 26, 12, 12, 5, 162, DateTimeKind.Local).AddTicks(5917),
+                            Created = new DateTime(2023, 4, 26, 11, 37, 29, 242, DateTimeKind.Local).AddTicks(185),
                             RepeatingName = "Каждую неделю"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 4, 26, 12, 12, 5, 162, DateTimeKind.Local).AddTicks(6485),
+                            Created = new DateTime(2023, 4, 26, 11, 37, 29, 242, DateTimeKind.Local).AddTicks(725),
                             RepeatingName = "По верхней неделе"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2023, 4, 26, 12, 12, 5, 162, DateTimeKind.Local).AddTicks(6494),
+                            Created = new DateTime(2023, 4, 26, 11, 37, 29, 242, DateTimeKind.Local).AddTicks(735),
                             RepeatingName = "По нижней неделе"
                         });
                 });
@@ -1091,37 +1056,37 @@ namespace MyFaculty.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            Created = new DateTime(2023, 4, 26, 12, 12, 5, 83, DateTimeKind.Local).AddTicks(545),
+                            Created = new DateTime(2023, 4, 26, 11, 37, 29, 164, DateTimeKind.Local).AddTicks(5277),
                             DaysName = "Понедельник"
                         },
                         new
                         {
                             Id = 2,
-                            Created = new DateTime(2023, 4, 26, 12, 12, 5, 87, DateTimeKind.Local).AddTicks(2331),
+                            Created = new DateTime(2023, 4, 26, 11, 37, 29, 168, DateTimeKind.Local).AddTicks(6838),
                             DaysName = "Вторник"
                         },
                         new
                         {
                             Id = 3,
-                            Created = new DateTime(2023, 4, 26, 12, 12, 5, 87, DateTimeKind.Local).AddTicks(2366),
+                            Created = new DateTime(2023, 4, 26, 11, 37, 29, 168, DateTimeKind.Local).AddTicks(6865),
                             DaysName = "Среда"
                         },
                         new
                         {
                             Id = 4,
-                            Created = new DateTime(2023, 4, 26, 12, 12, 5, 87, DateTimeKind.Local).AddTicks(2370),
+                            Created = new DateTime(2023, 4, 26, 11, 37, 29, 168, DateTimeKind.Local).AddTicks(6868),
                             DaysName = "Четверг"
                         },
                         new
                         {
                             Id = 5,
-                            Created = new DateTime(2023, 4, 26, 12, 12, 5, 87, DateTimeKind.Local).AddTicks(2372),
+                            Created = new DateTime(2023, 4, 26, 11, 37, 29, 168, DateTimeKind.Local).AddTicks(6870),
                             DaysName = "Пятница"
                         },
                         new
                         {
                             Id = 6,
-                            Created = new DateTime(2023, 4, 26, 12, 12, 5, 87, DateTimeKind.Local).AddTicks(2374),
+                            Created = new DateTime(2023, 4, 26, 11, 37, 29, 168, DateTimeKind.Local).AddTicks(6872),
                             DaysName = "Суббота"
                         });
                 });
@@ -1400,25 +1365,6 @@ namespace MyFaculty.Persistence.Migrations
                     b.Navigation("Owner");
                 });
 
-            modelBuilder.Entity("MyFaculty.Domain.Entities.InformationPublicBanReport", b =>
-                {
-                    b.HasOne("MyFaculty.Domain.Entities.AppUser", "Administrator")
-                        .WithMany("InformationsPublicBanReports")
-                        .HasForeignKey("AdministratorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyFaculty.Domain.Entities.InformationPublic", "AffectedPublic")
-                        .WithMany("AppliedBanReports")
-                        .HasForeignKey("PublicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Administrator");
-
-                    b.Navigation("AffectedPublic");
-                });
-
             modelBuilder.Entity("MyFaculty.Domain.Entities.Notification", b =>
                 {
                     b.HasOne("MyFaculty.Domain.Entities.AppUser", "NotifiedUser")
@@ -1672,8 +1618,6 @@ namespace MyFaculty.Persistence.Migrations
 
                     b.Navigation("Comments");
 
-                    b.Navigation("InformationsPublicBanReports");
-
                     b.Navigation("Notifications");
 
                     b.Navigation("OwnedInformationPublics");
@@ -1762,8 +1706,6 @@ namespace MyFaculty.Persistence.Migrations
 
             modelBuilder.Entity("MyFaculty.Domain.Entities.InformationPublic", b =>
                 {
-                    b.Navigation("AppliedBanReports");
-
                     b.Navigation("InfoPosts");
                 });
 

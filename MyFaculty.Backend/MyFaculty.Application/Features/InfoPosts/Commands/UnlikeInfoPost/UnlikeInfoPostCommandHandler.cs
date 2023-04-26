@@ -28,7 +28,7 @@ namespace MyFaculty.Application.Features.InfoPosts.Commands.UnlikeInfoPost
                     .ThenInclude(infoPublic => infoPublic.BlockedUsers)
                 .Include(post => post.LikedUsers)
                 .FirstOrDefaultAsync(post => post.Id == request.LikedPostId, cancellationToken);
-            if (infoPost == null)
+            if (infoPost == null || (infoPost.OwningInformationPublic != null && infoPost.OwningInformationPublic.IsBanned))
                 throw new EntityNotFoundException(nameof(InfoPost), request.LikedPostId);
             AppUser user = await _context.Users.FindAsync(new object[] { request.LikedUserId }, cancellationToken);
             if (user == null)

@@ -29,7 +29,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.UnblockUser
             InformationPublic infoPublic = await _context.InformationPublics
                 .Include(club => club.BlockedUsers)
                 .FirstOrDefaultAsync(club => club.Id == request.PublicId, cancellationToken);
-            if (infoPublic == null)
+            if (infoPublic == null || infoPublic.IsBanned)
                 throw new EntityNotFoundException(nameof(InformationPublic), request.PublicId);
             if (!infoPublic.BlockedUsers.Contains(unblockingUser))
                 throw new DestructiveActionException("Пользователь не заблокирован.");

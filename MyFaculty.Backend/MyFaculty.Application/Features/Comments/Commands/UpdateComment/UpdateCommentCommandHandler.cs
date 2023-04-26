@@ -40,6 +40,8 @@ namespace MyFaculty.Application.Features.Comments.Commands.UpdateComment
                     .Include(infoPost => infoPost.OwningInformationPublic)
                         .ThenInclude(infoPublic => infoPublic.BlockedUsers)
                     .FirstOrDefaultAsync(infoPost => infoPost.Id == updatingComment.Post.Id);
+                if (infoPost.OwningInformationPublic != null && infoPost.OwningInformationPublic.IsBanned)
+                    throw new EntityNotFoundException(nameof(InfoPost), infoPost.Id);
                 if (infoPost.OwningInformationPublic != null
                     && infoPost
                         .OwningInformationPublic

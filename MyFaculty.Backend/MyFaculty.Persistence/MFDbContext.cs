@@ -50,6 +50,7 @@ namespace MyFaculty.Persistence
         public DbSet<TaskSubmissionReview> TaskSubmissionReviews { get; set; } = null!;
         public DbSet<Notification> Notifications { get; set; } = null!;
         public DbSet<UserBanReport> UsersBansReports { get; set; } = null!;
+        public DbSet<InformationPublicBanReport> InformationPublicsBansReports { get; set; } = null!;
         public DbSet<ExpertSystemState> ExpertSystemStates { get; set; } = null!;
         public DbSet<ExpertSystemStateTransition> ExpertSystemStateTransitions { get; set; } = null!;
         public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; } = null!;

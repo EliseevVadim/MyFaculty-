@@ -172,7 +172,8 @@ export default {
                 ['Работа с группами', 'mdi-account-multiple', '/adminPanel/usersGroups']
             ],
             bansActions: [
-                ['Блокировка пользователей', 'mdi-account-off', '/adminPanel/banUsers']
+                ['Блокировка пользователей', 'mdi-account-off', '/adminPanel/banUsers'],
+                ['Блокировка сообществ', 'mdi-account-multiple-minus', '/adminPanel/banPublics']
             ]
         }
     },

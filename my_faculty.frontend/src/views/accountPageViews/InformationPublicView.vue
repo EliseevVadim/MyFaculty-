@@ -139,7 +139,7 @@
         <ErrorPage v-if="publicNotFound" error-code="404" message="Информационное сообщество не найдено"/>
         <v-container
             fluid
-            v-if="Object.keys(watchingPublic).length !== 0"
+            v-if="Object.keys(watchingPublic).length !== 0 && !watchingPublic.isBanned"
         >
             <v-row class="d-flex justify-start ma-1 mt-3">
                 <h1
@@ -297,6 +297,77 @@
                     @load="loadInfoPosts"
                 />
             </v-container>
+        </v-container>
+        <v-container
+            fluid
+            v-else-if="watchingPublic.isBanned"
+        >
+            <v-row class="d-flex justify-start ma-1 mt-3">
+                <h1
+                    class="public-name"
+                >
+                    {{ watchingPublic.publicName }}
+                </h1>
+                <v-spacer class="d-block"></v-spacer>
+                <v-menu
+                    v-if="currentUserIsMember()"
+                    bottom
+                    left
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon>mdi-dots-horizontal</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-item ripple>
+                            <v-list-item-title
+                                class="public-menu-option"
+                                @click="leaveInfoPublic"
+                            >
+                                Покинуть сообщество
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+            </v-row>
+            <v-divider></v-divider>
+            <h3
+                v-if="currentUserIsBlocked()"
+                class="black--text mt-5"
+            >
+                Вы были заблокированы в этом сообществе. Просмотр контента недоступен.
+            </h3>
+            <v-row
+                v-else
+                class="d-flex mt-2 mb-2 flex-column-reverse flex-sm-row"
+            >
+                <v-col
+                    class="d-flex flex-column justify-center col-sm-9 col-12"
+                >
+                    <h2
+                        class="mt-2 black--text"
+                    >
+                        Сообщество был заблокировано за нарушение правил сайта.
+                    </h2>
+                </v-col>
+                <v-col
+                    class="d-flex col-12 col-sm-3 justify-center justify-sm-end"
+                >
+                    <v-img
+                        aspect-ratio="1"
+                        max-width="150"
+                        max-height="150"
+                        src="../img/banned.jpg"
+                        class="public-photo"
+                    >
+                    </v-img>
+                </v-col>
+            </v-row>
         </v-container>
     </div>
 </template>

@@ -43,6 +43,7 @@ namespace MyFaculty.Application.Common.Interfaces
         public DbSet<TaskSubmissionReview> TaskSubmissionReviews { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<UserBanReport> UsersBansReports { get; set; }
+        public DbSet<InformationPublicBanReport> InformationPublicsBansReports { get; set; }
         public DbSet<ExpertSystemState> ExpertSystemStates { get; set; }
         public DbSet<ExpertSystemStateTransition> ExpertSystemStateTransitions { get; set; }
         public DbSet<ExpertSystemAnswer> ExpertSystemAnswers { get; set; }

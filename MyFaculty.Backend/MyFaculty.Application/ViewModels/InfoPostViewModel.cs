@@ -29,14 +29,16 @@ namespace MyFaculty.Application.ViewModels
                 {
                     OwnerName = infoPost.OwningInformationPublic.PublicName,
                     OwnerAvatar = infoPost.OwningInformationPublic.ImagePath,
-                    OwnerLink = $"public{infoPost.OwningInformationPublic.Id}"
+                    OwnerLink = $"public{infoPost.OwningInformationPublic.Id}",
+                    IsBanned = infoPost.OwningInformationPublic.IsBanned
                 } : 
                 new PostOwnerViewModel()
                 {
                     OwnerName = infoPost.OwningStudyClub.ClubName,
                     OwnerAvatar = infoPost.OwningStudyClub.ImagePath,
                     OwnerLink = $"clubs/{infoPost.OwningStudyClub.Id}",
-                    ModeratorsIds = infoPost.OwningStudyClub.Moderators.Select(user => user.Id).ToList()
+                    ModeratorsIds = infoPost.OwningStudyClub.Moderators.Select(user => user.Id).ToList(),
+                    IsBanned = false
                 }))
                 .ForMember(vm => vm.LikedUsers, options => options.MapFrom(infoPost => infoPost.LikedUsers))
                 .ForMember(vm => vm.CommentsAllowed, options => options.MapFrom(infoPost => infoPost.CommentsAllowed));

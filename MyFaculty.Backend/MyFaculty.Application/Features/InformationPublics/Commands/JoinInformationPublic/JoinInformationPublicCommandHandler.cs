@@ -26,7 +26,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.JoinInforma
             InformationPublic informationPublic = await _context.InformationPublics
                 .Include(infoPublic => infoPublic.BlockedUsers)
                 .FirstOrDefaultAsync(infoPublic => infoPublic.Id == request.PublicId, cancellationToken);
-            if (informationPublic == null)
+            if (informationPublic == null || informationPublic.IsBanned)
                 throw new EntityNotFoundException(nameof(InformationPublic), request.PublicId);
             if (informationPublic.BlockedUsers.Select(user => user.Id).Contains(request.UserId))
                 throw new DestructiveActionException("Вы не можете вступить в это сообщество, так как были там заблокированы");

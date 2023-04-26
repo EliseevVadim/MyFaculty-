@@ -30,7 +30,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.BlockUserAt
                 .Include(club => club.Members)
                 .Include(club => club.BlockedUsers)
                 .FirstOrDefaultAsync(club => club.Id == request.PublicId, cancellationToken);
-            if (infoPublic == null)
+            if (infoPublic == null || infoPublic.IsBanned)
                 throw new EntityNotFoundException(nameof(InformationPublic), request.PublicId);
             if (!infoPublic.Members.Contains(blockingUser))
                 throw new DestructiveActionException("Пользователь не является членом сообщества.");

@@ -61,6 +61,7 @@ namespace MyFaculty.Application.Features.Newsfeed.Queries.GeneratePostsNewsfeedF
                 throw new EntityNotFoundException(nameof(AppUser), request.UserId);
             var infoPosts = user.InformationPublics
                 .SelectMany(infoPublic => infoPublic.InfoPosts)
+                .Where(infoPost => !infoPost.OwningInformationPublic.IsBanned)
                 .Concat(user.StudyClubs.SelectMany(club => club.InfoPosts))
                 .OrderByDescending(infoPost => infoPost.Created)
                 .Take(POSTS_COUNT_LIMIT)

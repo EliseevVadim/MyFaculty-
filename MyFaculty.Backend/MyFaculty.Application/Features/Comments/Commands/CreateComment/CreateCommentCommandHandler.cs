@@ -38,6 +38,8 @@ namespace MyFaculty.Application.Features.Comments.Commands.CreateComment
                     .Include(infoPost => infoPost.OwningInformationPublic)
                         .ThenInclude(infoPublic => infoPublic.BlockedUsers)
                     .FirstOrDefaultAsync(infoPost => infoPost.Id == request.PostId);
+                if (infoPost.OwningInformationPublic != null && infoPost.OwningInformationPublic.IsBanned)
+                    throw new EntityNotFoundException(nameof(InfoPost), request.PostId);
                 if (infoPost.OwningInformationPublic != null
                     && infoPost
                         .OwningInformationPublic

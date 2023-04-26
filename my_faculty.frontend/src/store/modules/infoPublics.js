@@ -158,6 +158,38 @@ const actions = {
                     reject(error);
                 })
         });
+    },
+    banInfoPublic: (context, payload) => {
+        return new Promise(async (resolve, reject) => {
+            await axios.post(config.apiUrl + '/api/informationpublics/ban', {
+                'bannedPublicId': payload.publicId,
+                'reason': payload.reason
+            }, {
+                headers: config.headers
+            })
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+        })
+    },
+    unbanInfoPublic: (context, payload) => {
+        return new Promise(async (resolve, reject) => {
+            await axios.post(config.apiUrl + '/api/informationpublics/unban', {
+                'unbannedPublicId': payload.publicId,
+                'reason': payload.reason
+            }, {
+                headers: config.headers
+            })
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+        })
     }
 };
 

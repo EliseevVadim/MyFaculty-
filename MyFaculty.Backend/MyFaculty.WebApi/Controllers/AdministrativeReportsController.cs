@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MyFaculty.Application.Features.UsersBansReports.Queries.GetInformationPublicsBansReports;
 using MyFaculty.Application.Features.UsersBansReports.Queries.GetUsersBansReports;
 using MyFaculty.Application.ViewModels;
 using System.Threading.Tasks;
@@ -35,6 +36,25 @@ namespace MyFaculty.WebApi.Controllers
         {
             GetUsersBansReportsQuery query = new GetUsersBansReportsQuery();
             UsersBansReportsListViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the list of information publics bans reports
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /administrativereports/publicsbans
+        /// </remarks>
+        /// <returns>Returns InformationPublicsBansReportsListViewModel</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("publicsbans")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<InformationPublicsBansReportsListViewModel>> GetInformationPublicsBansReports()
+        {
+            GetInformationPublicsBansReportsQuery query = new GetInformationPublicsBansReportsQuery();
+            InformationPublicsBansReportsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
     }

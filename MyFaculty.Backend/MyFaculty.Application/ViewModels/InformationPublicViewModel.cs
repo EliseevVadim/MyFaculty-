@@ -17,6 +17,7 @@ namespace MyFaculty.Application.ViewModels
         public string Description { get; set; }
         public string ImagePath { get; set; }
         public int OwnerId { get; set; }
+        public bool IsBanned { get; set; }
         public UserLookupDto Owner { get; set; }
         public int MembersCount { get; set; }
         public List<UserLookupDto> Members { get; set; }
@@ -32,6 +33,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.Description, options => options.MapFrom(infoPublic => infoPublic.Description))
                 .ForMember(vm => vm.ImagePath, options => options.MapFrom(infoPublic => infoPublic.ImagePath))
                 .ForMember(vm => vm.OwnerId, options => options.MapFrom(infoPublic => infoPublic.OwnerId))
+                .ForMember(vm => vm.IsBanned, options => options.MapFrom(infoPublic => infoPublic.IsBanned))
                 .ForMember(vm => vm.Owner, options => options.MapFrom(infoPublic => infoPublic.Owner))
                 .ForMember(vm => vm.MembersCount, options => options.MapFrom(infoPublic => infoPublic.Members.Count))
                 .ForMember(vm => vm.Members, options => options.MapFrom(infoPublic => infoPublic.Members))

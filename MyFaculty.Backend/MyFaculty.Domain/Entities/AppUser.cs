@@ -41,5 +41,6 @@ namespace MyFaculty.Domain.Entities
         public List<Notification> Notifications { get; set; }
         public List<UserBanReport> AppliedBanActions { get; set; }
         public List<UserBanReport> PerformedBanActions { get; set; }
+        public List<InformationPublicBanReport> InformationsPublicBanReports { get; set; }
     }
 }

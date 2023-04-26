@@ -28,7 +28,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.UpdateInfor
         public async Task<InformationPublicViewModel> Handle(UpdateInformationPublicCommand request, CancellationToken cancellationToken)
         {
             InformationPublic infoPublic = await _context.InformationPublics.FirstOrDefaultAsync(infoPublic => infoPublic.Id == request.Id, cancellationToken);
-            if (infoPublic == null)
+            if (infoPublic == null || infoPublic.IsBanned)
                 throw new EntityNotFoundException(nameof(InformationPublic), request.Id);
             AppUser owner = await _context.Users.FirstOrDefaultAsync(user => user.Id == request.OwnerId);
             if (owner == null)

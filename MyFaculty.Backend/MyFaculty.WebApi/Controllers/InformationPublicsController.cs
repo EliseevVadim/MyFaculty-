@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyFaculty.Application.Features.InformationPublics.Commands.BanInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.BlockUserAtInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.CreateInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.DeleteInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.JoinInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.LeaveInformationPublic;
+using MyFaculty.Application.Features.InformationPublics.Commands.UnbanInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.UnblockUserAtInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.UpdateInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Queries.GetInformationPublicInfo;
@@ -353,6 +355,66 @@ namespace MyFaculty.WebApi.Controllers
             };
             await Mediator.Send(command);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Bans the information public
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /informationpublics/ban
+        /// {
+        ///     "bannedPublicId": 1,
+        ///     "administratorId": 1,
+        ///     "reason": "spam"
+        /// }
+        /// </remarks>
+        /// <param name="banInformationPublicDto">BanInformationPublicDto object</param>
+        /// <returns>Retruns OkResult</returns>
+        /// <response code="200">Sucess</response>
+        /// <response code="403">Forbidden</response> 
+        /// <response code="500">Server error</response>
+        [HttpPost("ban")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Ban([FromBody] BanInformationPublicDto banInformationPublicDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            BanInformationPublicCommand command = _mapper.Map<BanInformationPublicCommand>(banInformationPublicDto);
+            command.AdministratorId = requesterId;
+            await Mediator.Send(command);
+            return Ok();
+        }
+
+        /// <summary>
+        /// Unbans the user
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /informationpublics/unban
+        /// {
+        ///     "unbannedPublicId": 1,
+        ///     "administratorId": 1,
+        ///     "reason": "amnestied"
+        /// }
+        /// </remarks>
+        /// <param name="unbanInformationPublicDto">UnbanUserDto object</param>
+        /// <returns>Retruns OkResult</returns>
+        /// <response code="200">Sucess</response>
+        /// <response code="403">Forbidden</response> 
+        /// <response code="500">Server error</response>
+        [HttpPost("unban")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Unban([FromBody] UnbanInformationPublicDto unbanInformationPublicDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            UnbanInformationPublicCommand command = _mapper.Map<UnbanInformationPublicCommand>(unbanInformationPublicDto);
+            command.AdministratorId = requesterId;
+            await Mediator.Send(command);
+            return Ok();
         }
     }
 }

@@ -1,58 +1,107 @@
 <template>
     <div>
-        <v-divider></v-divider>
-        <v-list-item
-            :key="item.clubName"
-        >
-            <v-list-item-avatar>
-                <v-img
-                    class="public-image"
-                    :src="item.imagePath ? item.imagePath : 'img/blank-club.png'"
-                />
-            </v-list-item-avatar>
+        <div v-if="!item.isBanned">
+            <v-divider></v-divider>
+            <v-list-item
+                :key="item.clubName"
+            >
+                <v-list-item-avatar>
+                    <v-img
+                        class="public-image"
+                        :src="item.imagePath ? item.imagePath : 'img/blank-club.png'"
+                    />
+                </v-list-item-avatar>
 
-            <v-list-item-content class="public-lookup-content">
-                <v-list-item-title>
-                    <router-link class="public-title" :to="'/public' + item.id">{{ item.publicName }}</router-link>
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                    {{ prettifyMembersCount() }}
-                </v-list-item-subtitle>
-            </v-list-item-content>
-            <v-menu
-                v-if="item.currentUserInPublic"
-                bottom
-                left
-            >
-                <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                        icon
-                        v-bind="attrs"
-                        v-on="on"
-                    >
-                        <v-icon>mdi-dots-horizontal</v-icon>
-                    </v-btn>
-                </template>
-                <v-list>
-                    <v-list-item ripple>
-                        <v-list-item-title
-                            class="public-menu-option"
-                            @click="leaveInfoPublic"
+                <v-list-item-content class="public-lookup-content">
+                    <v-list-item-title>
+                        <router-link class="public-title" :to="'/public' + item.id">{{ item.publicName }}</router-link>
+                    </v-list-item-title>
+                    <v-list-item-subtitle>
+                        {{ prettifyMembersCount() }}
+                    </v-list-item-subtitle>
+                </v-list-item-content>
+                <v-menu
+                    v-if="item.currentUserInPublic"
+                    bottom
+                    left
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
                         >
-                            Покинуть сообщество
-                        </v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-            <v-btn
-                v-else
-                color="primary"
-                @click="joinInfoPublic"
+                            <v-icon>mdi-dots-horizontal</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-item ripple>
+                            <v-list-item-title
+                                class="public-menu-option"
+                                @click="leaveInfoPublic"
+                            >
+                                Покинуть сообщество
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+                <v-btn
+                    v-else
+                    color="primary"
+                    @click="joinInfoPublic"
+                >
+                    Вступить
+                </v-btn>
+            </v-list-item>
+            <v-divider></v-divider>
+        </div>
+        <div v-else>
+            <v-divider></v-divider>
+            <v-list-item
+                :key="item.clubName"
             >
-                Вступить
-            </v-btn>
-        </v-list-item>
-        <v-divider></v-divider>
+                <v-list-item-avatar>
+                    <v-img
+                        class="public-image"
+                        src="../img/banned.jpg"
+                    />
+                </v-list-item-avatar>
+
+                <v-list-item-content class="public-lookup-content">
+                    <v-list-item-title>
+                        <router-link class="public-title" :to="'/public' + item.id">
+                            Заблокированное сообщество
+                        </router-link>
+                    </v-list-item-title>
+                </v-list-item-content>
+                <v-menu
+                    v-if="item.currentUserInPublic"
+                    bottom
+                    left
+                >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                            icon
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <v-icon>mdi-dots-horizontal</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-item ripple>
+                            <v-list-item-title
+                                class="public-menu-option"
+                                @click="leaveInfoPublic"
+                            >
+                                Покинуть сообщество
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+            </v-list-item>
+            <v-divider></v-divider>
+        </div>
     </div>
 </template>
 

@@ -34,7 +34,7 @@ namespace MyFaculty.Application.Features.Users.Commands.UnbanUser
                 AffectedUserId = request.UnbannedUserId,
                 AdministratorId = request.AdministratorId,
                 Reason = request.Reason,
-                PerformedAction = UserBanAction.Unbanned,
+                PerformedAction = BanAction.Unbanned,
                 Created = DateTime.Now
             };
             await _context.UsersBansReports.AddAsync(unbanReport, cancellationToken);

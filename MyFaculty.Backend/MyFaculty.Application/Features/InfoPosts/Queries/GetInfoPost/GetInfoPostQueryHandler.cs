@@ -34,7 +34,7 @@ namespace MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPost
                 .Include(post => post.LikedUsers)
                 .Include(post => post.Author)
                 .FirstOrDefaultAsync(infoPost => infoPost.Id == request.Id, cancellationToken);
-            if (infoPost == null)
+            if (infoPost == null || (infoPost.OwningInformationPublic != null && infoPost.OwningInformationPublic.IsBanned))
                 throw new EntityNotFoundException(nameof(InfoPost), request.Id);
             if (infoPost.OwningInformationPublic != null)
                 if (infoPost.OwningInformationPublic.BlockedUsers.Select(user => user.Id).Contains(request.IssuerId))

@@ -126,7 +126,6 @@ const actions = {
     },
     unbanUser: (context, payload) => {
         return new Promise(async (resolve, reject) => {
-            console.log(payload);
             await axios.post(config.apiUrl + '/api/users/unban', {
                 'unbannedUserId': payload.targetUserId,
                 'reason': payload.reason

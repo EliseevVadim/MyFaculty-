@@ -18,6 +18,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.Property(infoPublic => infoPublic.Description).IsRequired(false);
             builder.Property(infoPublic => infoPublic.ImagePath).IsRequired(false);
             builder.Property(infoPublic => infoPublic.PublicName).IsRequired();
+            builder.Property(infoPublic => infoPublic.IsBanned).HasDefaultValue(false);
             builder.HasIndex(infoPublic => infoPublic.PublicName).IsUnique();
             builder.HasOne(infoPublic => infoPublic.Owner)
                 .WithMany(user => user.OwnedInformationPublics)
@@ -28,6 +29,9 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasMany(infoPublic => infoPublic.BlockedUsers)
                 .WithMany(user => user.BlockedPublics)
                 .UsingEntity(j => j.ToTable("UsersBlockedInPublics"));
+            builder.HasMany(infoPublic => infoPublic.AppliedBanReports)
+                .WithOne(banReport => banReport.AffectedPublic)
+                .HasForeignKey(banReport => banReport.PublicId);
         }
     }
 }

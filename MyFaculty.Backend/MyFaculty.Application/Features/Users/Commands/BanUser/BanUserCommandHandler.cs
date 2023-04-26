@@ -35,7 +35,7 @@ namespace MyFaculty.Application.Features.Users.Commands.BanUser
                 AffectedUserId = request.BannedUserId,
                 AdministratorId = request.AdministratorId,
                 Reason = request.Reason,
-                PerformedAction = UserBanAction.Banned,
+                PerformedAction = BanAction.Banned,
                 Created = DateTime.Now
             };
             await _context.ExecuteSqlRawAsync(query);

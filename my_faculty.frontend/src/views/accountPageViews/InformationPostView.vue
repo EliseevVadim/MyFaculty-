@@ -29,7 +29,7 @@
             Вы были заблокированы в сообществе, содержащем эту запись. Просмотр контента недоступен.
         </h3>
         <div
-            v-else-if="Object.keys(watchingPost).length !== 0"
+            v-else-if="Object.keys(watchingPost).length !== 0 && !watchingPost.owner.isBanned"
         >
             <v-container
                 fluid

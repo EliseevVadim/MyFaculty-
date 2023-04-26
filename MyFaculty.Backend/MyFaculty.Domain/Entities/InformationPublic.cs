@@ -17,10 +17,12 @@ namespace MyFaculty.Domain.Entities
         public string Description { get; set; }
         public string ImagePath { get; set; }
         public int OwnerId { get; set; }
+        public bool IsBanned { get; set; }
         public AppUser Owner { get; set; }
         public List<AppUser> Members { get; set; } = new List<AppUser>();
         public List<AppUser> BlockedUsers { get; set; } = new List<AppUser>();
         public List<InfoPost> InfoPosts { get; set; }
+        public List<InformationPublicBanReport> AppliedBanReports { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
     }
