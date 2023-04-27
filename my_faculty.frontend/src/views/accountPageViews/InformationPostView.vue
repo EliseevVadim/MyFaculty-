@@ -65,7 +65,7 @@
                             </v-list-item-subtitle>
                         </v-list-item-content>
                         <v-menu
-                            v-if="currentUserIsPostAuthor()"
+                            v-if="currentUserIsPostAuthor() || currentUserCanDeleteThePost()"
                             bottom
                             left
                         >
@@ -79,7 +79,10 @@
                                 </v-btn>
                             </template>
                             <v-list>
-                                <v-list-item ripple>
+                                <v-list-item
+                                    v-if="currentUserIsPostAuthor()"
+                                    ripple
+                                >
                                     <v-list-item-title
                                         class="post-context-menu-option"
                                         @click="startPostEditing"
@@ -154,7 +157,7 @@
                     </v-row>
                 </div>
             </v-container>
-            <div class="comments-wrapper pt-2">
+            <div v-if="watchingPost.commentsAllowed" class="comments-wrapper pt-2">
                 <div class="comment-form">
                     <CommentForm
                         ref="commentForm"
@@ -357,6 +360,10 @@ export default {
         currentUserIsPostAuthor() {
             return this.watchingPost.authorId == this.$oidc.currentUserId;
         },
+        currentUserCanDeleteThePost() {
+            return this.watchingPost.authorId == this.$oidc.currentUserId ||
+                this.watchingPost.owner.owningUserId == this.$oidc.currentUserId;
+        },
         setReplyingComment(comment) {
             this.$refs.commentForm.setReplyingComment(comment);
         },
@@ -370,7 +377,7 @@ export default {
                 .then((result) => {
                     if (result) {
                         this.$loading(true);
-                        this.$store.dispatch('deleteInfoPost', this.post.id)
+                        this.$store.dispatch('deleteInfoPost', this.watchingPost.id)
                             .then(() => {
                                 this.$notify({
                                     group: 'admin-actions',
@@ -378,7 +385,7 @@ export default {
                                     text: 'Запись успешно удалена',
                                     type: 'success'
                                 });
-                                this.$emit('load');
+                                this.loadPost(this.$route.params.id);
                             })
                             .catch((error) => {
                                 this.$notify({

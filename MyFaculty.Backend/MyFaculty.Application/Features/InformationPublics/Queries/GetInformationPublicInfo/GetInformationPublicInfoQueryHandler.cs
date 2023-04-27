@@ -29,6 +29,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Queries.GetInformati
         {
             InformationPublic infoPublic = await _context.InformationPublics
                 .Include(infoPublic => infoPublic.Members)
+                .Include(infoPublic => infoPublic.Moderators)
                 .Include(infoPublic => infoPublic.BlockedUsers)
                 .FirstOrDefaultAsync(infoPublic => infoPublic.Id == request.Id, cancellationToken);
             if (infoPublic == null)

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.ViewModels;
@@ -26,10 +27,12 @@ namespace MyFaculty.Application.Features.ClubTasks.Commands.DeleteClubTask
 
         public async Task<ClubTaskViewModel> Handle(DeleteClubTaskCommand request, CancellationToken cancellationToken)
         {
-            ClubTask task = await _context.ClubTasks.FindAsync(new object[] { request.Id }, cancellationToken);
+            ClubTask task = await _context.ClubTasks
+                .Include(task => task.OwningStudyClub)
+                .FirstOrDefaultAsync(task => task.Id == request.Id);
             if (task == null)
                 throw new EntityNotFoundException(nameof(ClubTask), request.Id);
-            if (task.AuthorId != request.IssuerId)
+            if (task.AuthorId != request.IssuerId && task.OwningStudyClub.OwnerId != request.IssuerId)
                 throw new UnauthorizedActionException("Данное действие Вам запрещено.");
             _context.ClubTasks.Remove(task);
             await _context.SaveChangesAsync(cancellationToken);

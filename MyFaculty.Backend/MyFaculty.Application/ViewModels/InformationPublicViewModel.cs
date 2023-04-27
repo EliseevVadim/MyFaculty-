@@ -21,6 +21,7 @@ namespace MyFaculty.Application.ViewModels
         public UserLookupDto Owner { get; set; }
         public int MembersCount { get; set; }
         public List<UserLookupDto> Members { get; set; }
+        public List<UserLookupDto> Moderators { get; set; }
         public List<UserLookupDto> BlockedUsers { get; set; }
         public DateTime Created { get; set; }
         public DateTime? Updated { get; set; }
@@ -37,6 +38,7 @@ namespace MyFaculty.Application.ViewModels
                 .ForMember(vm => vm.Owner, options => options.MapFrom(infoPublic => infoPublic.Owner))
                 .ForMember(vm => vm.MembersCount, options => options.MapFrom(infoPublic => infoPublic.Members.Count))
                 .ForMember(vm => vm.Members, options => options.MapFrom(infoPublic => infoPublic.Members))
+                .ForMember(vm => vm.Moderators, options => options.MapFrom(infoPublic => infoPublic.Moderators))
                 .ForMember(vm => vm.BlockedUsers, options => options.MapFrom(infoPublic => infoPublic.BlockedUsers))
                 .ForMember(vm => vm.Created, options => options.MapFrom(infoPublic => infoPublic.Created))
                 .ForMember(vm => vm.Updated, options => options.MapFrom(infoPublic => infoPublic.Updated));

@@ -30,7 +30,8 @@ namespace MyFaculty.Application.ViewModels
                     OwnerName = infoPost.OwningInformationPublic.PublicName,
                     OwnerAvatar = infoPost.OwningInformationPublic.ImagePath,
                     OwnerLink = $"public{infoPost.OwningInformationPublic.Id}",
-                    IsBanned = infoPost.OwningInformationPublic.IsBanned
+                    IsBanned = infoPost.OwningInformationPublic.IsBanned,
+                    OwningUserId = infoPost.OwningInformationPublic.OwnerId
                 } : 
                 new PostOwnerViewModel()
                 {
@@ -38,7 +39,8 @@ namespace MyFaculty.Application.ViewModels
                     OwnerAvatar = infoPost.OwningStudyClub.ImagePath,
                     OwnerLink = $"clubs/{infoPost.OwningStudyClub.Id}",
                     ModeratorsIds = infoPost.OwningStudyClub.Moderators.Select(user => user.Id).ToList(),
-                    IsBanned = false
+                    IsBanned = false,
+                    OwningUserId = infoPost.OwningStudyClub.OwnerId
                 }))
                 .ForMember(vm => vm.LikedUsers, options => options.MapFrom(infoPost => infoPost.LikedUsers))
                 .ForMember(vm => vm.CommentsAllowed, options => options.MapFrom(infoPost => infoPost.CommentsAllowed));

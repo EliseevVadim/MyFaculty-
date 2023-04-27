@@ -27,13 +27,14 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.UnblockUser
             if (unblockingUser == null)
                 throw new EntityNotFoundException(nameof(AppUser), request.UserId);
             InformationPublic infoPublic = await _context.InformationPublics
-                .Include(club => club.BlockedUsers)
+                .Include(infoPublic => infoPublic.Moderators)
+                .Include(infoPublic => infoPublic.BlockedUsers)
                 .FirstOrDefaultAsync(club => club.Id == request.PublicId, cancellationToken);
             if (infoPublic == null || infoPublic.IsBanned)
                 throw new EntityNotFoundException(nameof(InformationPublic), request.PublicId);
             if (!infoPublic.BlockedUsers.Contains(unblockingUser))
                 throw new DestructiveActionException("Пользователь не заблокирован.");
-            if (infoPublic.OwnerId != request.IssuerId)
+            if (!infoPublic.Moderators.Any(user => user.Id == request.IssuerId))
                 throw new UnauthorizedActionException("Данное действие Вам запрещено.");
             infoPublic.BlockedUsers.Remove(unblockingUser);
             await _context.SaveChangesAsync(cancellationToken);

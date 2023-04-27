@@ -3,16 +3,25 @@
         <UsersListModal
             :show="showMembers"
             :users="watchingPublic.members"
-            :context-menu-authorization-checker="currentUserIsPublicOwner"
+            :context-menu-authorization-checker="currentUserIsModerator"
             :user-has-full-access="currentUserIsPublicOwner()"
             :context-actions="membersActions"
             title="Участники сообщества"
             @close="showMembers = false"
         />
         <UsersListModal
+            :show="showModerators"
+            :users="watchingPublic.moderators"
+            :context-menu-authorization-checker="currentUserIsPublicOwner"
+            :user-has-full-access="currentUserIsPublicOwner()"
+            :context-actions="moderatorsActions"
+            title="Модераторы сообщества"
+            @close="showModerators = false"
+        />
+        <UsersListModal
             :show="showBanned"
             :users="watchingPublic.blockedUsers"
-            :context-menu-authorization-checker="currentUserIsPublicOwner"
+            :context-menu-authorization-checker="currentUserIsModerator"
             :user-has-full-access="currentUserIsPublicOwner()"
             :context-actions="bannedUsersActions"
             title="Заблокированные пользователи"
@@ -218,8 +227,12 @@
                         <b>Участников: </b>
                         <span>{{ watchingPublic.membersCount }}</span>
                     </v-col>
+                    <v-col class="mt-0 modal-invoker" @click="showModerators = true">
+                        <b>Модераторов: </b>
+                        <span>{{ watchingPublic.moderators.length }}</span>
+                    </v-col>
                     <v-col
-                        v-if="currentUserIsPublicOwner()"
+                        v-if="currentUserIsModerator()"
                         class="mt-0 modal-invoker"
                         @click="showBanned = true"
                     >
@@ -278,7 +291,7 @@
             <v-row class="mt-1">
                 <v-card-actions>
                     <v-btn
-                        v-if="currentUserIsPublicOwner()"
+                        v-if="currentUserIsModerator()"
                         color="primary"
                         @click="showPostCreationForm = true"
                     >
@@ -411,6 +424,7 @@ export default {
             formValid: true,
             publicNotFound: false,
             showMembers: false,
+            showModerators: false,
             showBanned: false,
             showEditingForm: false,
             showPostCreationForm: false,
@@ -418,6 +432,18 @@ export default {
                 {
                     title: "Удалить из сообщества и заблокировать",
                     method: this.removeAndBlockMember,
+                    requireFullAccess: false
+                },
+                {
+                    title: "Сделать модератором",
+                    method: this.promoteToModerator,
+                    requireFullAccess: true
+                }
+            ],
+            moderatorsActions: [
+                {
+                    title: "Понизить до обычного пользователя",
+                    method: this.demoteFromModerator,
                     requireFullAccess: false
                 }
             ],
@@ -440,6 +466,9 @@ export default {
         },
         currentUserIsMember() {
             return this.watchingPublic.members.find(user => user.id == this.$oidc.currentUserId) !== undefined;
+        },
+        currentUserIsModerator() {
+            return this.watchingPublic.moderators.find(user => user.id == this.$oidc.currentUserId) !== undefined;
         },
         currentUserIsBlocked() {
             return this.watchingPublic.blockedUsers.find(user => user.id == this.$oidc.currentUserId) !== undefined;
@@ -476,6 +505,46 @@ export default {
             })
                 .then(() => {
                     this.reloadInfoPublicWithMessage('Пользователь успешно разблокирован!');
+                })
+                .catch((error) => {
+                    this.$notify({
+                        group: 'admin-actions',
+                        title: 'Ошибка',
+                        text: error.response.data.error,
+                        type: 'error'
+                    });
+                    this.$loading(false);
+                })
+        },
+        promoteToModerator(userId) {
+            this.$loading(true);
+            this.$store.dispatch('addModeratorToInfoPublic', {
+                informationPublicId: this.watchingPublic.id,
+                issuerId: this.$oidc.currentUserId,
+                moderatorId: userId
+            })
+                .then(() => {
+                    this.reloadInfoPublicWithMessage('Пользователь был успешно повышен до модератора!');
+                })
+                .catch((error) => {
+                    this.$notify({
+                        group: 'admin-actions',
+                        title: 'Ошибка',
+                        text: error.response.data.error,
+                        type: 'error'
+                    });
+                    this.$loading(false);
+                })
+        },
+        demoteFromModerator(userId) {
+            this.$loading(true);
+            this.$store.dispatch('demoteModeratorAtInfoPublic', {
+                informationPublicId: this.watchingPublic.id,
+                issuerId: this.$oidc.currentUserId,
+                moderatorId: userId
+            })
+                .then(() => {
+                    this.reloadInfoPublicWithMessage('Пользователь был успешно снят с должности модератора!');
                 })
                 .catch((error) => {
                     this.$notify({

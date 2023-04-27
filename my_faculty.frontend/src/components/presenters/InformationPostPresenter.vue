@@ -63,7 +63,7 @@
                         </router-link>
                     </v-list-item-content>
                     <v-menu
-                        v-if="currentUserIsPostAuthor()"
+                        v-if="currentUserIsPostAuthor() || currentUserCanDeleteThePost()"
                         bottom
                         left
                     >
@@ -77,7 +77,10 @@
                             </v-btn>
                         </template>
                         <v-list>
-                            <v-list-item ripple>
+                            <v-list-item
+                                v-if="currentUserIsPostAuthor()"
+                                ripple
+                            >
                                 <v-list-item-title
                                     class="post-context-menu-option"
                                     @click="startPostEditing"
@@ -340,6 +343,10 @@ export default {
         },
         currentUserIsPostAuthor() {
             return this.post.authorId == this.$oidc.currentUserId;
+        },
+        currentUserCanDeleteThePost() {
+            return this.post.authorId == this.$oidc.currentUserId ||
+                this.post.owner.owningUserId == this.$oidc.currentUserId;
         },
         startPostEditing() {
             this.$refs.editingForm.loadPost();

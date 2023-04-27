@@ -16,5 +16,6 @@ namespace MyFaculty.Application.ViewModels
         public string OwnerLink { get; set; }
         public List<int> ModeratorsIds { get; set; }
         public bool IsBanned { get; set; }
+        public int OwningUserId { get; set; }
     }
 }

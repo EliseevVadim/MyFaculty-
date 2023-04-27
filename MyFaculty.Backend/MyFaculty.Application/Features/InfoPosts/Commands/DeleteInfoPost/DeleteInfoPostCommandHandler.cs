@@ -27,10 +27,15 @@ namespace MyFaculty.Application.Features.InfoPosts.Commands.DeleteInfoPost
 
         public async Task<InfoPostViewModel> Handle(DeleteInfoPostCommand request, CancellationToken cancellationToken)
         {
-            InfoPost infoPost = await _context.InfoPosts.FindAsync(new object[] {request.Id}, cancellationToken);
+            InfoPost infoPost = await _context.InfoPosts
+                .Include(infoPost => infoPost.OwningInformationPublic)
+                .Include(infoPost => infoPost.OwningStudyClub)
+                .FirstOrDefaultAsync(infoPost => infoPost.Id == request.Id);
             if (infoPost == null)
                 throw new EntityNotFoundException(nameof(InfoPost), request.Id);
-            if (infoPost.AuthorId != request.IssuerId)
+            if (infoPost.AuthorId != request.IssuerId &&
+                   ((infoPost.OwningInformationPublic != null && infoPost.OwningInformationPublic.OwnerId != request.IssuerId) ||
+                   (infoPost.OwningStudyClub != null && infoPost.OwningStudyClub.OwnerId != request.IssuerId)))
                 throw new UnauthorizedActionException("Данное действие Вам запрещено.");
             _context.InfoPosts.Remove(infoPost);
             await _context.SaveChangesAsync(cancellationToken);

@@ -65,6 +65,40 @@ const actions = {
                 })
         })
     },
+    addModeratorToInfoPublic: (context, payload) => {
+        return new Promise(async (resolve, reject) => {
+            await axios.post(config.apiUrl + '/api/informationpublics/add-moderator', {
+                'issuerId': payload.issuerId,
+                'informationPublicId': payload.informationPublicId,
+                'moderatorId': payload.moderatorId
+            }, {
+                headers: config.headers
+            })
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+        })
+    },
+    demoteModeratorAtInfoPublic: (context, payload) => {
+        return new Promise(async (resolve, reject) => {
+            await axios.post(config.apiUrl + '/api/informationpublics/demote-moderator', {
+                'issuerId': payload.issuerId,
+                'informationPublicId': payload.informationPublicId,
+                'moderatorId': payload.moderatorId
+            }, {
+                headers: config.headers
+            })
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+        })
+    },
     blockUserAtInfoPublic: (context, payload) => {
         return new Promise(async (resolve, reject) => {
             await axios.post(config.apiUrl + '/api/informationpublics/block-user', {

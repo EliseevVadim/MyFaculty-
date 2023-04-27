@@ -21,6 +21,7 @@ namespace MyFaculty.Domain.Entities
         public AppUser Owner { get; set; }
         public List<AppUser> Members { get; set; } = new List<AppUser>();
         public List<AppUser> BlockedUsers { get; set; } = new List<AppUser>();
+        public List<AppUser> Moderators { get; set; } = new List<AppUser>();
         public List<InfoPost> InfoPosts { get; set; }
         public List<InformationPublicBanReport> AppliedBanReports { get; set; }
         public DateTime Created { get; set; }

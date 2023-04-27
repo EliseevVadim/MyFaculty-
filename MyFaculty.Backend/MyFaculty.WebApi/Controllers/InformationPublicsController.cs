@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MyFaculty.Application.Features.InformationPublics.Commands.AddModeratorToInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.BanInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.BlockUserAtInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.CreateInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.DeleteInformationPublic;
+using MyFaculty.Application.Features.InformationPublics.Commands.DemoteInformationPublicModerator;
 using MyFaculty.Application.Features.InformationPublics.Commands.JoinInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.LeaveInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.UnbanInformationPublic;
@@ -211,6 +213,72 @@ namespace MyFaculty.WebApi.Controllers
             if (requesterId != leaveInformationPublicDto.UserId)
                 return Forbid();
             LeaveInformationPublicCommand command = _mapper.Map<LeaveInformationPublicCommand>(leaveInformationPublicDto);
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Add the moderator to information public
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /informationpublics/add-moderator
+        ///     "issuerId": 1,
+        ///     "moderatorId": 2,
+        ///     "informationPublicId": 1
+        /// }
+        /// </remarks>
+        /// <param name="addModeratorToInformationPublicDto">AddModeratorToInformationPublicDto object</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Server error</response>
+        [HttpPost("add-moderator")]
+        [Authorize(Roles = "User")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddModerator([FromBody] AddModeratorToInformationPublicDto addModeratorToInformationPublicDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (requesterId != addModeratorToInformationPublicDto.IssuerId)
+                return Forbid();
+            AddModeratorToInformationPublicCommand command = _mapper.Map<AddModeratorToInformationPublicCommand>(addModeratorToInformationPublicDto);
+            await Mediator.Send(command);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Demotes the moderator at information public
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// POST /informationpublics/demote-moderator
+        ///     "issuerId": 1,
+        ///     "moderatorId": 2,
+        ///     "informationPublicId": 1
+        /// }
+        /// </remarks>
+        /// <param name="demoteInformationPublicModeratorDto">DemoteInformationPublicModeratorDto object</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="403">Forbidden</response>
+        /// <response code="500">Server error</response>
+        [HttpPost("demote-moderator")]
+        [Authorize(Roles = "User")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DemoteModerator([FromBody] DemoteInformationPublicModeratorDto demoteInformationPublicModeratorDto)
+        {
+            int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if (requesterId != demoteInformationPublicModeratorDto.IssuerId)
+                return Forbid();
+            DemoteInformationPublicModeratorCommand command = _mapper.Map<DemoteInformationPublicModeratorCommand>(demoteInformationPublicModeratorDto);
             await Mediator.Send(command);
             return NoContent();
         }

@@ -29,6 +29,9 @@ namespace MyFaculty.Persistence.EntityConfigurations
             builder.HasMany(infoPublic => infoPublic.BlockedUsers)
                 .WithMany(user => user.BlockedPublics)
                 .UsingEntity(j => j.ToTable("UsersBlockedInPublics"));
+            builder.HasMany(infoPublic => infoPublic.Moderators)
+                .WithMany(user => user.InformationPublicsAtModeration)
+                .UsingEntity(j => j.ToTable("UsersModeratesInformationPublics"));
             builder.HasMany(infoPublic => infoPublic.AppliedBanReports)
                 .WithOne(banReport => banReport.AffectedPublic)
                 .HasForeignKey(banReport => banReport.PublicId);
