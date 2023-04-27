@@ -19,19 +19,25 @@ const mutations = {
 
 const actions = {
     loadAllStudyClubs: async (context) => {
-        await axios.get(config.apiUrl + '/api/studyclubs')
+        await axios.get(config.apiUrl + '/api/studyclubs', {
+            headers: config.headers
+        })
             .then((response) => {
                 context.commit('setStudyClubs', response.data);
             })
     },
     loadStudyClubsForSpecificUser: async (context, userId) => {
-        await axios.get(config.apiUrl + '/api/studyclubs/user/' + userId)
+        await axios.get(config.apiUrl + '/api/studyclubs/user/' + userId, {
+            headers: config.headers
+        })
             .then((response) => {
                 context.commit('setStudyClubs', response.data);
             })
     },
     loadStudyClubsBySearchQuery: async (context, searchQuery) => {
-        await axios.get(config.apiUrl + '/api/studyclubs/search/' + searchQuery)
+        await axios.get(config.apiUrl + '/api/studyclubs/search/' + searchQuery, {
+            headers: config.headers
+        })
             .then((response) => {
                 context.commit('setStudyClubs', response.data);
             })
@@ -208,7 +214,9 @@ const actions = {
     },
     loadStudyClubById: (context, id) => {
         return new Promise(async (resolve, reject) => {
-            await axios.get(config.apiUrl + '/api/studyclubs/' + id)
+            await axios.get(config.apiUrl + '/api/studyclubs/' + id, {
+                headers: config.headers
+            })
                 .then((response) => {
                     resolve(response);
                 })

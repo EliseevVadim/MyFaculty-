@@ -56,6 +56,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <returns>Returns StudyClubsListViewModel</returns>
         /// <response code="200">Success</response>
         [HttpGet]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<StudyClubsListViewModel>> GetAll()
         {
@@ -74,6 +75,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <returns>Returns StudyClubsListViewModel</returns>
         /// <response code="200">Success</response>
         [HttpGet("user/{id}")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<StudyClubsListViewModel>> GetForSpecificUser(int id)
         {
@@ -95,6 +97,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <returns>Returns StudyClubsListViewModel</returns>
         /// <response code="200">Success</response>
         [HttpGet("search/{request}")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<StudyClubsListViewModel>> GetByClubName(string request)
         {
@@ -118,6 +121,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="200">Success</response>
         /// <response code="404">Not found</response>
         [HttpGet("{id}")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<StudyClubViewModel>> Get(int id)
@@ -254,7 +258,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="500">Server error</response>
         [HttpPost("add-moderator")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -287,7 +291,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="500">Server error</response>
         [HttpPost("demote-moderator")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -320,7 +324,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="403">Forbidden</response>
         /// <response code="500">Server error</response>
         [HttpPost("remove-user")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -487,7 +491,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="404">Not found</response>
         /// <response code="500">Server error</response>
         [HttpPut]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
