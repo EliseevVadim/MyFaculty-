@@ -7,6 +7,7 @@ namespace MyFaculty.Identity.ViewModels
         [Required]
         [EmailAddress]
         public string Email { get; set; }
+        public string ReturnUrl { get; set; }
         public string ErrorMessage { get; set; }
     }
 }

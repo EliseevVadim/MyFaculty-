@@ -37,7 +37,9 @@
                             class="form-link">Еще не зарегистрированы? Создайте аккаунт!</a>
                     </div>
                     <div class="col s12 center">
-                        <a class="form-link" href="/auth/forgotpassword">Забыли пароль?</a>
+                        <a asp-controller="Auth" asp-action="ForgotPassword"
+                            asp-route-returnUrl="@Model.ReturnUrl"
+                            class="form-link">Забыли пароль?</a>
                     </div>
                 </form>
             </div>

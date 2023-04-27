@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using MyFaculty.Identity.Models;
 using MyFaculty.Identity.Services;
 using MyFaculty.Identity.ViewModels;
+using System.Linq;
 using System.Threading.Tasks;
 using Unidecode.NET;
 
@@ -95,7 +96,7 @@ namespace MyFaculty.Identity.Controllers
                 await _signInManager.SignInAsync(user, false);
                 return Redirect(viewModel.ReturnUrl);
             }
-            viewModel.ErrorMessage = "Произошла ошибка. Попробуйте снова";
+            viewModel.ErrorMessage = result.Errors.First().Description;
             return View(viewModel);
         }
 
@@ -108,9 +109,13 @@ namespace MyFaculty.Identity.Controllers
         }
 
         [HttpGet]
-        public IActionResult ForgotPassword()
+        public IActionResult ForgotPassword(string returnUrl)
         {
-            return View(new ForgotPasswordViewModel());
+            ForgotPasswordViewModel viewModel = new ForgotPasswordViewModel()
+            {
+                ReturnUrl = returnUrl
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -138,7 +143,7 @@ namespace MyFaculty.Identity.Controllers
         }
 
         [HttpGet]
-        public IActionResult ResetPassword(string code)
+        public IActionResult ResetPassword(string code, string returnUrl)
         {
             return code == null ? View("Error") : View(new ResetPasswordViewModel());
         }
