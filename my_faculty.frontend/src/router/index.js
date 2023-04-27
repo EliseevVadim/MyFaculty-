@@ -38,11 +38,6 @@ const routes = [
                 component: () => import('../views/mainPageViews/AboutContentView')
             },
             {
-                path: '/info',
-                name: 'infoContent',
-                component: () => import('../views/mainPageViews/InfoContentView')
-            },
-            {
                 path: '/choose-your-faculty',
                 name: 'expert system content',
                 component: () => import('../views/mainPageViews/ExpertSystemContentView')

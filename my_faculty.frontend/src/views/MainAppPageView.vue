@@ -87,8 +87,7 @@ export default {
                 {"text": "Главная", "link": '/'},
                 {"text": "Преподаватели", "link": '/teachers'},
                 {"text": "Пары", "link": '/pairs'},
-                {"text": "О факульете", "link": '/about'},
-                {"text": "Полезная информация", "link": '/info'},
+                {"text": "О сайте", "link": '/about'},
                 {"text": "Куда поступать?", "link": '/choose-your-faculty'}
             ]
         }
