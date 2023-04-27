@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.StudyClubs.Commands.AddModeratorToStudyClub
 {
-    public class AddModeratorToStudyClubCommand : IRequest
+    public class AddModeratorToStudyClubCommand : IRequest<int>
     {
         public int IssuerId { get; set; }
         public int StudyClubId { get; set; }

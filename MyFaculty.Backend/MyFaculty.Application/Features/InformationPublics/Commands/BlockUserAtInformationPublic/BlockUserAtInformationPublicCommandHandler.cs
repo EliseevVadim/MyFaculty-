@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.InformationPublics.Commands.BlockUserAtInformationPublic
 {
-    public class BlockUserAtInformationPublicCommandHandler : IRequestHandler<BlockUserAtInformationPublicCommand>
+    public class BlockUserAtInformationPublicCommandHandler : IRequestHandler<BlockUserAtInformationPublicCommand, int>
     {
         private IMFDbContext _context;
 
@@ -21,7 +21,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.BlockUserAt
             _context = context;
         }
 
-        public async Task<Unit> Handle(BlockUserAtInformationPublicCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(BlockUserAtInformationPublicCommand request, CancellationToken cancellationToken)
         {
             AppUser blockingUser = await _context.Users.FindAsync(new object[] { request.UserId }, cancellationToken);
             if (blockingUser == null)
@@ -43,8 +43,16 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.BlockUserAt
                 throw new DestructiveActionException("Вы не можете заблокировать и исключить модератора. Сначала понизьте его до обычного пользователя.");
             infoPublic.Members.Remove(blockingUser);
             infoPublic.BlockedUsers.Add(blockingUser);
+            Notification notification = new Notification()
+            {
+                UserId = request.UserId,
+                TextContent = $"Вы были заблокированы в информационном сообществе \"{infoPublic.PublicName}\"",
+                ReturnUrl = $"/public{request.PublicId}",
+                Created = DateTime.Now
+            };
+            await _context.Notifications.AddAsync(notification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
+            return request.UserId;
         }
     }
 }

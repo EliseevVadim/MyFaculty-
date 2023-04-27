@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.InformationPublics.Commands.DemoteInformationPublicModerator
 {
-    public class DemoteInformationPublicModeratorCommand : IRequest
+    public class DemoteInformationPublicModeratorCommand : IRequest<int>
     {
         public int IssuerId { get; set; }
         public int InformationPublicId { get; set; }

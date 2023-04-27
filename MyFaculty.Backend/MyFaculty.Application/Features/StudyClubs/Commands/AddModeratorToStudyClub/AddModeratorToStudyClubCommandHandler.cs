@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.StudyClubs.Commands.AddModeratorToStudyClub
 {
-    public class AddModeratorToStudyClubCommandHandler : IRequestHandler<AddModeratorToStudyClubCommand>
+    public class AddModeratorToStudyClubCommandHandler : IRequestHandler<AddModeratorToStudyClubCommand, int>
     {
         private IMFDbContext _context;
 
@@ -21,7 +21,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.AddModeratorToStudy
             _context = context;
         }
 
-        public async Task<Unit> Handle(AddModeratorToStudyClubCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(AddModeratorToStudyClubCommand request, CancellationToken cancellationToken)
         {
             AppUser newModerator = await _context.Users.FindAsync(new object[] { request.ModeratorId }, cancellationToken);
             if (newModerator == null)
@@ -39,8 +39,16 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.AddModeratorToStudy
             if (club.Moderators.Contains(newModerator))
                 throw new DestructiveActionException("Ошибка. Пользователь уже является модератором.");
             club.Moderators.Add(newModerator);
+            Notification notification = new Notification()
+            {
+                UserId = request.ModeratorId,
+                TextContent = $"Вы были назаначены модератором в сообществе курса \"{club.ClubName}\"",
+                ReturnUrl = $"/clubs/{request.StudyClubId}",
+                Created = DateTime.Now
+            };
+            await _context.Notifications.AddAsync(notification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
+            return request.ModeratorId;
         }
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.InformationPublics.Commands.AddModeratorToInformationPublic
 {
-    public class AddModeratorToInformationPublicCommandHandler : IRequestHandler<AddModeratorToInformationPublicCommand>
+    public class AddModeratorToInformationPublicCommandHandler : IRequestHandler<AddModeratorToInformationPublicCommand, int>
     {
         private IMFDbContext _context;
 
@@ -21,7 +21,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.AddModerato
             _context = context;
         }
 
-        public async Task<Unit> Handle(AddModeratorToInformationPublicCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(AddModeratorToInformationPublicCommand request, CancellationToken cancellationToken)
         {
             AppUser newModerator = await _context.Users.FindAsync(new object[] { request.ModeratorId }, cancellationToken);
             if (newModerator == null)
@@ -39,8 +39,16 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.AddModerato
             if (infoPublic.Moderators.Contains(newModerator))
                 throw new DestructiveActionException("Ошибка. Пользователь уже является модератором.");
             infoPublic.Moderators.Add(newModerator);
+            Notification notification = new Notification()
+            {
+                UserId = request.ModeratorId,
+                TextContent = $"Вы были назаначены модератором в информационном сообществе \"{infoPublic.PublicName}\"",
+                ReturnUrl = $"/public{request.InformationPublicId}",
+                Created = DateTime.Now
+            };
+            await _context.Notifications.AddAsync(notification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
+            return request.ModeratorId;
         }
     }
 }

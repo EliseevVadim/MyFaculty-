@@ -20,6 +20,7 @@ using MyFaculty.Application.Features.InformationPublics.Queries.GetInformationPu
 using MyFaculty.Application.Features.InformationPublics.Queries.GetInformationPublicsByName;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
+using MyFaculty.WebApi.Hubs;
 using System;
 using System.IO;
 using System.Security.Claims;
@@ -34,13 +35,15 @@ namespace MyFaculty.WebApi.Controllers
         private IMapper _mapper;
         private IWebHostEnvironment _webHostEnvironment;
         private IConfiguration _configuration;
+        private NotificationsHub _notificationsHub;
         private string _appDomain;
 
-        public InformationPublicsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public InformationPublicsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, NotificationsHub notificationsHub)
         {
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
+            _notificationsHub = notificationsHub;
             _appDomain = configuration["AppDomain"];
         }
 
@@ -246,7 +249,8 @@ namespace MyFaculty.WebApi.Controllers
             if (requesterId != addModeratorToInformationPublicDto.IssuerId)
                 return Forbid();
             AddModeratorToInformationPublicCommand command = _mapper.Map<AddModeratorToInformationPublicCommand>(addModeratorToInformationPublicDto);
-            await Mediator.Send(command);
+            int newModeratorId = await Mediator.Send(command);
+            await _notificationsHub.MakeUserLoadNotificationsAsync(newModeratorId);
             return NoContent();
         }
 
@@ -279,7 +283,8 @@ namespace MyFaculty.WebApi.Controllers
             if (requesterId != demoteInformationPublicModeratorDto.IssuerId)
                 return Forbid();
             DemoteInformationPublicModeratorCommand command = _mapper.Map<DemoteInformationPublicModeratorCommand>(demoteInformationPublicModeratorDto);
-            await Mediator.Send(command);
+            int demotedModeratorId = await Mediator.Send(command);
+            await _notificationsHub.MakeUserLoadNotificationsAsync(demotedModeratorId);
             return NoContent();
         }
 
@@ -312,7 +317,8 @@ namespace MyFaculty.WebApi.Controllers
             if (requesterId != blockUserAtInformationPublicDto.IssuerId)
                 return Forbid();
             BlockUserAtInformationPublicCommand command = _mapper.Map<BlockUserAtInformationPublicCommand>(blockUserAtInformationPublicDto);
-            await Mediator.Send(command);
+            int blockedUserId = await Mediator.Send(command);
+            await _notificationsHub.MakeUserLoadNotificationsAsync(blockedUserId);
             return NoContent();
         }
 

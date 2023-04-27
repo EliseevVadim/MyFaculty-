@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.StudyClubs.Commands.DemoteStudyClubModerator
 {
-    public class DemoteStudyClubModeratorCommandHandler : IRequestHandler<DemoteStudyClubModeratorCommand>
+    public class DemoteStudyClubModeratorCommandHandler : IRequestHandler<DemoteStudyClubModeratorCommand, int>
     {
         private IMFDbContext _context;
 
@@ -21,7 +21,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.DemoteStudyClubMode
             _context = context;
         }
 
-        public async Task<Unit> Handle(DemoteStudyClubModeratorCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(DemoteStudyClubModeratorCommand request, CancellationToken cancellationToken)
         {
             AppUser demotingModerator = await _context.Users.FindAsync(new object[] { request.ModeratorId }, cancellationToken);
             if (demotingModerator == null)
@@ -38,8 +38,16 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.DemoteStudyClubMode
             if (!club.Moderators.Contains(demotingModerator))
                 throw new DestructiveActionException("Пользователь не является модератором сообщества.");
             club.Moderators.Remove(demotingModerator);
+            Notification notification = new Notification()
+            {
+                UserId = request.ModeratorId,
+                TextContent = $"Вы были сняты с должности модератора в сообществе курса \"{club.ClubName}\"",
+                ReturnUrl = $"/clubs/{request.StudyClubId}",
+                Created = DateTime.Now
+            };
+            await _context.Notifications.AddAsync(notification, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
+            return request.ModeratorId;
         }
     }
 }

@@ -302,7 +302,7 @@
                     </v-btn>
                 </v-card-actions>
             </v-row>
-            <v-container class="mt-4 text-left mx-0">
+            <v-container v-if="!currentUserIsBlocked()" class="mt-4 text-left mx-0">
                 <InformationPostPresenter
                     v-for="infoPost in informationPosts"
                     :key="infoPost.id + infoPost.updated + infoPost.likedUsers.length + infoPost.commentsCount"
@@ -458,6 +458,23 @@ export default {
         }
     },
     methods: {
+        loadInformationPublic(id) {
+            this.$store.dispatch('loadInfoPublicById', id)
+                .then((response) => {
+                    this.watchingPublic = response.data;
+                    document.title = this.watchingPublic.publicName;
+                    this.loadInfoPosts();
+                })
+                .catch((error) => {
+                    if (error.response.status === 404) {
+                        document.title = "Сообщество не найдено";
+                        this.publicNotFound = true;
+                    }
+                })
+                .finally(() => {
+                    this.$loading(false);
+                });
+        },
         getOwnersFullName() {
             return this.watchingPublic.owner.firstName + " " + this.watchingPublic.owner.lastName;
         },
@@ -660,21 +677,10 @@ export default {
     mounted() {
         let id = this.$route.params.id;
         this.$loading(true);
-        this.$store.dispatch('loadInfoPublicById', id)
-            .then((response) => {
-                this.watchingPublic = response.data;
-                document.title = this.watchingPublic.publicName;
-                this.loadInfoPosts();
-            })
-            .catch((error) => {
-                if (error.response.status === 404) {
-                    document.title = "Сообщество не найдено";
-                    this.publicNotFound = true;
-                }
-            })
-            .finally(() => {
-                this.$loading(false);
-            })
+        this.loadInformationPublic(id);
+        this.$notificationsHub.$on('loadNotifications', () => {
+            this.loadInformationPublic(id);
+        });
     },
     computed: {
         ...mapGetters(['INFO_POSTS'])

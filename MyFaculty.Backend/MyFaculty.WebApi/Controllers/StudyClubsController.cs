@@ -22,6 +22,7 @@ using MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubsByName;
 using MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubsForSpecificUser;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
+using MyFaculty.WebApi.Hubs;
 using System;
 using System.IO;
 using System.Security.Claims;
@@ -36,13 +37,15 @@ namespace MyFaculty.WebApi.Controllers
         private IMapper _mapper;
         private IWebHostEnvironment _webHostEnvironment;
         private IConfiguration _configuration;
+        private NotificationsHub _notificationsHub;
         private string _appDomain;
 
-        public StudyClubsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public StudyClubsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, NotificationsHub notificationsHub)
         {
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
             _configuration = configuration;
+            _notificationsHub = notificationsHub;
             _appDomain = configuration["AppDomain"];
         }
 
@@ -269,7 +272,8 @@ namespace MyFaculty.WebApi.Controllers
             if (requesterId != addModeratorToStudyClubDto.IssuerId)
                 return Forbid();
             AddModeratorToStudyClubCommand command = _mapper.Map<AddModeratorToStudyClubCommand>(addModeratorToStudyClubDto);
-            await Mediator.Send(command);
+            int newModeratorId = await Mediator.Send(command);
+            await _notificationsHub.MakeUserLoadNotificationsAsync(newModeratorId);
             return NoContent();
         }
 
@@ -302,7 +306,8 @@ namespace MyFaculty.WebApi.Controllers
             if (requesterId != demoteStudyClubModeratorDto.IssuerId)
                 return Forbid();
             DemoteStudyClubModeratorCommand command = _mapper.Map<DemoteStudyClubModeratorCommand>(demoteStudyClubModeratorDto);
-            await Mediator.Send(command);
+            int demotedModeratorId = await Mediator.Send(command);
+            await _notificationsHub.MakeUserLoadNotificationsAsync(demotedModeratorId);
             return NoContent();
         }
 

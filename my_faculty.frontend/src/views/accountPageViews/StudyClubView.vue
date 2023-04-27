@@ -470,6 +470,23 @@ export default {
         }
     },
     methods: {
+        loadStudyClub(id) {
+            this.$store.dispatch('loadStudyClubById', id)
+                .then((response) => {
+                    this.watchingClub = response.data;
+                    document.title = this.watchingClub.clubName;
+                    this.loadInfoPosts();
+                })
+                .catch((error) => {
+                    if (error.response.status === 404) {
+                        document.title = "Сообщество не найдено";
+                        this.clubNotFound = true;
+                    }
+                })
+                .finally(() => {
+                    this.$loading(false);
+                });
+        },
         getOwnersFullName() {
             return this.watchingClub.owner.firstName + " " + this.watchingClub.owner.lastName;
         },
@@ -691,21 +708,10 @@ export default {
         this.showClubContent = this.clubContentType.InfoPosts;
         let id = this.$route.params.id;
         this.$loading(true);
-        this.$store.dispatch('loadStudyClubById', id)
-            .then((response) => {
-                this.watchingClub = response.data;
-                document.title = this.watchingClub.clubName;
-                this.loadInfoPosts();
-            })
-            .catch((error) => {
-                if (error.response.status === 404) {
-                    document.title = "Сообщество не найдено";
-                    this.clubNotFound = true;
-                }
-            })
-            .finally(() => {
-                this.$loading(false);
-            })
+        this.loadStudyClub(id);
+        this.$notificationsHub.$on('loadNotifications', () => {
+            this.loadStudyClub(id);
+        });
     },
     computed: {
         ...mapGetters(['INFO_POSTS']),
