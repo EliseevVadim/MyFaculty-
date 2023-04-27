@@ -44,7 +44,7 @@
                         </v-list-item-subtitle>
                     </v-list-item-content>
                     <v-menu
-                        v-if="currentUserIsTaskAuthor()"
+                        v-if="currentUserIsTaskAuthor() || currentUserCanDeleteTheTask()"
                         bottom
                         left
                     >
@@ -58,7 +58,10 @@
                             </v-btn>
                         </template>
                         <v-list>
-                            <v-list-item ripple>
+                            <v-list-item
+                                v-if="currentUserIsTaskAuthor()"
+                                ripple
+                            >
                                 <v-list-item-title
                                     class="task-context-menu-option"
                                     @click="startTaskEditing"
@@ -274,6 +277,10 @@ export default {
         currentUserIsTaskAuthor() {
             return this.watchingTask.authorId == this.$oidc.currentUserId;
         },
+        currentUserCanDeleteTheTask() {
+            return this.watchingTask.authorId == this.$oidc.currentUserId ||
+                this.watchingTask.owningStudyClub.ownerId == this.$oidc.currentUserId;
+        },
         setReplyingComment(comment) {
             this.$refs.commentForm.setReplyingComment(comment);
         },
@@ -288,7 +295,7 @@ export default {
                 .then((result) => {
                     if (result) {
                         this.$loading(true);
-                        this.$store.dispatch('deleteClubTask', this.task.id)
+                        this.$store.dispatch('deleteClubTask', this.watchingTask.id)
                             .then(() => {
                                 this.$notify({
                                     group: 'admin-actions',
@@ -296,7 +303,7 @@ export default {
                                     text: 'Задание успешно удалено',
                                     type: 'success'
                                 });
-                                this.$emit('load');
+                                this.loadClubTask(this.$route.params.id);
                             })
                             .catch((error) => {
                                 this.$notify({

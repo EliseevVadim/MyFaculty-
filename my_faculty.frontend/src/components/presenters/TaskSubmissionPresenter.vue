@@ -113,7 +113,6 @@
                     v-for="review in [submission.review]"
                     :key="review.id + review.updated"
                     :review="submission.review"
-                    :current-user-is-task-moderator="currentUserIsTaskModerator"
                     :max-rate="submission.maxRate"
                     :submission-status="submission.status"
                     @load="reloadSubmissions"

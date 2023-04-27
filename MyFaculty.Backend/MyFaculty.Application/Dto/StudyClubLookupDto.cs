@@ -15,6 +15,7 @@ namespace MyFaculty.Application.Dto
         public string ClubName { get; set; }
         public string ImagePath { get; set; }
         public List<UserLookupDto> Moderators { get; set; }
+        public int OwnerId { get; set; }
         public int MembersCount { get; set; }
 
         public void Mapping(Profile profile)
@@ -23,6 +24,7 @@ namespace MyFaculty.Application.Dto
                 .ForMember(dto => dto.Id, options => options.MapFrom(club => club.Id))
                 .ForMember(dto => dto.ClubName, options => options.MapFrom(club => club.ClubName))
                 .ForMember(dto => dto.ImagePath, options => options.MapFrom(club => club.ImagePath))
+                .ForMember(dto => dto.OwnerId, options => options.MapFrom(club => club.OwnerId))
                 .ForMember(dto => dto.Moderators, options => options.MapFrom(club => club.Moderators))
                 .ForMember(dto => dto.MembersCount, options => options.MapFrom(club => club.Members.Count));
         }

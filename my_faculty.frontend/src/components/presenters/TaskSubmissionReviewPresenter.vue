@@ -31,7 +31,7 @@
                         </v-list-item-subtitle>
                     </v-list-item-content>
                     <v-menu
-                        v-if="currentUserIsTaskModerator"
+                        v-if="currentUserCanManageReview()"
                         bottom
                         left
                     >
@@ -125,7 +125,7 @@ import EditTaskSubmissionReviewModal
 export default {
     name: "TaskSubmissionReviewPresenter",
     components: {EditTaskSubmissionReviewModal},
-    props: ['review', 'currentUserIsTaskModerator', 'maxRate', 'submissionStatus'],
+    props: ['review', 'maxRate', 'submissionStatus'],
     data() {
         return {
             images: [],
@@ -134,6 +134,9 @@ export default {
         }
     },
     methods: {
+        currentUserCanManageReview() {
+            return this.review.reviewer.id == this.$oidc.currentUserId;
+        },
         getPureText(htmlContent) {
             return htmlContent ? new DOMParser()
                 .parseFromString(htmlContent, "text/html")

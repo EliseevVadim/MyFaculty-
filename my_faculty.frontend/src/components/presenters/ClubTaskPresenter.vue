@@ -48,7 +48,7 @@
                     </router-link>
                 </v-list-item-content>
                 <v-menu
-                    v-if="currentUserIsTaskAuthor()"
+                    v-if="currentUserIsTaskAuthor() || currentUserCanDeleteTheTask()"
                     bottom
                     left
                 >
@@ -62,7 +62,10 @@
                         </v-btn>
                     </template>
                     <v-list>
-                        <v-list-item ripple>
+                        <v-list-item
+                            v-if="currentUserIsTaskAuthor()"
+                            ripple
+                        >
                             <v-list-item-title
                                 class="task-context-menu-option"
                                 @click="startTaskEditing"
@@ -255,6 +258,10 @@ export default {
         },
         currentUserIsTaskAuthor() {
             return this.task.authorId == this.$oidc.currentUserId;
+        },
+        currentUserCanDeleteTheTask() {
+            return this.task.authorId == this.$oidc.currentUserId ||
+                this.task.owningStudyClub.ownerId == this.$oidc.currentUserId;
         },
         startTaskEditing() {
             this.isDeadLineClose();
