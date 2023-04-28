@@ -302,7 +302,11 @@
                     </v-btn>
                 </v-card-actions>
             </v-row>
-            <v-container v-if="!currentUserIsBlocked()" class="mt-4 text-left mx-0">
+            <v-container
+                fluid
+                v-if="!currentUserIsBlocked()"
+                class="mt-4 text-left mx-0"
+            >
                 <InformationPostPresenter
                     v-for="infoPost in informationPosts"
                     :key="infoPost.id + infoPost.updated + infoPost.likedUsers.length + infoPost.commentsCount"

@@ -23,7 +23,10 @@
                 </v-tab>
             </v-tabs>
         </v-row>
-        <v-container class="mt-4 text-left mx-0">
+        <v-container
+            fluid
+            class="mt-4 text-left mx-0"
+        >
             <div v-if="displayingContent === newsfeedContentType.InfoPosts">
                 <EmptySearchResult
                     v-if="informationPosts.length === 0"
