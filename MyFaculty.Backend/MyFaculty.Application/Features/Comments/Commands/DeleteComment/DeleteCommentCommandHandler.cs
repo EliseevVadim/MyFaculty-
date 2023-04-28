@@ -42,6 +42,8 @@ namespace MyFaculty.Application.Features.Comments.Commands.DeleteComment
                     .FirstOrDefaultAsync(infoPost => infoPost.Id == deletingComment.Post.Id);
                 if (infoPost.OwningInformationPublic != null && infoPost.OwningInformationPublic.IsBanned)
                     throw new EntityNotFoundException(nameof(InfoPost), infoPost.Id);
+                if (!infoPost.CommentsAllowed)
+                    throw new DestructiveActionException("Вы не можете работать с комментариями к этой записи, поскольку в ней они запрещены комментарии");
                 if (infoPost.OwningInformationPublic != null
                     && infoPost
                         .OwningInformationPublic

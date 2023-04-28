@@ -40,6 +40,8 @@ namespace MyFaculty.Application.Features.Comments.Commands.CreateComment
                     .FirstOrDefaultAsync(infoPost => infoPost.Id == request.PostId);
                 if (infoPost.OwningInformationPublic != null && infoPost.OwningInformationPublic.IsBanned)
                     throw new EntityNotFoundException(nameof(InfoPost), request.PostId);
+                if (!infoPost.CommentsAllowed)
+                    throw new DestructiveActionException("Вы не можете прокомментировать эту запись, поскольку в ней запрещены комментарии");
                 if (infoPost.OwningInformationPublic != null
                     && infoPost
                         .OwningInformationPublic
