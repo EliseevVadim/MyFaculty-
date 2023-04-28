@@ -183,7 +183,7 @@ export default {
                     align: 'start',
                     value: 'id',
                 },
-                {text: 'Сообщество', value: 'affectedUserLink'},
+                {text: 'Сообщество', value: 'publicLink'},
                 {text: 'Администратор', value: 'administratorLink'},
                 {text: 'Действие', value: 'performedAction'},
                 {text: 'Причина', value: 'reason'},

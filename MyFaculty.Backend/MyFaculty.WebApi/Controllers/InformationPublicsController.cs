@@ -8,6 +8,7 @@ using MyFaculty.Application.Features.InformationPublics.Commands.AddModeratorToI
 using MyFaculty.Application.Features.InformationPublics.Commands.BanInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.BlockUserAtInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.CreateInformationPublic;
+using MyFaculty.Application.Features.InformationPublics.Commands.DeleteAllInformationPublicContent;
 using MyFaculty.Application.Features.InformationPublics.Commands.DeleteInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.DemoteInformationPublicModerator;
 using MyFaculty.Application.Features.InformationPublics.Commands.JoinInformationPublic;
@@ -15,13 +16,17 @@ using MyFaculty.Application.Features.InformationPublics.Commands.LeaveInformatio
 using MyFaculty.Application.Features.InformationPublics.Commands.UnbanInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.UnblockUserAtInformationPublic;
 using MyFaculty.Application.Features.InformationPublics.Commands.UpdateInformationPublic;
+using MyFaculty.Application.Features.InformationPublics.Queries.GetBannedInformationPublics;
 using MyFaculty.Application.Features.InformationPublics.Queries.GetInformationPublicInfo;
 using MyFaculty.Application.Features.InformationPublics.Queries.GetInformationPublics;
 using MyFaculty.Application.Features.InformationPublics.Queries.GetInformationPublicsByName;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.WebApi.Dto;
 using MyFaculty.WebApi.Hubs;
+using MyFaculty.WebApi.Models;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -57,10 +62,30 @@ namespace MyFaculty.WebApi.Controllers
         /// <returns>Returns InformationPublicsListViewModel</returns>
         /// <response code="200">Success</response>
         [HttpGet]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<InformationPublicsListViewModel>> GetAll()
         {
             GetInformationPublicsQuery query = new GetInformationPublicsQuery();
+            InformationPublicsListViewModel viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Gets the list of blocked information publics
+        /// </summary>
+        /// <remarks>
+        /// Sample request: 
+        /// GET /informationpublics/banned
+        /// </remarks>
+        /// <returns>Returns InformationPublicsListViewModel</returns>
+        /// <response code="200">Success</response>
+        [HttpGet("banned")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<InformationPublicsListViewModel>> GetBanned()
+        {
+            GetBannedInformationPublicsQuery query = new GetBannedInformationPublicsQuery();
             InformationPublicsListViewModel viewModel = await Mediator.Send(query);
             return Ok(viewModel);
         }
@@ -75,6 +100,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <returns>Returns InformationPublicsListViewModel</returns>
         /// <response code="200">Success</response>
         [HttpGet("search/{request}")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<InformationPublicsListViewModel>> GetByClubName(string request)
         {
@@ -98,6 +124,7 @@ namespace MyFaculty.WebApi.Controllers
         /// <response code="200">Success</response>
         /// <response code="404">Not found</response>
         [HttpGet("{id}")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<InformationPublicViewModel>> Get(int id)
@@ -432,6 +459,41 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
+        /// Deletes the informations public content by id
+        /// </summary>
+        /// <remarks>
+        /// Sample request:
+        /// DELETE /informationpublics/content/1
+        /// </remarks>
+        /// <param name="id">Study club id (integer)</param>
+        /// <returns>Returns NoContent</returns>
+        /// <response code="204">Success</response>
+        /// <response code="404">Not found</response>
+        /// <response code="500">Server error</response>
+        [HttpDelete("content/{id}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeletePublicContent(int id)
+        {
+            DeleteAllInformationPublicContentCommand command = new DeleteAllInformationPublicContentCommand()
+            {
+                PublicId = id
+            };
+            List<string> attachmentsToDelete = await Mediator.Send(command);
+            foreach (string attachmentsData in attachmentsToDelete)
+            {
+                if (!string.IsNullOrEmpty(attachmentsData))
+                {
+                    List<Attachment> filesToDelete = JsonConvert.DeserializeObject<List<Attachment>>(attachmentsData);
+                    DeleteAttachments(filesToDelete);
+                }
+            }
+            return NoContent();
+        }
+
+        /// <summary>
         /// Bans the information public
         /// </summary>
         /// <remarks>
@@ -489,6 +551,16 @@ namespace MyFaculty.WebApi.Controllers
             command.AdministratorId = requesterId;
             await Mediator.Send(command);
             return Ok();
+        }
+
+        private void DeleteAttachments(List<Attachment> attachmentsToDelete)
+        {
+            foreach (Attachment attachment in attachmentsToDelete)
+            {
+                string path = attachment.Path
+                    .Replace(_appDomain, $"{_webHostEnvironment.ContentRootPath}/");
+                System.IO.File.Delete(path);
+            }
         }
     }
 }

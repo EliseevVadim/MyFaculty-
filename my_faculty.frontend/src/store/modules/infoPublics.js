@@ -19,13 +19,25 @@ const mutations = {
 
 const actions = {
     loadAllInfoPublics: async (context) => {
-        await axios.get(config.apiUrl + '/api/informationpublics')
+        await axios.get(config.apiUrl + '/api/informationpublics', {
+            headers: config.headers
+        })
+            .then((response) => {
+                context.commit('setInfoPublics', response.data);
+            })
+    },
+    loadBannedInfoPublics: async (context) => {
+        await axios.get(config.apiUrl + '/api/informationpublics/banned', {
+            headers: config.headers
+        })
             .then((response) => {
                 context.commit('setInfoPublics', response.data);
             })
     },
     loadInfoPublicsBySearchQuery: async (context, searchQuery) => {
-        await axios.get(config.apiUrl + '/api/informationpublics/search/' + searchQuery)
+        await axios.get(config.apiUrl + '/api/informationpublics/search/' + searchQuery, {
+            headers: config.headers
+        })
             .then((response) => {
                 context.commit('setInfoPublics', response.data);
             })
@@ -151,7 +163,9 @@ const actions = {
     },
     loadInfoPublicById: (context, id) => {
         return new Promise(async (resolve, reject) => {
-            await axios.get(config.apiUrl + '/api/informationpublics/' + id)
+            await axios.get(config.apiUrl + '/api/informationpublics/' + id, {
+                headers: config.headers
+            })
                 .then((response) => {
                     resolve(response);
                 })
@@ -183,6 +197,19 @@ const actions = {
     deleteInfoPublic: (context, id) => {
         return new Promise(async (resolve, reject) => {
             await axios.delete(config.apiUrl + '/api/informationpublics/' + id, {
+                headers: config.headers
+            })
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+                })
+        });
+    },
+    deleteInfoPublicContent: (context, id) => {
+        return new Promise(async (resolve, reject) => {
+            await axios.delete(config.apiUrl + '/api/informationpublics/content/' + id, {
                 headers: config.headers
             })
                 .then((response) => {

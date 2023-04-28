@@ -173,7 +173,8 @@ export default {
             ],
             bansActions: [
                 ['Блокировка пользователей', 'mdi-account-off', '/adminPanel/banUsers'],
-                ['Блокировка сообществ', 'mdi-account-multiple-minus', '/adminPanel/banPublics']
+                ['Блокировка сообществ', 'mdi-account-multiple-minus', '/adminPanel/banPublics'],
+                ['Очистка медиа', 'mdi-delete-forever', '/adminPanel/clearMedia']
             ]
         }
     },
