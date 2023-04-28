@@ -32,7 +32,7 @@ namespace MyFaculty.Application.Features.Users.Queries.GetUserInfo
                     .ThenInclude(club => club.Members)
                 .Include(user => user.StudyClubs)
                     .ThenInclude(club => club.Moderators)
-                .Include(user => user.InformationPublics)
+                .Include(user => user.InformationPublics.Where(infoPublic => !infoPublic.IsBanned))
                     .ThenInclude(infoPublic => infoPublic.Members)
                 .Include(user => user.City)
                     .ThenInclude(city => city.Region)
@@ -41,6 +41,7 @@ namespace MyFaculty.Application.Features.Users.Queries.GetUserInfo
                 .Include(user => user.Course)
                 .Include(user => user.Group)
                 .FirstOrDefaultAsync(user => user.Id == request.Id, cancellationToken);
+
             if (user == null)
                 throw new EntityNotFoundException(nameof(AppUser), request.Id);
             return _mapper.Map<UserViewModel>(user);

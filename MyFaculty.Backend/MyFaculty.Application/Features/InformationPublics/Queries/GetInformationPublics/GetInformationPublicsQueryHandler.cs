@@ -28,6 +28,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Queries.GetInformati
         public async Task<InformationPublicsListViewModel> Handle(GetInformationPublicsQuery request, CancellationToken cancellationToken)
         {
             var infoPublics = await _context.InformationPublics
+                .Where(infoPublic => !infoPublic.IsBanned)
                 .ProjectTo<InformationPublicLookupDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
             return new InformationPublicsListViewModel
