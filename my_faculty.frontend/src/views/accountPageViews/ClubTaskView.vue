@@ -178,6 +178,7 @@ export default {
     components: {ErrorPage, CommentPresenter, CommentForm, SubmissionsModal, EditClubTaskModal},
     data() {
         return {
+            needToJump: true,
             taskNotFound: false,
             currentUserIsTaskModerator: false,
             watchingTask: {},
@@ -221,8 +222,10 @@ export default {
         jumpToReply() {
             try {
                 let jumpToId = this.$route.hash;
-                if (jumpToId)
+                if (jumpToId && this.needToJump) {
                     document.getElementById(jumpToId.substring(1)).scrollIntoView();
+                    this.needToJump = false;
+                }
             } catch (e) {
             }
         },

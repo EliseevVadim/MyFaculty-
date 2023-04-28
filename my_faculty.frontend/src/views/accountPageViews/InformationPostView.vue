@@ -197,6 +197,7 @@ export default {
     },
     data() {
         return {
+            needToJump: true,
             watchingPost: {},
             comments: [],
             images: [],
@@ -251,8 +252,10 @@ export default {
         jumpToReply() {
             try {
                 let jumpToId = this.$route.hash;
-                if (jumpToId)
+                if (jumpToId && this.needToJump) {
                     document.getElementById(jumpToId.substring(1)).scrollIntoView();
+                    this.needToJump = false;
+                }
             } catch (e) {
             }
         },
