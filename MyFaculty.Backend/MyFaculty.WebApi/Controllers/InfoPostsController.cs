@@ -29,10 +29,10 @@ namespace MyFaculty.WebApi.Controllers
     [Route("api/[controller]")]
     public class InfoPostsController : BaseController
     {
-        private IMapper _mapper;
-        private IWebHostEnvironment _webHostEnvironment;
-        private IConfiguration _configuration;
-        private string _appDomain;
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
+        private readonly string _appDomain;
 
         public InfoPostsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {

@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.Groups.Commands.DeleteGroup
 {
     public class DeleteGroupCommandHandler : IRequestHandler<DeleteGroupCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteGroupCommandHandler(IMFDbContext context)
         {

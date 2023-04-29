@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubsByName
 {
     public class GetStudyClubsByNameQueryHandler : IRequestHandler<GetStudyClubsByNameQuery, StudyClubsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetStudyClubsByNameQueryHandler(IMFDbContext context, IMapper mapper)
         {

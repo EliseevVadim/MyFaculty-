@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Users.Commands.UpdateUser
 {
     public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, UserViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateUserCommandHandler(IMFDbContext context, IMapper mapper)
         {

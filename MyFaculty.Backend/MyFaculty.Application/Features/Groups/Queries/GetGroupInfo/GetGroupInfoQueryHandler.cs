@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Groups.Queries.GetGroupInfo
 {
     public class GetGroupInfoQueryHandler : IRequestHandler<GetGroupInfoQuery, GroupViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetGroupInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

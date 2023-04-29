@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.PairInfos.Commands.CreatePairInfo
 {
     public class CreatePairInfoCommandHandler : IRequestHandler<CreatePairInfoCommand, PairInfoViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreatePairInfoCommandHandler(IMFDbContext context, IMapper mapper)
         {

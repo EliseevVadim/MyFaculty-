@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Floors.Queries.GetFloorInfo
 {
     public class GetFloorInfoQueryHandler : IRequestHandler<GetFloorInfoQuery, FloorViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetFloorInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

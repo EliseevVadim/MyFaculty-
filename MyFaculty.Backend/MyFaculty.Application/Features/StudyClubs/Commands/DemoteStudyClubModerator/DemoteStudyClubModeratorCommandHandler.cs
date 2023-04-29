@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.DemoteStudyClubMode
 {
     public class DemoteStudyClubModeratorCommandHandler : IRequestHandler<DemoteStudyClubModeratorCommand, int>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DemoteStudyClubModeratorCommandHandler(IMFDbContext context)
         {

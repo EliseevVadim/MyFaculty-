@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.SecondaryObjectTypes.Queries.GetSeconda
 {
     public class GetSecondaryObjectTypeInfoQueryHandler : IRequestHandler<GetSecondaryObjectTypeInfoQuery, SecondaryObjectTypeViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetSecondaryObjectTypeInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

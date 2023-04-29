@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.TeachersDisciplines.Commands.CreateTeac
 {
     public class CreateTeacherDisciplineCommandHandler : IRequestHandler<CreateTeacherDisciplineCommand, TeacherDisciplineViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateTeacherDisciplineCommandHandler(IMFDbContext context, IMapper mapper)
         {

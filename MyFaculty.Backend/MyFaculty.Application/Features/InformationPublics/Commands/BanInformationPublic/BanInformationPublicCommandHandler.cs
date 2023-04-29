@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.BanInformat
 {
     public class BanInformationPublicCommandHandler : IRequestHandler<BanInformationPublicCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public BanInformationPublicCommandHandler(IMFDbContext context)
         {

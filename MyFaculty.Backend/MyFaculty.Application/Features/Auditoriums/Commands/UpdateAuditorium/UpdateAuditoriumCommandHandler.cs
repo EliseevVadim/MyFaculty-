@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Auditoriums.Commands.UpdateAuditorium
 {
     public class UpdateAuditoriumCommandHandler : IRequestHandler<UpdateAuditoriumCommand, AuditoriumViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateAuditoriumCommandHandler(IMFDbContext context, IMapper mapper)
         {

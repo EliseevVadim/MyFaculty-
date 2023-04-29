@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.DeleteInfor
 {
     public class DeleteInformationPublicCommandHandler : IRequestHandler<DeleteInformationPublicCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteInformationPublicCommandHandler(IMFDbContext context)
         {

@@ -7,7 +7,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.JoinStudyClub
 {
     public class JoinStudyClubCommandHandler : IRequestHandler<JoinStudyClubCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public JoinStudyClubCommandHandler(IMFDbContext context)
         {

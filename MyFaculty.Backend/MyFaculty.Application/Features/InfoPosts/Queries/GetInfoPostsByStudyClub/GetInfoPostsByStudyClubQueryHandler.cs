@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPostsByStudyCl
 {
     public class GetInfoPostsByStudyClubQueryHandler : IRequestHandler<GetInfoPostsByStudyClubQuery, InfoPostsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetInfoPostsByStudyClubQueryHandler(IMFDbContext context, IMapper mapper)
         {

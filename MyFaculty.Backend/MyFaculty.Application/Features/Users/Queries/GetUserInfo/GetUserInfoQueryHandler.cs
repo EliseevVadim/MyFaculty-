@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Users.Queries.GetUserInfo
 {
     public class GetUserInfoQueryHandler : IRequestHandler<GetUserInfoQuery, UserViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetUserInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

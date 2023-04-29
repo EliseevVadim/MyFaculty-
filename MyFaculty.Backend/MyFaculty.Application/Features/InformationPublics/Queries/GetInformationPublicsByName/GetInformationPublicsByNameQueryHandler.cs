@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.InformationPublics.Queries.GetInformati
 {
     public class GetInformationPublicsByNameQueryHandler : IRequestHandler<GetInformationPublicsByNameQuery, InformationPublicsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetInformationPublicsByNameQueryHandler(IMFDbContext context, IMapper mapper)
         {

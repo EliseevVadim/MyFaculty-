@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Regions.Queries.GetRegionInfo
 {
     public class GetRegionInfoQueryHandler : IRequestHandler<GetRegionInfoQuery, RegionViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetRegionInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

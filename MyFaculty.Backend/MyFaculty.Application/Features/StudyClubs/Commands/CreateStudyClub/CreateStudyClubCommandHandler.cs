@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.CreateStudyClub
 {
     public class CreateStudyClubCommandHandler : IRequestHandler<CreateStudyClubCommand, StudyClubViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateStudyClubCommandHandler(IMFDbContext context, IMapper mapper)
         {

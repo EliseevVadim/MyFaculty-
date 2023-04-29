@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.ClubTasks.Queries.GetClubTasksForStudyC
 {
     public class GetClubTasksForStudyClubQueryHandler : IRequestHandler<GetClubTasksForStudyClubQuery, ClubTasksListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetClubTasksForStudyClubQueryHandler(IMFDbContext context, IMapper mapper)
         {

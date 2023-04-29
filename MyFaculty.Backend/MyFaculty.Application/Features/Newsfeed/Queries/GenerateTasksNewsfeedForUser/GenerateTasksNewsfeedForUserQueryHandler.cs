@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Newsfeed.Queries.GenerateTasksNewsfeedF
 {
     public class GenerateTasksNewsfeedForUserQueryHandler : IRequestHandler<GenerateTasksNewsfeedForUserQuery, ClubTasksListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         private const int TASKS_COUNT_LIMIT = 100;
 

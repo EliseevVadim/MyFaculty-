@@ -5,7 +5,7 @@ namespace MyFaculty.Identity.Configurations
 {
     public static class RolesManager
     {
-        private static string[] _roles = new[]
+        private static readonly string[] _roles = new[]
         {
             "User",
             "Admin",

@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.InformationPublics.Queries.GetInformati
 {
     public class GetInformationPublicInfoQueryHandler : IRequestHandler<GetInformationPublicInfoQuery, InformationPublicViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetInformationPublicInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

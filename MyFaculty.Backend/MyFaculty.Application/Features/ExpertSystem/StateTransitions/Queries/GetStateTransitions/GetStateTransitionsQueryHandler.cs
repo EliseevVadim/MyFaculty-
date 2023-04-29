@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.ExpertSystem.StateTransitions.Queries.G
 {
     public class GetStateTransitionsQueryHandler : IRequestHandler<GetStateTransitionsQuery, StateTransitionsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetStateTransitionsQueryHandler(IMFDbContext context, IMapper mapper)
         {

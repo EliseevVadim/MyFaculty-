@@ -14,7 +14,7 @@ namespace MyFaculty.WebApi.Controllers
     [Route("api/[controller]")]
     public class NotificationsController : BaseController
     {
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public NotificationsController(IMapper mapper)
         {

@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.Countries.Commands.DeleteCountry
 {
     public class DeleteCountryCommandHandler : IRequestHandler<DeleteCountryCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteCountryCommandHandler(IMFDbContext context)
         {

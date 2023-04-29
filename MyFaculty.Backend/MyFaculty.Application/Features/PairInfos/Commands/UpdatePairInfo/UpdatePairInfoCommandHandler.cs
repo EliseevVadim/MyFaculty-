@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.PairInfos.Commands.UpdatePairInfo
 {
     public class UpdatePairInfoCommandHandler : IRequestHandler<UpdatePairInfoCommand, PairInfoViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdatePairInfoCommandHandler(IMFDbContext context, IMapper mapper)
         {

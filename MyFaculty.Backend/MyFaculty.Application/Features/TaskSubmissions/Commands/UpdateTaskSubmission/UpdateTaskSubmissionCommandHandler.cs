@@ -14,8 +14,8 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Commands.UpdateTaskSubm
 {
     public class UpdateTaskSubmissionCommandHandler : IRequestHandler<UpdateTaskSubmissionCommand, TaskSubmissionViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateTaskSubmissionCommandHandler(IMFDbContext context, IMapper mapper)
         {

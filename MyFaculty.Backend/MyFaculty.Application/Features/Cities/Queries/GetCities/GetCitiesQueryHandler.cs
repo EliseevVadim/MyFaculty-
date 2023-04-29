@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Cities.Queries.GetCities
 {
     public class GetCitiesQueryHandler : IRequestHandler<GetCitiesQuery, CitiesListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetCitiesQueryHandler(IMFDbContext context, IMapper mapper)
         {

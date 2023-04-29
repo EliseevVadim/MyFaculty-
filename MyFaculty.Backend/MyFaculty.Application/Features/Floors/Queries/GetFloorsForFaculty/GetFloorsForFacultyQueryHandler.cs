@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Floors.Queries.GetFloorsForFaculty
 {
     public class GetFloorsForFacultyQueryHandler : IRequestHandler<GetFloorsForFacultyQuery, FloorsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetFloorsForFacultyQueryHandler(IMFDbContext context, IMapper mapper)
         {

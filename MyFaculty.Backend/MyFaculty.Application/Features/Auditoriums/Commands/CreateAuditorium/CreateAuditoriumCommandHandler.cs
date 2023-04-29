@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.Auditoriums.Commands.CreateAuditorium
 {
     public class CreateAuditoriumCommandHandler : IRequestHandler<CreateAuditoriumCommand, AuditoriumViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateAuditoriumCommandHandler(IMFDbContext context, IMapper mapper)
         {

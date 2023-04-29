@@ -14,8 +14,8 @@ namespace MyFaculty.Application.Features.TaskSubmissionReviews.Commands.DeleteTa
 {
     public class DeleteTaskSubmissionReviewCommandHandler : IRequestHandler<DeleteTaskSubmissionReviewCommand, TaskSubmissionReviewViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public DeleteTaskSubmissionReviewCommandHandler(IMFDbContext context, IMapper mapper)
         {

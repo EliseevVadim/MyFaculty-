@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.Disciplines.Commands.CreateDiscipline
 {
     public class CreateDisciplineCommandHandler : IRequestHandler<CreateDisciplineCommand, DisciplineViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateDisciplineCommandHandler(IMFDbContext context, IMapper mapper)
         {

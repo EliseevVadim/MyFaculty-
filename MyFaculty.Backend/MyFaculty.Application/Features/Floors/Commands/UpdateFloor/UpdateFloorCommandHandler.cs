@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Floors.Commands.UpdateFloor
 {
     public class UpdateFloorCommandHandler : IRequestHandler<UpdateFloorCommand, FloorViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateFloorCommandHandler(IMFDbContext context, IMapper mapper)
         {

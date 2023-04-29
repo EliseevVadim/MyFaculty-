@@ -25,11 +25,11 @@ namespace MyFaculty.WebApi.Controllers
     [Route("api/[controller]")]
     public class TaskSubmissionReviewsController : BaseController
     {
-        private IMapper _mapper;
-        private IWebHostEnvironment _webHostEnvironment;
-        private IConfiguration _configuration;
-        private NotificationsHub _notificationsHub;
-        private string _appDomain;
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
+        private readonly NotificationsHub _notificationsHub;
+        private readonly string _appDomain;
 
         public TaskSubmissionReviewsController(IMapper mapper, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, NotificationsHub notificationsHub)
         {

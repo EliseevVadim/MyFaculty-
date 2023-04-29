@@ -10,7 +10,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.LeaveStudyClub
 {
     public class LeaveStudyClubCommandHandler : IRequestHandler<LeaveStudyClubCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public LeaveStudyClubCommandHandler(IMFDbContext context)
         {

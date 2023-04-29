@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Newsfeed.Queries.GeneratePostsNewsfeedF
 {
     public class GeneratePostsNewsfeedForUserQueryHandler : IRequestHandler<GeneratePostsNewsfeedForUserQuery, InfoPostsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         private const int POSTS_COUNT_LIMIT = 100;
 

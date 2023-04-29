@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Cities.Queries.GetCitiesForRegion
 {
     public class GetCitiesForRegionQueryHandler : IRequestHandler<GetCitiesForRegionQuery, CitiesListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetCitiesForRegionQueryHandler(IMFDbContext context, IMapper mapper)
         {

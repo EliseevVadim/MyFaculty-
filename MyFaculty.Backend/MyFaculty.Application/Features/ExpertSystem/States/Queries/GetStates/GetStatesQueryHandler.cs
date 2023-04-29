@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.ExpertSystem.States.Queries.GetStates
 {
     public class GetStatesQueryHandler : IRequestHandler<GetStatesQuery, StatesListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetStatesQueryHandler(IMFDbContext context, IMapper mapper)
         {

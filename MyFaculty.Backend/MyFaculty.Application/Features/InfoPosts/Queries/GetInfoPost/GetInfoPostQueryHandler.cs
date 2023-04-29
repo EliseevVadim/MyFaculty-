@@ -14,8 +14,8 @@ namespace MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPost
 {
     public class GetInfoPostQueryHandler : IRequestHandler<GetInfoPostQuery, InfoPostViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetInfoPostQueryHandler(IMFDbContext context, IMapper mapper)
         {

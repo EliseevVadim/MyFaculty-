@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.Regions.Commands.CreateRegion
 {
     public class CreateRegionCommandHandler : IRequestHandler<CreateRegionCommand, RegionViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateRegionCommandHandler(IMFDbContext context, IMapper mapper)
         {

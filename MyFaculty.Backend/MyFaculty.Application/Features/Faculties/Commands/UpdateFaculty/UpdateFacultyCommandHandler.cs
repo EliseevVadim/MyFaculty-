@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Faculties.Commands.UpdateFaculty
 {
     public class UpdateFacultyCommandHandler : IRequestHandler<UpdateFacultyCommand, FacultyViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateFacultyCommandHandler(IMFDbContext context, IMapper mapper)
         {

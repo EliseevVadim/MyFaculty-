@@ -14,8 +14,8 @@ namespace MyFaculty.Application.Features.Cities.Commands.UpdateCity
 {
     public class UpdateCityCommandHandler : IRequestHandler<UpdateCityCommand, CityViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateCityCommandHandler(IMFDbContext context, IMapper mapper)
         {

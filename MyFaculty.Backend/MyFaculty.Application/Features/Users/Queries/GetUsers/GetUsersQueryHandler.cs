@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Users.Queries.GetUsers
 {
     public class GetUsersQueryHandler : IRequestHandler<GetUsersQuery, UsersListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetUsersQueryHandler(IMFDbContext context, IMapper mapper)
         {

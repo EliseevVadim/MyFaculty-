@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.Disciplines.Commands.DeleteDiscipline
 {
     public class DeleteDisciplineCommandHandler : IRequestHandler<DeleteDisciplineCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteDisciplineCommandHandler(IMFDbContext context)
         {

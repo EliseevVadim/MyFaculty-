@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.Countries.Commands.CreateCountry
 {
     public class CreateCountryCommandHandler : IRequestHandler<CreateCountryCommand, CountryViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateCountryCommandHandler(IMFDbContext context, IMapper mapper)
         {

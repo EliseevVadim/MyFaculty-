@@ -14,8 +14,8 @@ namespace MyFaculty.Application.Features.Comments.Commands.DeleteComment
 {
     public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand, CommentViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public DeleteCommentCommandHandler(IMFDbContext context, IMapper mapper)
         {

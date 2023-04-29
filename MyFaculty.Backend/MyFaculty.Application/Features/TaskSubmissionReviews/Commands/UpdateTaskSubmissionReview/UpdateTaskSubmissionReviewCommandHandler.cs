@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.TaskSubmissionReviews.Commands.UpdateTa
 {
     public class UpdateTaskSubmissionReviewCommandHandler : IRequestHandler<UpdateTaskSubmissionReviewCommand, TaskSubmissionReviewViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateTaskSubmissionReviewCommandHandler(IMFDbContext context, IMapper mapper)
         {

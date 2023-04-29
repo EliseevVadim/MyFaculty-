@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Notifications.Queries.GetNotificationsF
 {
     public class GetNotificationsForUserQueryHandler : IRequestHandler<GetNotificationsForUserQuery, NotificationsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetNotificationsForUserQueryHandler(IMFDbContext context, IMapper mapper)
         {

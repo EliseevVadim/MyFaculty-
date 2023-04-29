@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.Regions.Commands.DeleteRegion
 {
     public class DeleteRegionCommandHandler : IRequestHandler<DeleteRegionCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteRegionCommandHandler(IMFDbContext context)
         {

@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubs
 {
     public class GetStudyClubsQueryHandler : IRequestHandler<GetStudyClubsQuery, StudyClubsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetStudyClubsQueryHandler(IMFDbContext context, IMapper mapper)
         {

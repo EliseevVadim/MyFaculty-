@@ -11,7 +11,7 @@ namespace MyFaculty.WebApi.Controllers
     [Route("api/[controller]")]
     public class DaysOfWeekController : BaseController
     {
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public DaysOfWeekController(IMapper mapper)
         {

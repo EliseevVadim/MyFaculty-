@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.DeleteStudyClub
 {
     public class DeleteStudyClubCommandHandler : IRequestHandler<DeleteStudyClubCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteStudyClubCommandHandler(IMFDbContext context)
         {

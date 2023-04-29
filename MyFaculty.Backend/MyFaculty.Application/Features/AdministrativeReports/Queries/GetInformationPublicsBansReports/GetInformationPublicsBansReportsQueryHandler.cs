@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.AdministrativeReports.Queries.GetInform
 {
     public class GetInformationPublicsBansReportsQueryHandler : IRequestHandler<GetInformationPublicsBansReportsQuery, InformationPublicsBansReportsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetInformationPublicsBansReportsQueryHandler(IMFDbContext context, IMapper mapper)
         {

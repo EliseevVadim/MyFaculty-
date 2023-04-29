@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Countries.Commands.UpdateCountry
 {
     public class UpdateCountryCommandHandler : IRequestHandler<UpdateCountryCommand, CountryViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateCountryCommandHandler(IMFDbContext context, IMapper mapper)
         {

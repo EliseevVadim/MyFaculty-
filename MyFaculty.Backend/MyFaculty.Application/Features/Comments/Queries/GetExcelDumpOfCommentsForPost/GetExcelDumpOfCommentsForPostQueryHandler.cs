@@ -17,8 +17,8 @@ namespace MyFaculty.Application.Features.Comments.Queries.GetExcelDumpOfComments
 {
     public class GetExcelDumpOfCommentsForPostQueryHandler : IRequestHandler<GetExcelDumpOfCommentsForPostQuery, ExcelFileInfoDto>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetExcelDumpOfCommentsForPostQueryHandler(IMFDbContext context, IMapper mapper)
         {

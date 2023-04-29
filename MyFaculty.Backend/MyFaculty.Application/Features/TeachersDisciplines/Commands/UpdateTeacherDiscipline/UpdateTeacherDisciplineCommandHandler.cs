@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.TeachersDisciplines.Commands.UpdateTeac
 {
     public class UpdateTeacherDisciplineCommandHandler : IRequestHandler<UpdateTeacherDisciplineCommand, TeacherDisciplineViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateTeacherDisciplineCommandHandler(IMFDbContext context, IMapper mapper)
         {

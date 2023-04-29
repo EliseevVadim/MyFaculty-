@@ -18,7 +18,7 @@ namespace MyFaculty.WebApi.Controllers
     [Route("api/[controller]")]
     public class PairsController : BaseController
     {
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public PairsController(IMapper mapper)
         {

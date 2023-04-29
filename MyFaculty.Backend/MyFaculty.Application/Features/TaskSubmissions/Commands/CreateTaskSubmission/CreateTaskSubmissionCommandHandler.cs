@@ -14,8 +14,8 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Commands.CreateTaskSubm
 {
     public class CreateTaskSubmissionCommandHandler : IRequestHandler<CreateTaskSubmissionCommand, TaskSubmissionViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateTaskSubmissionCommandHandler(IMFDbContext context, IMapper mapper)
         {

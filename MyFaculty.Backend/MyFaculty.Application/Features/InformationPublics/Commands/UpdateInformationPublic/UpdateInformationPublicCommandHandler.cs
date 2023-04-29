@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.UpdateInfor
 {
     public class UpdateInformationPublicCommandHandler : IRequestHandler<UpdateInformationPublicCommand, InformationPublicViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateInformationPublicCommandHandler(IMFDbContext context, IMapper mapper)
         {

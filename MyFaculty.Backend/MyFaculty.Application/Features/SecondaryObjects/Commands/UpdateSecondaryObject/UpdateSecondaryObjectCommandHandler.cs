@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.SecondaryObjects.Commands.UpdateSeconda
 {
     public class UpdateSecondaryObjectCommandHandler : IRequestHandler<UpdateSecondaryObjectCommand, SecondaryObjectViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateSecondaryObjectCommandHandler(IMFDbContext context, IMapper mapper)
         {

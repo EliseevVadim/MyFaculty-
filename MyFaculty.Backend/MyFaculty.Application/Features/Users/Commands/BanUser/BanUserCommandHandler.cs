@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.Users.Commands.BanUser
 {
     public class BanUserCommandHandler : IRequestHandler<BanUserCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public BanUserCommandHandler(IMFDbContext context)
         {

@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Auditoriums.Queries.GetAuditoriumInfo
 {
     public class GetAuditoriumInfoQueryHandler : IRequestHandler<GetAuditoriumInfoQuery, AuditoriumViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetAuditoriumInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.UnblockUser
 {
     public class UnblockUserAtInformationPublicCommandHandler : IRequestHandler<UnblockUserAtInformationPublicCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public UnblockUserAtInformationPublicCommandHandler(IMFDbContext context)
         {

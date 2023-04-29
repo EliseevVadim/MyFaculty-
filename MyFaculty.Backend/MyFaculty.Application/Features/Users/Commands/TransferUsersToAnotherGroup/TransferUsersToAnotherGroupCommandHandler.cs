@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.Users.Commands.TransferUsersToAnotherGr
 {
     public class TransferUsersToAnotherGroupCommandHandler : IRequestHandler<TransferUsersToAnotherGroupCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public TransferUsersToAnotherGroupCommandHandler(IMFDbContext context)
         {

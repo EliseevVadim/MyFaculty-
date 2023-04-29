@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Cities.Queries.GetCityInfo
 {
     public class GetCityInfoQueryHandler : IRequestHandler<GetCityInfoQuery, CityViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetCityInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

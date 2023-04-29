@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.InfoPosts.Commands.DeleteInfoPost
 {
     public class DeleteInfoPostCommandHandler : IRequestHandler<DeleteInfoPostCommand, InfoPostViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public DeleteInfoPostCommandHandler(IMFDbContext context, IMapper mapper)
         {

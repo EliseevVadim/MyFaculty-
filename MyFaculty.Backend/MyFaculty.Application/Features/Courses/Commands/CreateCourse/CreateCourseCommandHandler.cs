@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.Courses.Commands.CreateCourse
 {
     public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand, CourseViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateCourseCommandHandler(IMFDbContext context, IMapper mapper)
         {

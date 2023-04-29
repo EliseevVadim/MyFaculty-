@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.SecondaryObjects.Commands.CreateSeconda
 {
     public class CreateSecondaryObjectCommandHandler : IRequestHandler<CreateSecondaryObjectCommand, SecondaryObjectViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateSecondaryObjectCommandHandler(IMFDbContext context, IMapper mapper)
         {

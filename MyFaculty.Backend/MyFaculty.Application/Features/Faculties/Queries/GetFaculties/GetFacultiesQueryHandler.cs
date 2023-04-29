@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Faculties.Queries.GetFaculties
 {
     public class GetFacultiesQueryHandler : IRequestHandler<GetFacultiesQuery, FacultiesListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetFacultiesQueryHandler(IMFDbContext context, IMapper mapper)
         {

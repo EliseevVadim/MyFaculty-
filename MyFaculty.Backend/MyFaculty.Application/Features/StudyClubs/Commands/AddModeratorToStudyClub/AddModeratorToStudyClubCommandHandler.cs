@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.AddModeratorToStudy
 {
     public class AddModeratorToStudyClubCommandHandler : IRequestHandler<AddModeratorToStudyClubCommand, int>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public AddModeratorToStudyClubCommandHandler(IMFDbContext context)
         {

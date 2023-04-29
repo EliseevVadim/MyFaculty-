@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.ScienceRanks.Commands.UpdateScienceRank
 {
     public class UpdateScienceRankCommandHandler : IRequestHandler<UpdateScienceRankCommand, ScienceRankViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateScienceRankCommandHandler(IMFDbContext context, IMapper mapper)
         {

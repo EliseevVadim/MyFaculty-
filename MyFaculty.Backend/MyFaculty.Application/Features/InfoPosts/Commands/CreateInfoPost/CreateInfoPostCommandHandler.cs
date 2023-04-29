@@ -14,8 +14,8 @@ namespace MyFaculty.Application.Features.InfoPosts.Commands.CreateInfoPost
 {
     public class CreateInfoPostCommandHandler : IRequestHandler<CreateInfoPostCommand, InfoPostViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateInfoPostCommandHandler(IMFDbContext context, IMapper mapper)
         {

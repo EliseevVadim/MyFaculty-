@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Countries.Queries.GetCountryInfo
 {
     public class GetCountryInfoQueryHandler : IRequestHandler<GetCountryInfoQuery, CountryViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetCountryInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

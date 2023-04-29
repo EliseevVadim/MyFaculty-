@@ -12,7 +12,7 @@ namespace MyFaculty.Identity.Services
 {
     public class ProfileService : IProfileService
     {
-        private UserManager<AppUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
         public ProfileService(UserManager<AppUser> userManager)
         {

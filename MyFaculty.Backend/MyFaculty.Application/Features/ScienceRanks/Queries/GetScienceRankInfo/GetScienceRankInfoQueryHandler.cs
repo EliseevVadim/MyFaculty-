@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.ScienceRanks.Queries.GetScienceRankInfo
 {
     public class GetScienceRankInfoQueryHandler : IRequestHandler<GetScienceRankInfoQuery, ScienceRankViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetScienceRankInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

@@ -10,7 +10,7 @@ namespace MyFaculty.Application.Features.InfoPosts.Commands.UnlikeInfoPost
 {
     public class UnlikeInfoPostCommandHandler : IRequestHandler<UnlikeInfoPostCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public UnlikeInfoPostCommandHandler(IMFDbContext context)
         {

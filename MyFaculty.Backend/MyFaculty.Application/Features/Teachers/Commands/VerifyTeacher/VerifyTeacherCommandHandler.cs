@@ -10,7 +10,7 @@ namespace MyFaculty.Application.Features.Teachers.Commands.VerifyTeacher
 {
     public class VerifyTeacherCommandHandler : IRequestHandler<VerifyTeacherCommand, TeacherVerificationDto>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public VerifyTeacherCommandHandler(IMFDbContext context)
         {

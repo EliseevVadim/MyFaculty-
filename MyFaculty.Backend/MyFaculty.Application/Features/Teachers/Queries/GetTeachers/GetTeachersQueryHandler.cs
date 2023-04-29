@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Teachers.Queries.GetTeachers
 {
     public class GetTeachersQueryHandler : IRequestHandler<GetTeachersQuery, TeachersListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetTeachersQueryHandler(IMFDbContext context, IMapper mapper)
         {

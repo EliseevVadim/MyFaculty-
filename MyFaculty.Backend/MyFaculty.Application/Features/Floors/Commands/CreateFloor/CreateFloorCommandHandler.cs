@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.Floors.Commands.CreateFloor
 {
     public class CreateFloorCommandHandler : IRequestHandler<CreateFloorCommand, FloorViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateFloorCommandHandler(IMFDbContext context, IMapper mapper)
         {

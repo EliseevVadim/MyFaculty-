@@ -10,7 +10,7 @@ namespace MyFaculty.Application.Features.InfoPosts.Commands.LikeInfoPost
 {
     public class LikeInfoPostCommandHandler : IRequestHandler<LikeInfoPostCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public LikeInfoPostCommandHandler(IMFDbContext context)
         {

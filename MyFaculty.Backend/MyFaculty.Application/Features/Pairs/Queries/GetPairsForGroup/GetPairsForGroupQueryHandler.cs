@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Pairs.Queries.GetPairsForGroup
 {
     public class GetPairsForGroupQueryHandler : IRequestHandler<GetPairsForGroupQuery, PairsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetPairsForGroupQueryHandler(IMFDbContext context, IMapper mapper)
         {

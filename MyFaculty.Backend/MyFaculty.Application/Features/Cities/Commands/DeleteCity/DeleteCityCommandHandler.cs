@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.Cities.Commands.DeleteCity
 {
     public class DeleteCityCommandHandler : IRequestHandler<DeleteCityCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteCityCommandHandler(IMFDbContext context)
         {

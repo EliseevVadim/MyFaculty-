@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.Cities.Commands.CreateCity
 {
     public class CreateCityCommandHandler : IRequestHandler<CreateCityCommand, CityViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateCityCommandHandler(IMFDbContext context, IMapper mapper)
         {

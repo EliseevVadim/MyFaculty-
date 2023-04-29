@@ -13,7 +13,7 @@ namespace MyFaculty.WebApi.Controllers
     [Route("api/[controller]")]
     public class AdministrativeReportsController : BaseController
     {
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public AdministrativeReportsController(IMapper mapper)
         {

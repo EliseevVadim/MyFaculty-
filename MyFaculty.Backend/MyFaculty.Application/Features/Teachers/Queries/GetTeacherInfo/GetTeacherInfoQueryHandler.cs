@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Teachers.Queries.GetTeacherInfo
 {
     public class GetTeacherInfoQueryHandler : IRequestHandler<GetTeacherInfoQuery, TeacherViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetTeacherInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

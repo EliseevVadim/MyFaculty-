@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.WorkDaysOfWeek.Queries.GetWorkDaysOfWee
 {
     public class GetWorkDaysOfWeekQueryHandler : IRequestHandler<GetWorkDaysOfWeekQuery, WorkDaysOfWeekListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetWorkDaysOfWeekQueryHandler(IMFDbContext context, IMapper mapper)
         {

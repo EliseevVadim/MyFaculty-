@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.AddModerato
 {
     public class AddModeratorToInformationPublicCommandHandler : IRequestHandler<AddModeratorToInformationPublicCommand, int>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public AddModeratorToInformationPublicCommandHandler(IMFDbContext context)
         {

@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.Floors.Commands.DeleteFloor
 {
     public class DeleteFloorCommandHandler : IRequestHandler<DeleteFloorCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteFloorCommandHandler(IMFDbContext context)
         {

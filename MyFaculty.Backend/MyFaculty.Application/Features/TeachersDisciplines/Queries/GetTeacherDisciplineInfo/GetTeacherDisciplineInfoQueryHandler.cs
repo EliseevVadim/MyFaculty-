@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.TeachersDisciplines.Queries.GetTeacherD
 {
     public class GetTeacherDisciplineInfoQueryHandler : IRequestHandler<GetTeacherDisciplineInfoQuery, TeacherDisciplineViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetTeacherDisciplineInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {

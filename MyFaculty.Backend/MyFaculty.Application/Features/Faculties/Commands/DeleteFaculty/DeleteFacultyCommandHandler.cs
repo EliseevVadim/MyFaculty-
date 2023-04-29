@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.Faculties.Commands.DeleteFaculty
 {
     public class DeleteFacultyCommandHandler : IRequestHandler<DeleteFacultyCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteFacultyCommandHandler(IMFDbContext context)
         {

@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Disciplines.Queries.GetDisciplines
 {
     public class GetDisciplinesQueryHandler : IRequestHandler<GetDisciplinesQuery, DisciplinesListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetDisciplinesQueryHandler(IMFDbContext context, IMapper mapper)
         {

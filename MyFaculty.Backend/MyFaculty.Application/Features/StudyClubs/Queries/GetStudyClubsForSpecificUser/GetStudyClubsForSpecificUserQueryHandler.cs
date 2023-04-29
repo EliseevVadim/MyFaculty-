@@ -15,8 +15,8 @@ namespace MyFaculty.Application.Features.StudyClubs.Queries.GetStudyClubsForSpec
 {
     public class GetStudyClubsForSpecificUserQueryHandler : IRequestHandler<GetStudyClubsForSpecificUserQuery, StudyClubsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetStudyClubsForSpecificUserQueryHandler(IMFDbContext context, IMapper mapper)
         {

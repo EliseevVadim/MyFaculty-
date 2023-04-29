@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.PairRepeatings.Queries.GetPairRepeating
 {
     public class GetPairRepeatingsQueryHandler : IRequestHandler<GetPairRepeatingsQuery, PairRepeatingsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetPairRepeatingsQueryHandler(IMFDbContext context, IMapper mapper)
         {

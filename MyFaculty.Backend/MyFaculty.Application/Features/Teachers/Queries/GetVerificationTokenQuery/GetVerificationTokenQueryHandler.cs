@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Teachers.Queries.GetVerificationTokenQu
 {
     public class GetVerificationTokenQueryHandler : IRequestHandler<GetVerificationTokenQuery, TeacherVerificationCredentialsDto>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetVerificationTokenQueryHandler(IMFDbContext context, IMapper mapper)
         {

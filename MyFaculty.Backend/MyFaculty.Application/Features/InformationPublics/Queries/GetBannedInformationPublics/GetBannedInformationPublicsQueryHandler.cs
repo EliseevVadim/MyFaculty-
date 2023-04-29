@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.InformationPublics.Queries.GetBannedInf
 {
     public class GetBannedInformationPublicsQueryHandler : IRequestHandler<GetBannedInformationPublicsQuery, InformationPublicsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetBannedInformationPublicsQueryHandler(IMFDbContext context, IMapper mapper)
         {

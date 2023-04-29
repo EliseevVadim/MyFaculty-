@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Users.Queries.GetUsersForGroup
 {
     public class GetUsersForGroupQueryHandler : IRequestHandler<GetUsersForGroupQuery, UsersListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetUsersForGroupQueryHandler(IMFDbContext context, IMapper mapper)
         {

@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.InfoPosts.Commands.UpdateInfoPost
 {
     public class UpdateInfoPostCommandHandler : IRequestHandler<UpdateInfoPostCommand, InfoPostViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateInfoPostCommandHandler(IMFDbContext context, IMapper mapper)
         {

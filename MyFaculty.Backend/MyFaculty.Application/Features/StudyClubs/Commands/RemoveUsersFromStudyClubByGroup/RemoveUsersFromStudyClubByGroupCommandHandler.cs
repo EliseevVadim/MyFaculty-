@@ -12,7 +12,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.RemoveUsersFromStud
 {
     public class RemoveUsersFromStudyClubByGroupCommandHandler : IRequestHandler<RemoveUsersFromStudyClubByGroupCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public RemoveUsersFromStudyClubByGroupCommandHandler(IMFDbContext context)
         {

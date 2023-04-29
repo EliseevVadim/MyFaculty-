@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Groups.Queries.GetGroupsForCourse
 {
     public class GetGroupsForCourseQueryHandler : IRequestHandler<GetGroupsForCourseQuery, GroupsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetGroupsForCourseQueryHandler(IMFDbContext context, IMapper mapper)
         {

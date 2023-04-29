@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.PairInfos.Commands.DeletePairInfo
 {
     public class DeletePairInfoCommandHandler : IRequestHandler<DeletePairInfoCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeletePairInfoCommandHandler(IMFDbContext context)
         {

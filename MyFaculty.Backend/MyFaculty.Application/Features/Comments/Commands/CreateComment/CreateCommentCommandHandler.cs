@@ -15,8 +15,8 @@ namespace MyFaculty.Application.Features.Comments.Commands.CreateComment
 {
     public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, CommentViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateCommentCommandHandler(IMFDbContext context, IMapper mapper)
         {

@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.Auditoriums.Commands.DeleteAuditorium
 {
     public class DeleteAuditoriumCommandHandler : IRequestHandler<DeleteAuditoriumCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteAuditoriumCommandHandler(IMFDbContext context)
         {

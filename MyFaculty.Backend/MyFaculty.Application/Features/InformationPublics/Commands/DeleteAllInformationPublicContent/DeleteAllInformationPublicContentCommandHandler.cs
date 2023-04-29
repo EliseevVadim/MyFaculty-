@@ -12,7 +12,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.DeleteAllIn
 {
     public class DeleteAllInformationPublicContentCommandHandler : IRequestHandler<DeleteAllInformationPublicContentCommand, List<string>>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteAllInformationPublicContentCommandHandler(IMFDbContext context)
         {

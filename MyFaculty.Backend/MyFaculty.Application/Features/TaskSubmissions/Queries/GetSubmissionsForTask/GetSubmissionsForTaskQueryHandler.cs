@@ -15,8 +15,8 @@ namespace MyFaculty.Application.Features.TaskSubmissions.Queries.GetSubmissionsF
 {
     public class GetSubmissionsForTaskQueryHandler : IRequestHandler<GetSubmissionsForTaskQuery, TaskSubmissionsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetSubmissionsForTaskQueryHandler(IMFDbContext context, IMapper mapper)
         {

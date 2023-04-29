@@ -14,7 +14,7 @@ namespace MyFaculty.WebApi.Controllers
     [Route("api/news")]
     public class NewsfeedController : BaseController
     {
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public NewsfeedController(IMapper mapper)
         {

@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Regions.Commands.UpdateRegion
 {
     public class UpdateRegionCommandHandler : IRequestHandler<UpdateRegionCommand, RegionViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateRegionCommandHandler(IMFDbContext context, IMapper mapper)
         {

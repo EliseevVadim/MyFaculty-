@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.ScienceRanks.Commands.DeleteScienceRank
 {
     public class DeleteScienceRankCommandHandler : IRequestHandler<DeleteScienceRankCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteScienceRankCommandHandler(IMFDbContext context)
         {

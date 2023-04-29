@@ -18,7 +18,7 @@ namespace MyFaculty.WebApi.Controllers
     [Route("api/[controller]")]
     public class RegionsController : BaseController
     {
-        private IMapper _mapper;
+        private readonly IMapper _mapper;
 
         public RegionsController(IMapper mapper)
         {

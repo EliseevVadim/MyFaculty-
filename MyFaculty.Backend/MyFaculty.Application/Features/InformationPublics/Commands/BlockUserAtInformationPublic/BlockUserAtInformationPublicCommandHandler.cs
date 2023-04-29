@@ -12,7 +12,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.BlockUserAt
 {
     public class BlockUserAtInformationPublicCommandHandler : IRequestHandler<BlockUserAtInformationPublicCommand, int>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public BlockUserAtInformationPublicCommandHandler(IMFDbContext context)
         {

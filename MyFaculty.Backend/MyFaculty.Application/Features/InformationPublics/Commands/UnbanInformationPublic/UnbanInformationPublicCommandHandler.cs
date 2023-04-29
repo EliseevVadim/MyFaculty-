@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.UnbanInform
 {
     public class UnbanInformationPublicCommandHandler : IRequestHandler<UnbanInformationPublicCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public UnbanInformationPublicCommandHandler(IMFDbContext context)
         {

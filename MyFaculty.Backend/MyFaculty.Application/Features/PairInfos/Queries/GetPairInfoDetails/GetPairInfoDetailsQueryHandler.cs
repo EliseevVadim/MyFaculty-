@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.PairInfos.Queries.GetPairInfoDetails
 {
     public class GetPairInfoDetailsQueryHandler : IRequestHandler<GetPairInfoDetailsQuery, PairInfoViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetPairInfoDetailsQueryHandler(IMFDbContext context, IMapper mapper)
         {

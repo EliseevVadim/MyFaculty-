@@ -12,7 +12,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.AddUsersToStudyClub
 {
     public class AddUsersToStudyClubByGroupCommandHandler : IRequestHandler<AddUsersToStudyClubByGroupCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public AddUsersToStudyClubByGroupCommandHandler(IMFDbContext context)
         {

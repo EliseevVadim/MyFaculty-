@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.Regions.Queries.GetRegionsForCountry
 {
     public class GetRegionsForCountryQueryHandler : IRequestHandler<GetRegionsForCountryQuery, RegionsListViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetRegionsForCountryQueryHandler(IMFDbContext context, IMapper mapper)
         {

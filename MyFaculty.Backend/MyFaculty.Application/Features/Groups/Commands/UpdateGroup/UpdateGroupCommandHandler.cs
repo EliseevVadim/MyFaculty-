@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Groups.Commands.UpdateGroup
 {
     public class UpdateGroupCommandHandler : IRequestHandler<UpdateGroupCommand, GroupViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateGroupCommandHandler(IMFDbContext context, IMapper mapper)
         {

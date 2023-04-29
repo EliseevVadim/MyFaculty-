@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.Users.Commands.UnbanUser
 {
     public class UnbanUserCommandHandler : IRequestHandler<UnbanUserCommand, int>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public UnbanUserCommandHandler(IMFDbContext context)
         {

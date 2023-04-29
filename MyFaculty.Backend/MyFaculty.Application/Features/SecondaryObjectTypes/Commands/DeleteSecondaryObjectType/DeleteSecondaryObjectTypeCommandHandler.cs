@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.SecondaryObjectTypes.Commands.DeleteSec
 {
     public class DeleteSecondaryObjectTypeCommandHandler : IRequestHandler<DeleteSecondaryObjectTypeCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteSecondaryObjectTypeCommandHandler(IMFDbContext context)
         {

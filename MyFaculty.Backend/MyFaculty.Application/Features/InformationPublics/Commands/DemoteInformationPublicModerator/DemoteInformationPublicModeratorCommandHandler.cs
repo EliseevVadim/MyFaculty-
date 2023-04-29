@@ -11,7 +11,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.DemoteInfor
 {
     public class DemoteInformationPublicModeratorCommandHandler : IRequestHandler<DemoteInformationPublicModeratorCommand, int>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DemoteInformationPublicModeratorCommandHandler(IMFDbContext context)
         {

@@ -11,8 +11,8 @@ namespace MyFaculty.Application.Features.ClubTasks.Commands.CreateClubTask
 {
     public class CreateClubTaskCommandHandler : IRequestHandler<CreateClubTaskCommand, ClubTaskViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public CreateClubTaskCommandHandler(IMFDbContext context, IMapper mapper)
         {

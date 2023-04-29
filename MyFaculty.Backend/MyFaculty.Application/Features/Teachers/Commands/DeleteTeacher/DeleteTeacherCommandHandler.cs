@@ -9,7 +9,7 @@ namespace MyFaculty.Application.Features.Teachers.Commands.DeleteTeacher
 {
     public class DeleteTeacherCommandHandler : IRequestHandler<DeleteTeacherCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteTeacherCommandHandler(IMFDbContext context)
         {

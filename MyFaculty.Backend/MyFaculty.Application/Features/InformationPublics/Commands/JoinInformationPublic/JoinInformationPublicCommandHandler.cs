@@ -12,7 +12,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.JoinInforma
 {
     public class JoinInformationPublicCommandHandler : IRequestHandler<JoinInformationPublicCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public JoinInformationPublicCommandHandler(IMFDbContext context)
         {

@@ -8,7 +8,7 @@ namespace MyFaculty.Application.Features.Notifications.Commands.DeleteAllNotific
 {
     public class DeleteAllNotificationsForUserCommandHandler : IRequestHandler<DeleteAllNotificationsForUserCommand>
     {
-        private IMFDbContext _context;
+        private readonly IMFDbContext _context;
 
         public DeleteAllNotificationsForUserCommandHandler(IMFDbContext context)
         {

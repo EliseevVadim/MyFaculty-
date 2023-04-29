@@ -13,8 +13,8 @@ namespace MyFaculty.Application.Features.ClubTasks.Commands.UpdateClubTask
 {
     public class UpdateClubTaskCommandHandler : IRequestHandler<UpdateClubTaskCommand, ClubTaskViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public UpdateClubTaskCommandHandler(IMFDbContext context, IMapper mapper)
         {

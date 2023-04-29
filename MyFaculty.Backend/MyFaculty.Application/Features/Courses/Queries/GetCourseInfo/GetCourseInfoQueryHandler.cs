@@ -12,8 +12,8 @@ namespace MyFaculty.Application.Features.Courses.Queries.GetCourseInfo
 {
     public class GetCourseInfoQueryHandler : IRequestHandler<GetCourseInfoQuery, CourseViewModel>
     {
-        private IMFDbContext _context;
-        private IMapper _mapper;
+        private readonly IMFDbContext _context;
+        private readonly IMapper _mapper;
 
         public GetCourseInfoQueryHandler(IMFDbContext context, IMapper mapper)
         {
