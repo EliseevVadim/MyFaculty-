@@ -26,14 +26,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of floors
+        /// Возвращает список этажей
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /floors
         /// </remarks>
-        /// <returns>Returns FloorsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект FloorsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<FloorsListViewModel>> GetAll()
@@ -44,19 +44,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the floor by id
+        /// Возвращает информацию об этаже по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /floors/1
         /// </remarks>
-        /// <param name="id">Floor's id (integer)</param>
-        /// <returns>Returns FloorViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id этажа (integer)</param>
+        /// <returns>>Возвращает объект FloorViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Этаж не найден</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<FloorViewModel>> Get(int id)
         {
             GetFloorInfoQuery query = new GetFloorInfoQuery()
@@ -68,17 +70,19 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of floors for a specific faculty
+        /// Возвращает список этажей, принадлежащих указанному факультету
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /floors/faculty/1
         /// </remarks>
-        /// <param name="id">Specific faculty id (integer)</param>
-        /// <returns>FloorsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <param name="id">id факультета (integer)</param>
+        /// <returns>Возвращает объект FloorsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("faculty/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<FloorsListViewModel>> GetByFacultyId(int id)
         {
             GetFloorsForFacultyQuery query = new GetFloorsForFacultyQuery()
@@ -90,23 +94,27 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the floor
+        /// Создает новую запись об этаже
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /floors
         /// {
         ///     "name": "string",
         ///     "bounds": "json"
         /// }
         /// </remarks>
-        /// <param name="createFloorDto">CreateFloorDto object</param>
-        /// <returns>Retruns FloorViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createFloorDto">Объект CreateFloorDto</param>
+        /// <returns>Возвращает объект FloorViewModel</returns>
+        /// <response code="201">Запись об этаже успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FloorViewModel>> Create([FromBody] CreateFloorDto createFloorDto)
         {
@@ -116,10 +124,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the floor
+        /// Редактирует информацию об этаже
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /floors
         /// {
         ///     "id": 1,
@@ -127,15 +135,19 @@ namespace MyFaculty.WebApi.Controllers
         ///     "bounds": "json"
         /// }
         /// </remarks>
-        /// <param name="updateFloorDto">UpdateFloorDto object</param>
-        /// <returns>Retruns FloorViewModel</returns>
-        /// <response code="200">Created</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateFloorDto">Объект UpdateFloorDto</param>
+        /// <returns>Возвращает объект FloorViewModel</returns>
+        /// <response code="200">Информация об этаже успешно обновлена</response>
+        /// <response code="404">Этаж не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>  
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FloorViewModel>> Update([FromBody] UpdateFloorDto updateFloorDto)
         {
@@ -145,21 +157,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the floor by id
+        /// Удаляет информацию об этаже по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /floors/1
         /// </remarks>
-        /// <param name="id">Floor's id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id этажа (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информация об этаже успешно удалена</response>
+        /// <response code="404">Этаж не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

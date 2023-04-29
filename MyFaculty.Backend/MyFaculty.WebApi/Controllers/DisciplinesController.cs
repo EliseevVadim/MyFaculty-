@@ -25,14 +25,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of disciplines
+        /// Возвращает список дисциплин
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /disciplines
         /// </remarks>
-        /// <returns>Returns DisciplinesListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект DisciplinesListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<DisciplinesListViewModel>> GetAll()
@@ -43,19 +43,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the discipline by id
+        /// Возвращает информацию о дисциплине по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /disciplines/1
         /// </remarks>
-        /// <param name="id">Discipline's id (integer)</param>
-        /// <returns>Returns DisciplineViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id дисциплины (integer)</param>
+        /// <returns>Возвращает объект DisciplineViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Дисциплина не найдена</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<DisciplineViewModel>> Get(int id)
         {
             GetDisciplineInfoQuery query = new GetDisciplineInfoQuery()
@@ -67,22 +69,26 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the discipline
+        /// Создает новую запись о дисциплине
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /disciplines
         /// {
         ///     "disciplineName": "string"
         /// }
         /// </remarks>
-        /// <param name="createDisciplineDto">CreateDisciplineDto object</param>
-        /// <returns>Retruns DisciplineViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createDisciplineDto">Объект CreateDisciplineDto</param>
+        /// <returns>Возвращает объект DisciplineViewModel</returns>
+        /// <response code="201">Запись о дисциплине успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<DisciplineViewModel>> Create([FromBody] CreateDisciplineDto createDisciplineDto)
         {
@@ -92,25 +98,29 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the discipline
+        /// Редактирует информацию о дисциплине
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /disciplines
         /// {
         ///     "id": 1,
         ///     "disciplineName": "string"
         /// }
         /// </remarks>
-        /// <param name="updateDisciplineDto">UpdateDisciplineDto object</param>
-        /// <returns>Retruns DisciplineViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateDisciplineDto">Объект UpdateDisciplineDto</param>
+        /// <returns>Возвращает объект DisciplineViewModel</returns>
+        /// <response code="200">Информация о дисциплине успешно обновлена</response>
+        /// <response code="404">Дисциплина не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>  
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<DisciplineViewModel>> Update([FromBody] UpdateDisciplineDto updateDisciplineDto)
         {
@@ -120,21 +130,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the discipline by id
+        /// Удаляет информацию о дисциплине по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /disciplines/1
         /// </remarks>
-        /// <param name="id">Discipline's id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id дисциплины (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информация о дисциплине успешно удалена</response>
+        /// <response code="404">Дисциплина не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

@@ -19,7 +19,9 @@ const mutations = {
 
 const actions = {
     loadClubTasksByStudyClubId: async (context, studyClubId) => {
-        await axios.get(config.apiUrl + '/api/clubtasks/study-club/' + studyClubId)
+        await axios.get(config.apiUrl + '/api/clubtasks/study-club/' + studyClubId, {
+            headers: config.headers
+        })
             .then((response) => {
                 context.commit('setClubTasks', response.data);
             })

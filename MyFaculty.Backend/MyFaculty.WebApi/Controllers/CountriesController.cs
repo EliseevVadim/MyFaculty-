@@ -25,14 +25,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of countries
+        /// Возвращает список стран
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /countries
         /// </remarks>
-        /// <returns>Returns CountriesListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект CountriesListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<CountriesListViewModel>> GetAll()
@@ -43,19 +43,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the country by id
+        /// Возвращает информацию о стране по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /countries/1
         /// </remarks>
-        /// <param name="id">Country id (integer)</param>
-        /// <returns>Returns CountryViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id страны (integer)</param>
+        /// <returns>Возвращает объект CountryViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Страна не найдена</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CountryViewModel>> Get(int id)
         {
             GetCountryInfoQuery query = new GetCountryInfoQuery()
@@ -67,22 +69,26 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the country
+        /// Создает новую запись о стране
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /countries
         /// {
         ///     "countryName": "string"
         /// }
         /// </remarks>
-        /// <param name="createCountryDto">CreateCountryDto object</param>
-        /// <returns>Retruns CountryViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createCountryDto">Объект CreateCountryDto</param>
+        /// <returns>Возвращает объект CountryViewModel</returns>
+        /// <response code="201">Запись о стране успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CountryViewModel>> Create([FromBody] CreateCountryDto createCountryDto)
         {
@@ -92,25 +98,29 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the country
+        /// Редактирует информацию о стране
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /countries
         /// {
         ///     "id": 1,
         ///     "countryName": "string"
         /// }        
         /// </remarks>
-        /// <param name="updateCountryDto">UpdateCountryDto object</param>
-        /// <returns>Returns CountryViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>        
+        /// <param name="updateCountryDto">Объект UpdateCountryDto</param>
+        /// <returns>Возвращает объект CountryViewModel</returns>
+        /// <response code="200">Информация о стране успешно обновлена</response>
+        /// <response code="404">Страна не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>  
+        /// <response code="500">Внутренняя серверная ошибка</response>      
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CountryViewModel>> Update([FromBody] UpdateCountryDto updateCountryDto)
         {
@@ -120,21 +130,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the country by id
+        /// Удаляет информацию о стране по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /countries/1
         /// </remarks>
-        /// <param name="id">Country id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id страны (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информация о стране успешно удалена</response>
+        /// <response code="404">Страна не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

@@ -41,20 +41,24 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of submissions for a specific task
+        /// Возвращает список решений, принадлежащих кокретному заданию
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /tasksubmissions/task/1
         /// </remarks>
-        /// <param name="id">Specific task id (integer)</param>
-        /// <returns>Returns TaskSubmissionsListViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="401">Unauthorized</response>
+        /// <param name="id">id задания (integer)</param>
+        /// <returns>Возвращает объект TaskSubmissionsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Задание не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("task/{id}")]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TaskSubmissionsListViewModel>> GetByTaskId(int id)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -68,20 +72,24 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of submissions for a specific task sent by requester
+        /// Возвращает список решений текущего пользователя, принадлежащих кокретному заданию
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /tasksubmissions/mine/task/1
         /// </remarks>
-        /// <param name="id">Specific task id (integer)</param>
-        /// <returns>Returns TaskSubmissionsListViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="401">Unauthorized</response>
+        /// <param name="id">id задания (integer)</param>
+        /// <returns>Возвращает объект TaskSubmissionsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Задание не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("mine/task/{id}")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TaskSubmissionsListViewModel>> GetMineSubmissionsByTaskId(int id)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -95,20 +103,24 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the task submission by id
+        /// Возвращает решение задания по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /tasksubmissions/1
         /// </remarks>
-        /// <param name="id">Task submission id (integer)</param>
-        /// <returns>Returns TaskSubmissionViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id решения (integer)</param>
+        /// <returns>Возвращает объект TaskSubmissionViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Решение не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TaskSubmissionViewModel>> Get(int id)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -122,10 +134,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the task submission
+        /// Создает новое решение задания
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /tasksubmissions
         /// {
         ///     "title": "string",
@@ -135,13 +147,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "authorId": 1
         /// }
         /// </remarks>
-        /// <param name="createTaskSubmissionDto">CreateCommentDto object</param>
-        /// <returns>Retruns TaskSubmissionViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createTaskSubmissionDto">Объект CreateCommentDto</param>
+        /// <returns>Возвращает объект TaskSubmissionViewModel</returns>
+        /// <response code="201">Решение успешно создано</response>
+        /// <response code="404">Пользователь не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TaskSubmissionViewModel>> Create([FromForm] CreateTaskSubmissionDto createTaskSubmissionDto)
         {
@@ -161,10 +181,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the task submission
+        /// Редактирует решение задания
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /tasksubmissions
         /// {
         ///     "id": 1,
@@ -177,15 +197,23 @@ namespace MyFaculty.WebApi.Controllers
         ///     "issuerId": 1
         /// }
         /// </remarks>
-        /// <param name="updateTaskSubmissionDto">UpdateTaskSubmissionDto object</param>
-        /// <returns>Retruns TaskSubmissionViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateTaskSubmissionDto">Объект UpdateTaskSubmissionDto</param>
+        /// <returns>Возвращает объект TaskSubmissionViewModel</returns>
+        /// <response code="200">Решение успешно обновлено</response>
+        /// <response code="404">Решение не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPut]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TaskSubmissionViewModel>> Update([FromForm] UpdateTaskSubmissionDto updateTaskSubmissionDto)
         {
@@ -212,21 +240,29 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the task submission by id
+        /// Удаляет решение задания по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /tasksubmissions/1
         /// </remarks>
-        /// <param name="id">Task submission id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id решения (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Решение успешно удалено</response>
+        /// <response code="404">Решение не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

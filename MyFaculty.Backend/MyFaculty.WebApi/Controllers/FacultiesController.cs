@@ -25,14 +25,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of faculties
+        /// Возвращает список факультетов
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /faculties
         /// </remarks>
-        /// <returns>Returns FacultiesListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект FacultiesListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<FacultiesListViewModel>> GetAll()
@@ -43,19 +43,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the faculty by id
+        /// Возвращает информацию о факультете по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /faculties/1
         /// </remarks>
-        /// <param name="id">Faculty id (integer)</param>
-        /// <returns>Returns FacultyViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id факультета (integer)</param>
+        /// <returns>Возвращает объект FacultyViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Факультет не найден</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<FacultyViewModel>> Get(int id)
         {
             GetFacultyInfoQuery query = new GetFacultyInfoQuery()
@@ -67,36 +69,40 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the faculty
+        /// Создает новую запись о факультете
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /faculties
         /// {
         ///     "facultyName": "string",
         ///     "officialWebsite": "string"
         /// }
         /// </remarks>
-        /// <param name="createFacultyDto">CreateFacultyDto object</param>
-        /// <returns>Retruns FacultyViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createFacultyDto">Объект CreateFacultyDto</param>
+        /// <returns>Возвращает объект FacultyViewModel</returns>
+        /// <response code="201">Запись о факультете успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FacultyViewModel>> Create([FromBody] CreateFacultyDto createFacultyDto)
         {
             CreateFacultyCommand command = _mapper.Map<CreateFacultyCommand>(createFacultyDto);
-            FacultyViewModel floor = await Mediator.Send(command);
-            return Created(nameof(FacultiesController), floor);
+            FacultyViewModel faculty = await Mediator.Send(command);
+            return Created(nameof(FacultiesController), faculty);
         }
 
         /// <summary>
-        /// Updates the faculty
+        /// Редактирует информацию о факультете
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /faculties
         /// {
         ///     "id": 1,
@@ -104,39 +110,47 @@ namespace MyFaculty.WebApi.Controllers
         ///     "officialWebsite": "string"
         /// }
         /// </remarks>
-        /// <param name="updateFacultyDto">UpdateFacultyDto object</param>
-        /// <returns>Retruns FacultyViewModel</returns>
-        /// <response code="200">Created</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateFacultyDto">Объект UpdateFacultyDto</param>
+        /// <returns>Возвращает объект FacultyViewModel</returns>
+        /// <response code="200">Информация о факультете успешно обновлена</response>
+        /// <response code="404">Факультет не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>  
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<FacultyViewModel>> Update([FromBody] UpdateFacultyDto updateFacultyDto)
         {
             UpdateFacultyCommand command = _mapper.Map<UpdateFacultyCommand>(updateFacultyDto);
-            FacultyViewModel floor = await Mediator.Send(command);
-            return Ok(floor);
+            FacultyViewModel faculty = await Mediator.Send(command);
+            return Ok(faculty);
         }
 
         /// <summary>
-        /// Deletes the floor by id
+        /// Удаляет информацию о факультете по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /faculties/1
         /// </remarks>
-        /// <param name="id">Faculty id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id факультета (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информация о факультете успешно удалена</response>
+        /// <response code="404">Факультет не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

@@ -27,7 +27,9 @@ const actions = {
             })
     },
     loadInfoPostsByStudyClubId: async (context, studyClubId) => {
-        await axios.get(config.apiUrl + '/api/infoposts/study-club/' + studyClubId)
+        await axios.get(config.apiUrl + '/api/infoposts/study-club/' + studyClubId, {
+            headers: config.headers
+        })
             .then((response) => {
                 context.commit('setInfoPosts', response.data);
             })

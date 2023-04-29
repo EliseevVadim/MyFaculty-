@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyFaculty.Application.Features.UsersBansReports.Queries.GetInformationPublicsBansReports;
-using MyFaculty.Application.Features.UsersBansReports.Queries.GetUsersBansReports;
+using MyFaculty.Application.Features.AdministrativeReports.Queries.GetInformationPublicsBansReports;
+using MyFaculty.Application.Features.AdministrativeReports.Queries.GetUsersBansReports;
 using MyFaculty.Application.ViewModels;
 using System.Threading.Tasks;
 
@@ -21,17 +21,19 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of users bans reports
+        /// Возвращает список отчетов о блокировках пользователей
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /administrativereports/usersbans
         /// </remarks>
-        /// <returns>Returns UsersBansReportsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект UsersBansReportsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
         [HttpGet("usersbans")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<UsersBansReportsListViewModel>> GetUsersBansReports()
         {
             GetUsersBansReportsQuery query = new GetUsersBansReportsQuery();
@@ -40,17 +42,19 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of information publics bans reports
+        /// Возвращает список отчетов о блокировках информационных сообществ
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /administrativereports/publicsbans
         /// </remarks>
-        /// <returns>Returns InformationPublicsBansReportsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект InformationPublicsBansReportsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
         [HttpGet("publicsbans")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<InformationPublicsBansReportsListViewModel>> GetInformationPublicsBansReports()
         {
             GetInformationPublicsBansReportsQuery query = new GetInformationPublicsBansReportsQuery();

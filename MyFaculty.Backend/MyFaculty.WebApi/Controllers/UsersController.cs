@@ -40,14 +40,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of users
+        /// Возвращает список пользователей
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /users
         /// </remarks>
-        /// <returns>Returns UsersListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект UsersListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<UsersListViewModel>> GetAll()
@@ -58,16 +58,19 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of users for a specific group
+        /// Возвращает список пользователей из заданной группы
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /users/group/1
         /// </remarks>
-        /// <returns>Returns UsersListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект UsersListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("group/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UsersListViewModel>> GetByGroupId(int id)
         {
             GetUsersForGroupQuery query = new GetUsersForGroupQuery()
@@ -79,19 +82,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the user by id
+        /// Возвращает информацию о пользователе по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /users/1
         /// </remarks>
-        /// <param name="id">User's id (integer)</param>
-        /// <returns>Returns UserViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id пользователя (integer)</param>
+        /// <returns>Возвращает объект UserViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Пользователь не найден</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserViewModel>> Get(int id)
         {
             GetUserInfoQuery query = new GetUserInfoQuery()
@@ -103,10 +108,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the user
+        /// Редактирует информацию о пользователе
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса: 
         /// PUT /users
         /// {
         ///     "id": 1,
@@ -120,17 +125,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "telegramLink": "https://t.me/durov"
         /// }
         /// </remarks>
-        /// <param name="updateUserDto">UpdateUserDto object</param>
-        /// <returns>Retruns UserViewModel</returns>
-        /// <response code="201">Created</response>
-        /// /// <response code="403">Forbidden</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateUserDto">Объект UpdateUserDto</param>
+        /// <returns>Возвращает объект UserViewModel</returns>
+        /// <response code="200">Информация о пользователе успешно обновлена</response>
+        /// <response code="404">Пользователь не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response>  
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPut]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UserViewModel>> Update([FromForm] UpdateUserDto updateUserDto)
         {
@@ -155,27 +164,31 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Transfers the users from one group to another
+        /// Переводит пользователей из одной группы в другую
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /users/groupTransfer
         /// {
         ///     "sourceGroupId": 1,
         ///     "destinationGroupId": 2
         /// }
         /// </remarks>
-        /// <param name="transferUsersToAnotherGroupDto">TransferUsersToAnotherGroupDto object</param>
-        /// <returns>Retruns UserViewModel</returns>
-        /// <response code="200">Success</response>
-        /// /// <response code="401">Unauthorized</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="transferUsersToAnotherGroupDto">Объект TransferUsersToAnotherGroupDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="200">Пользователи успешно переведены</response>
+        /// <response code="404">Группа не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPut("groupTransfer")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> TransferUsersToGroup([FromBody] TransferUsersToAnotherGroupDto transferUsersToAnotherGroupDto)
         {
@@ -185,10 +198,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Bans the user
+        /// Блокирует пользователя
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /users/ban
         /// {
         ///     "bannedUserId": 2,
@@ -196,14 +209,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "reason": "spam"
         /// }
         /// </remarks>
-        /// <param name="banUserDto">BanUserDto object</param>
-        /// <returns>Retruns OkResult</returns>
-        /// <response code="200">Sucess</response>
-        /// <response code="403">Forbidden</response> 
-        /// <response code="500">Server error</response>
+        /// <param name="banUserDto">Объект BanUserDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="200">Пользователь успешно заблокирован</response>
+        /// <response code="404">Пользователь не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("ban")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Ban([FromBody] BanUserDto banUserDto)
         {
@@ -215,10 +235,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Unbans the user
+        /// Разблокирывает пользователя
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /users/unban
         /// {
         ///     "unbannedUserId": 2,
@@ -226,14 +246,22 @@ namespace MyFaculty.WebApi.Controllers
         ///     "reason": "amnestied"
         /// }
         /// </remarks>
-        /// <param name="unbanUserDto">UnbanUserDto object</param>
-        /// <returns>Retruns OkResult</returns>
-        /// <response code="200">Sucess</response>
-        /// <response code="403">Forbidden</response> 
-        /// <response code="500">Server error</response>
+        /// <param name="unbanUserDto">Объект UnbanUserDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="200">Пользователь успешно разблокирован</response>
+        /// <response code="404">Пользователь не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("unban")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Unban([FromBody] UnbanUserDto unbanUserDto)
         {

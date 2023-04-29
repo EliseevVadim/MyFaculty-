@@ -53,17 +53,19 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of information publics
+        /// Возвращает список информационных сообществ
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /informationpublics
         /// </remarks>
-        /// <returns>Returns InformationPublicsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект InformationPublicsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
         [HttpGet]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<InformationPublicsListViewModel>> GetAll()
         {
             GetInformationPublicsQuery query = new GetInformationPublicsQuery();
@@ -72,17 +74,19 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of blocked information publics
+        /// Возвращает список заблокированных информационных сообществ
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /informationpublics/banned
         /// </remarks>
-        /// <returns>Returns InformationPublicsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект InformationPublicsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
         [HttpGet("banned")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<ActionResult<InformationPublicsListViewModel>> GetBanned()
         {
             GetBannedInformationPublicsQuery query = new GetBannedInformationPublicsQuery();
@@ -91,17 +95,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of information publics by name
+        /// Возвращает список информационных сообществ по поисковому запросу
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /informationpublics/search/name
         /// </remarks>
-        /// <returns>Returns InformationPublicsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект InformationPublicsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("search/{request}")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<InformationPublicsListViewModel>> GetByClubName(string request)
         {
             GetInformationPublicsByNameQuery query = new GetInformationPublicsByNameQuery()
@@ -113,20 +121,24 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the information public by id
+        /// Возвращает информационное сообщество по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /informationpublics/1
         /// </remarks>
-        /// <param name="id">Information public id (integer)</param>
-        /// <returns>Returns InformationPublicViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id информационного сообщества (integer)</param>
+        /// <returns>Возвращает объект InformationPublicViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Информационное сообщество не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<InformationPublicViewModel>> Get(int id)
         {
             GetInformationPublicInfoQuery query = new GetInformationPublicInfoQuery()
@@ -138,10 +150,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the information public
+        /// Создает новое информационное сообщество
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /informationpublics
         /// {
         ///     "publicName": "string",
@@ -151,15 +163,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "issuerId": 1
         /// }
         /// </remarks>
-        /// <param name="createInformationPublicDto">CreateInformationPublicDto object</param>
-        /// <returns>Retruns InformationPublicViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createInformationPublicDto">Объект CreateInformationPublicDto</param>
+        /// <returns>Возвращает объект InformationPublicViewModel</returns>
+        /// <response code="201">Информационное сообщество успешно создано</response>
+        /// <response code="404">Пользователь не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<InformationPublicViewModel>> Create([FromForm] CreateInformationPublicDto createInformationPublicDto)
         {
@@ -179,31 +197,37 @@ namespace MyFaculty.WebApi.Controllers
             }
             CreateInformationPublicCommand command = _mapper.Map<CreateInformationPublicCommand>(createInformationPublicDto);
             command.ImagePath = String.IsNullOrEmpty(photoPath) ? string.Empty : _appDomain + "uploads/images/info-publics/" + photoPath;
-            InformationPublicViewModel teacher = await Mediator.Send(command);
-            return Created(nameof(InformationPublicsController), teacher);
+            InformationPublicViewModel infoPublic = await Mediator.Send(command);
+            return Created(nameof(InformationPublicsController), infoPublic);
         }
 
         /// <summary>
-        /// Joins the information public
+        /// Позволяет присоединиться к информационному сообществу
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /informationpublics/join
         ///     "userId": 1,
         ///     "publicId": 1
         /// }
         /// </remarks>
-        /// <param name="joinInformationPublicDto">JoinInformationPublicDto object</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="500">Server error</response>
+        /// <param name="joinInformationPublicDto">Объект JoinInformationPublicDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Пользователь успешно вступил в сообщество</response>
+        /// <response code="404">Информационное сообщество не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("join")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Join([FromBody] JoinInformationPublicDto joinInformationPublicDto)
         {
@@ -216,26 +240,32 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Leaves the information public
+        /// Позволяет покинуть информационное сообщество
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /informationpublics/leave
         ///     "userId": 1,
         ///     "publicId": 1
         /// }
         /// </remarks>
-        /// <param name="leaveInformationPublicDto">LeaveInformationPublicDto object</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="500">Server error</response>
+        /// <param name="leaveInformationPublicDto">Объект LeaveInformationPublicDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Пользователь успешно покинул сообщество</response>
+        /// <response code="404">Информационное сообщество или пользователь не найдены</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("leave")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Leave([FromBody] LeaveInformationPublicDto leaveInformationPublicDto)
         {
@@ -248,27 +278,33 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Add the moderator to information public
+        /// Добавляет модератора в информационное сообщество
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /informationpublics/add-moderator
         ///     "issuerId": 1,
         ///     "moderatorId": 2,
         ///     "informationPublicId": 1
         /// }
         /// </remarks>
-        /// <param name="addModeratorToInformationPublicDto">AddModeratorToInformationPublicDto object</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="500">Server error</response>
+        /// <param name="addModeratorToInformationPublicDto">Объект AddModeratorToInformationPublicDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Модератор успешно добавлен в информационное сообщество</response>
+        /// <response code="404">Информационное сообщество или пользователь не найдены</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("add-moderator")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddModerator([FromBody] AddModeratorToInformationPublicDto addModeratorToInformationPublicDto)
         {
@@ -282,27 +318,33 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Demotes the moderator at information public
+        /// Снимает пользователя с должности модератора в информационном сообществе
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /informationpublics/demote-moderator
         ///     "issuerId": 1,
         ///     "moderatorId": 2,
         ///     "informationPublicId": 1
         /// }
         /// </remarks>
-        /// <param name="demoteInformationPublicModeratorDto">DemoteInformationPublicModeratorDto object</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="500">Server error</response>
+        /// <param name="demoteInformationPublicModeratorDto">Объект DemoteInformationPublicModeratorDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Пользователь успешно снят с должности модератора в информационном сообществе</response>
+        /// <response code="404">Информационное сообщество или пользователь не найдены</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("demote-moderator")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DemoteModerator([FromBody] DemoteInformationPublicModeratorDto demoteInformationPublicModeratorDto)
         {
@@ -316,27 +358,33 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Blocks the user at the information public
+        /// Блокирует пользователя в информационном сообществе
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /informationpublics/block-user
         ///     "userId": 1,
         ///     "publicId": 1,
         ///     "issuerId": 2
         /// }
         /// </remarks>
-        /// <param name="blockUserAtInformationPublicDto">BlockUserAtInformationPublicDto object</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="500">Server error</response>
+        /// <param name="blockUserAtInformationPublicDto">Объект BlockUserAtInformationPublicDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Пользователь успешно заблокирован в информационном сообществе</response>
+        /// <response code="404">Информационное сообщество или пользователь не найдены</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("block-user")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> BlockUser([FromBody] BlockUserAtInformationPublicDto blockUserAtInformationPublicDto)
         {
@@ -350,27 +398,33 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Unblocks the user at the information public
+        /// Разблокирывает пользователя в информационном сообществе
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /informationpublics/unblock-user
         ///     "userId": 1,
         ///     "publicId": 1,
         ///     "issuerId": 2
         /// }
         /// </remarks>
-        /// <param name="unblockUserAtInformationPublicDto">UnblockUserAtInformationPublicDto object</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="500">Server error</response>
+        /// <param name="unblockUserAtInformationPublicDto">Объект UnblockUserAtInformationPublicDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Пользователь успешно разблокирован в информационном сообществе</response>
+        /// <response code="404">Информационное сообщество или пользователь не найдены</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("unblock-user")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UnblockUser([FromBody] UnblockUserAtInformationPublicDto unblockUserAtInformationPublicDto)
         {
@@ -383,10 +437,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the information public
+        /// Редактирует информацию об информационном сообществе
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /informationpublics
         /// {
         ///     "id": 1,
@@ -397,15 +451,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "issuerId": 1
         /// }
         /// </remarks>
-        /// <param name="updateInformationPublicDto">UpdateInformationPublicDto object</param>
-        /// <returns>Retruns InformationPublicViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateInformationPublicDto">Объект UpdateInformationPublicDto</param>
+        /// <returns>Возвращает объект InformationPublicViewModel</returns>
+        /// <response code="200">Информация об информационном сообществе успешно обновлена</response>
+        /// <response code="404">Информационное сообщество не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response>  
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPut]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<InformationPublicViewModel>> Update([FromForm] UpdateInformationPublicDto updateInformationPublicDto)
         {
@@ -430,21 +490,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the information public by id
+        /// Удаляет информационное сообщество по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /informationpublics/1
         /// </remarks>
-        /// <param name="id">Study club id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id информационного сообщества (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информационное сообщество успешно удалено</response>
+        /// <response code="404">Информационное сообщество не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
@@ -459,21 +523,27 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the informations public content by id
+        /// Удаляет все содержимое информационного сообщества (записи, комментарии, их вложения) по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /informationpublics/content/1
         /// </remarks>
-        /// <param name="id">Study club id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id информационного сообщества (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Cодержимое информационного сообщества успешно удалено</response>
+        /// <response code="404">Информационное сообщество не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("content/{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeletePublicContent(int id)
         {
@@ -494,10 +564,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Bans the information public
+        /// Блокирует информационное сообщество
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /informationpublics/ban
         /// {
         ///     "bannedPublicId": 1,
@@ -505,14 +575,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "reason": "spam"
         /// }
         /// </remarks>
-        /// <param name="banInformationPublicDto">BanInformationPublicDto object</param>
-        /// <returns>Retruns OkResult</returns>
-        /// <response code="200">Sucess</response>
-        /// <response code="403">Forbidden</response> 
-        /// <response code="500">Server error</response>
+        /// <param name="banInformationPublicDto">Объект BanInformationPublicDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="200">Информационное сообщество успешно заблокировано</response>
+        /// <response code="404">Информационное сообщество не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("ban")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Ban([FromBody] BanInformationPublicDto banInformationPublicDto)
         {
@@ -524,10 +601,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Unbans the user
+        /// Разблокирывает информационное сообщество
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /informationpublics/unban
         /// {
         ///     "unbannedPublicId": 1,
@@ -535,14 +612,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "reason": "amnestied"
         /// }
         /// </remarks>
-        /// <param name="unbanInformationPublicDto">UnbanUserDto object</param>
-        /// <returns>Retruns OkResult</returns>
-        /// <response code="200">Sucess</response>
-        /// <response code="403">Forbidden</response> 
-        /// <response code="500">Server error</response>
+        /// <param name="unbanInformationPublicDto">Объект UnbanInformationPublicDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="200">Информационное сообщество успешно заблокировано</response>
+        /// <response code="404">Информационное сообщество не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("unban")]
         [Authorize(Roles = "Admin")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Unban([FromBody] UnbanInformationPublicDto unbanInformationPublicDto)
         {

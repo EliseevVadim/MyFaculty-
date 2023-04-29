@@ -41,10 +41,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the task submission review
+        /// Добавляет отзыв к решению задания
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /tasksubmissionreviews
         /// {
         ///     "textContent": "string",
@@ -55,13 +55,23 @@ namespace MyFaculty.WebApi.Controllers
         ///     "reviewerId": 1
         /// }
         /// </remarks>
-        /// <param name="createTaskSubmissionReviewDto">CreateCommentDto object</param>
-        /// <returns>Retruns TaskSubmissionReviewViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createTaskSubmissionReviewDto">Объект CreateCommentDto</param>
+        /// <returns>Возвращает объект TaskSubmissionReviewViewModel</returns>
+        /// <response code="201">Отзыва успешно добавлен</response>
+        /// <response code="404">Решение не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TaskSubmissionReviewViewModel>> Create([FromForm] CreateTaskSubmissionReviewDto createTaskSubmissionReviewDto)
         {
@@ -82,10 +92,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the task submission review
+        /// Редактирует отзыв к решению задания
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /tasksubmissionreviews
         /// {
         ///     "id": 1,
@@ -99,15 +109,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "issuerId": 1
         /// }
         /// </remarks>
-        /// <param name="updateTaskSubmissionReviewDto">UpdateTaskSubmissionReviewDto object</param>
-        /// <returns>Retruns TaskSubmissionReviewViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateTaskSubmissionReviewDto">Объект UpdateTaskSubmissionReviewDto</param>
+        /// <returns>Возвращает объект TaskSubmissionReviewViewModel</returns>
+        /// <response code="200">Отзыв успешно обновлен</response>
+        /// <response code="404">Отзыв не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response>  
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPut]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TaskSubmissionReviewViewModel>> Update([FromForm] UpdateTaskSubmissionReviewDto updateTaskSubmissionReviewDto)
         {
@@ -135,21 +151,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the task submission review by id
+        /// Удаляет отзыв к решению задания
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /tasksubmissionreviews/1
         /// </remarks>
-        /// <param name="id">Task submission review id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id отзыва (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Отзыв успешно удален</response>
+        /// <response code="404">Отзыв не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MyFaculty.Application.Features.UsersBansReports.Queries.GetUsersBansReports
+namespace MyFaculty.Application.Features.AdministrativeReports.Queries.GetUsersBansReports
 {
     public class GetUsersBansReportsQueryHandler : IRequestHandler<GetUsersBansReportsQuery, UsersBansReportsListViewModel>
     {

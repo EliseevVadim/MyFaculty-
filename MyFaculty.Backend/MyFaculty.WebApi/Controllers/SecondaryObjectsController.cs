@@ -25,14 +25,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of secondary objects
+        /// Возвращает список вторичных объектов
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /secondaryobjects
         /// </remarks>
-        /// <returns>Returns SecondaryObjectsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект SecondaryObjectsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<SecondaryObjectsListViewModel>> GetAll()
@@ -43,19 +43,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the secondary object by id
+        /// Возвращает информацию о вторичном объекте по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /secondaryobjects/1
         /// </remarks>
-        /// <param name="id">Secondary object's id (integer)</param>
-        /// <returns>Returns SecondaryObjectViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id вторичного объекта (integer)</param>
+        /// <returns>Возвращает объект SecondaryObjectViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Вторичный объект не найден</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<SecondaryObjectViewModel>> Get(int id)
         {
             GetSecondaryObjectInfoQuery query = new GetSecondaryObjectInfoQuery()
@@ -67,10 +69,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the secondary object
+        /// Создает новую запись о вторичном объекте
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /secondaryobjects
         /// {
         ///     "objectName": "string",
@@ -79,13 +81,17 @@ namespace MyFaculty.WebApi.Controllers
         ///     "floorId": 1
         /// }
         /// </remarks>
-        /// <param name="createSecondaryObjectDto">CreateSecondaryObjectDto object</param>
-        /// <returns>Retruns SecondaryObjectViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createSecondaryObjectDto">Объект CreateSecondaryObjectDto</param>
+        /// <returns>Возвращает объект SecondaryObjectViewModel</returns>
+        /// <response code="201">Запись о вторичном объекте успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SecondaryObjectViewModel>> Create([FromBody] CreateSecondaryObjectDto createSecondaryObjectDto)
         {
@@ -95,10 +101,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the secondary object
+        /// Редактирует информацию о вторичном объекте
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /secondaryobjects
         /// {
         ///     "id": 1,
@@ -108,15 +114,19 @@ namespace MyFaculty.WebApi.Controllers
         ///     "floorId": 1
         /// }
         /// </remarks>
-        /// <param name="updateSecondaryObjectDto">UpdateSecondaryObjectDto object</param>
-        /// <returns>Retruns SecondaryObjectViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateSecondaryObjectDto">Объект UpdateSecondaryObjectDto</param>
+        /// <returns>Возвращает объект SecondaryObjectViewModel</returns>
+        /// <response code="200">Информация о вторичном объекте успешно обновлена</response>
+        /// <response code="404">Вторичный объект не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>  
+        /// <response code="500">Внутренняя серверная ошибка</response> 
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<SecondaryObjectViewModel>> Update([FromBody] UpdateSecondaryObjectDto updateSecondaryObjectDto)
         {
@@ -126,21 +136,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the secondary object by id
+        /// Удаляет информацию о вторичном объекте по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /secondaryobjects/1
         /// </remarks>
-        /// <param name="id">Secondary object's id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id вторичного объекта (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информация о вторичном объекте удалена</response>
+        /// <response code="404">Вторичный объект не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

@@ -26,14 +26,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of pairs
+        /// Возвращает список пар
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /pairs
         /// </remarks>
-        /// <returns>Returns PairsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект PairsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PairsListViewModel>> GetAll()
@@ -44,19 +44,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the pair by id
+        /// Возвращает информацию о паре по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /pairs/1
         /// </remarks>
-        /// <param name="id">Pair's id (integer)</param>
-        /// <returns>Returns PairViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id пары (integer)</param>
+        /// <returns>Возвращает объект PairViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Пара не найдена</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PairViewModel>> Get(int id)
         {
             GetPairInfoQuery query = new GetPairInfoQuery()
@@ -68,17 +70,19 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of pairs for a specific group
+        /// Возвращает список пар для конкретной группы
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /pairs/group/1
         /// </remarks>
-        /// <param name="id">Specific group's id (integer)</param>
-        /// <returns>PairsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <param name="id">id группы (integer)</param>
+        /// <returns>Возвращает объект PairsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("group/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PairsListViewModel>> GetByGroupId(int id)
         {
             GetPairsForGroupQuery query = new GetPairsForGroupQuery()
@@ -90,10 +94,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the pair
+        /// Создает новую запись о паре
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /pairs
         /// {
         ///     "pairName": "string",
@@ -106,13 +110,17 @@ namespace MyFaculty.WebApi.Controllers
         ///     "pairInfoId": 1
         /// }
         /// </remarks>
-        /// <param name="createPairDto">CreatePairDto object</param>
-        /// <returns>Retruns PairViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createPairDto">Объект CreatePairDto</param>
+        /// <returns>Возвращает объект PairViewModel</returns>
+        /// <response code="201">Запись о паре успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PairViewModel>> Create([FromBody] CreatePairDto createPairDto)
         {
@@ -122,10 +130,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the pair
+        /// Редактирует информацию о паре
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /pairs
         /// {
         ///     "pairName": "string",
@@ -138,15 +146,19 @@ namespace MyFaculty.WebApi.Controllers
         ///     "pairInfoId": 1
         /// }
         /// </remarks>
-        /// <param name="updatePairDto">UpdatePairDto object</param>
-        /// <returns>Retruns PairViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updatePairDto">Объект UpdatePairDto</param>
+        /// <returns>Возвращает объект PairViewModel</returns>
+        /// <response code="200">Информация о паре успешно обновлена</response>
+        /// <response code="404">Пара не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>  
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PairViewModel>> Update([FromBody] UpdatePairDto updatePairDto)
         {
@@ -156,21 +168,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the pair by id
+        /// Удаляет информацию о паре по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /pairs/1
         /// </remarks>
-        /// <param name="id">Pair's id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id пары (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информация о паре успешно удалена</response>
+        /// <response code="404">Пара не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

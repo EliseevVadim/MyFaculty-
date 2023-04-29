@@ -45,18 +45,26 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of comments for a specific post
+        /// Возвращает список комментариев к конкретной записи
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /comments/post/1
         /// </remarks>
-        /// <param name="id">Specific post id (integer)</param>
-        /// <returns>Returns InfoPostsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <param name="id">id записи (integer)</param>
+        /// <returns>Возвращает объект InfoPostsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Запись не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
         [HttpGet("post/{id}")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult<CommentsListViewModel>> GetByPostId(int id)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -70,18 +78,28 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the excel dump from the list of comments for a specific post
+        /// Получает список комментариев к конкретной записи в виде файла excel
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /comments/excel/post/1
         /// </remarks>
-        /// <param name="id">Specific post id (integer)</param>
-        /// <returns>Returns File</returns>
-        /// <response code="200">Success</response>
+        /// <param name="id">id записи (integer)</param>
+        /// <returns>Возвращает объект File</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Запись не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response> 
         [HttpGet("excel/post/{id}")]
         [Authorize(Roles = "Teacher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAsExcelDumpByPostId(int id)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -95,10 +113,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the comment
+        /// Создает новый комментарий
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /comments
         /// {
         ///     "textContent": "string",
@@ -108,13 +126,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "parentCommentId": null
         /// }
         /// </remarks>
-        /// <param name="createCommentDto">CreateCommentDto object</param>
-        /// <returns>Retruns CommentViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createCommentDto">Объект CreateCommentDto</param>
+        /// <returns>Возвращает объект CommentViewModel</returns>
+        /// <response code="201">Комментарий успешно создан</response>
+        /// <response code="404">Запись не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CommentViewModel>> Create([FromForm] CreateCommentDto createCommentDto)
         {
@@ -136,10 +162,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the comment
+        /// Редактирует комментарий
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /comments
         /// {
         ///     "commentId": 1,
@@ -151,15 +177,23 @@ namespace MyFaculty.WebApi.Controllers
         ///     "issuerId": 1
         /// }
         /// </remarks>
-        /// <param name="updateCommentDto">UpdateCommentDto object</param>
-        /// <returns>Retruns CommentViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateCommentDto">Объект UpdateCommentDto</param>
+        /// <returns>Возвращает объект CommentViewModel</returns>
+        /// <response code="200">Комментарий успешно обновлен</response>
+        /// <response code="404">Комментарий не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPut]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CommentViewModel>> Update([FromForm] UpdateCommentDto updateCommentDto)
         {
@@ -186,21 +220,27 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the comment by id
+        /// Удаляет комментарий по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /comments/1
         /// </remarks>
-        /// <param name="id">Comment id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id комментария (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Комментарий успешно удален</response>
+        /// <response code="404">Комментарий не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

@@ -26,14 +26,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of science ranks
+        /// Возвращает список ученых званий
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /scienceranks
         /// </remarks>
-        /// <returns>Returns ScienceRanksListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект ScienceRanksListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<ScienceRanksListViewModel>> GetAll()
@@ -44,19 +44,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the science rank by id
+        /// Возвращает информацию об ученом звании по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /scienceranks/1
         /// </remarks>
-        /// <param name="id">Science rank's id (integer)</param>
-        /// <returns>Returns ScienceRankViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id ученого звания (integer)</param>
+        /// <returns>Возвращает объект ScienceRankViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Ученое звание не найдено</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ScienceRankViewModel>> Get(int id)
         {
             GetScienceRankInfoQuery query = new GetScienceRankInfoQuery()
@@ -68,22 +70,26 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the science rank
+        /// Создает новую запись об ученом звании
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /scienceranks
         /// {
         ///     "rankName": "string",
         /// }
         /// </remarks>
-        /// <param name="createScienceRankDto">CreateScienceRankDto object</param>
-        /// <returns>Retruns ScienceRankViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createScienceRankDto">Объект CreateScienceRankDto</param>
+        /// <returns>Возвращает объект ScienceRankViewModel</returns>
+        /// <response code="201">Запись об ученом звании успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ScienceRankViewModel>> Create([FromBody] CreateScienceRankDto createScienceRankDto)
         {
@@ -93,25 +99,29 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the science rank
+        /// Редактирует информацию об ученом звании
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /scienceranks
         /// {
         ///     "id": 1,
         ///     "rankName": "string",
         /// }
         /// </remarks>
-        /// <param name="updateScienceRankDto">UpdateScienceRankDto object</param>
-        /// <returns>Retruns ScienceRankViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateScienceRankDto">Объект UpdateScienceRankDto</param>
+        /// <returns>Возвращает объект ScienceRankViewModel</returns>
+        /// <response code="200">Информация об ученом звании успешно обновлена</response>
+        /// <response code="404">Ученое звание не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>  
+        /// <response code="500">Внутренняя серверная ошибка</response> 
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ScienceRankViewModel>> Update([FromBody] UpdateScienceRankDto updateScienceRankDto)
         {
@@ -121,21 +131,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the science rank by id
+        /// Удаляет информацию об ученом звании по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /scienceranks/1
         /// </remarks>
-        /// <param name="id">Science rank's id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id ученого звания (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информация об ученом звании удалена</response>
+        /// <response code="404">Ученое звание не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

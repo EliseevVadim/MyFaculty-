@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFaculty.Application.Features.UsersBansReports.Queries.GetInformationPublicsBansReports
+namespace MyFaculty.Application.Features.AdministrativeReports.Queries.GetInformationPublicsBansReports
 {
     public class GetInformationPublicsBansReportsQuery : IRequest<InformationPublicsBansReportsListViewModel>
     {

@@ -9,17 +9,9 @@ namespace MyFaculty.WebApi.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ExpertSystemController : BaseController
     {
-        /// <summary>
-        /// Gets the list of states of expert system
-        /// </summary>
-        /// <remarks>
-        /// Sample request: 
-        /// GET /expertsystem/states
-        /// </remarks>
-        /// <returns>Returns StatesListViewModel</returns>
-        /// <response code="200">Success</response>
         [HttpGet("states")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<StatesListViewModel>> GetStates()
@@ -29,15 +21,7 @@ namespace MyFaculty.WebApi.Controllers
             return Ok(states);
         }
 
-        /// <summary>
-        /// Gets the list of state transitions of expert system
-        /// </summary>
-        /// <remarks>
-        /// Sample request: 
-        /// GET /expertsystem/state-transitions
-        /// </remarks>
-        /// <returns>Returns StateTransitionsListViewModel</returns>
-        /// <response code="200">Success</response>
+        
         [HttpGet("state-transitions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<StateTransitionsListViewModel>> GetStateTransitions()

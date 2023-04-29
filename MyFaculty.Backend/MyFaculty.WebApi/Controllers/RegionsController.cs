@@ -26,14 +26,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of regions
+        /// Возвращает список регионов
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /regions
         /// </remarks>
-        /// <returns>Returns RegionsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект RegionsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<RegionsListViewModel>> GetAll()
@@ -44,19 +44,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the region by id
+        /// Возвращает информацию о регионе по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /regions/1
         /// </remarks>
-        /// <param name="id">Region id (integer)</param>
-        /// <returns>Returns RegionViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id региона (integer)</param>
+        /// <returns>Возвращает объект RegionViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Регион не найден</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<RegionViewModel>> Get(int id)
         {
             GetRegionInfoQuery query = new GetRegionInfoQuery()
@@ -68,17 +70,19 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of regions for a specific country
+        /// Возвращает список регионов, принадлежащих указанной стране
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /regions/country/1
         /// </remarks>
-        /// <param name="id">Specific country id (integer)</param>
-        /// <returns>Returns RegionsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <param name="id">id страны (integer)</param>
+        /// <returns>Возвращает объект RegionsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("country/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<RegionsListViewModel>> GetByCountryId(int id)
         {
             GetRegionsForCountryQuery query = new GetRegionsForCountryQuery()
@@ -90,23 +94,27 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the region
+        /// Создает новую запись о регионе
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /regions
         /// {
         ///     "regionName": "string",
         ///     "countryId": 0
         /// }
         /// </remarks>
-        /// <param name="createRegionDto">CreateRegionDto object</param>
-        /// <returns>Retruns RegionViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createRegionDto">Объект CreateRegionDto</param>
+        /// <returns>Возвращает объект RegionViewModel</returns>
+        /// <response code="201">Запись о регионе успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<RegionViewModel>> Create([FromBody] CreateRegionDto createRegionDto)
         {
@@ -116,10 +124,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the city
+        /// Редактирует информацию о регионе
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /regions
         /// {
         ///     "id": 1,
@@ -127,15 +135,19 @@ namespace MyFaculty.WebApi.Controllers
         ///     "countryId": 0
         /// }        
         /// </remarks>
-        /// <param name="updateRegionDto">UpdateRegionDto object</param>
-        /// <returns>Returns RegionViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>        
+        /// <param name="updateRegionDto">Объект UpdateRegionDto</param>
+        /// <returns>Возвращает объект RegionViewModel</returns>
+        /// <response code="200">Информация о регионе успешно обновлена</response>
+        /// <response code="404">Регион не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>  
+        /// <response code="500">Внутренняя серверная ошибка</response>    
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<RegionViewModel>> Update([FromBody] UpdateRegionDto updateRegionDto)
         {
@@ -145,21 +157,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the region by id
+        /// Удаляет информацию о регионе по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /regions/1
         /// </remarks>
-        /// <param name="id">Region id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id региона (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информация о регионе успешно удалена</response>
+        /// <response code="404">Регион не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

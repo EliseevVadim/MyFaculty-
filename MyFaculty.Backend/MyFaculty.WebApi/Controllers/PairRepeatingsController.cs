@@ -19,14 +19,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of pair repeatings
+        /// Возвращает список записей о повторяемости пар
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /pairrepeatings
         /// </remarks>
-        /// <returns>Returns PairRepeatingsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект PairRepeatingsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PairRepeatingsListViewModel>> GetAll()

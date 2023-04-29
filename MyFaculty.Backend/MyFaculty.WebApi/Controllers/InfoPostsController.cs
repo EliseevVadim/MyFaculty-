@@ -43,17 +43,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of information posts by a specific information public
+        /// Возвращает список записей, принадлежащих указанному информационному сообществу
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /infoposts/info-public/1
         /// </remarks>
-        /// <param name="id">Specific information public id (integer)</param>
-        /// <returns>Returns InfoPostsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <param name="id">id информационного сообщества (integer)</param>
+        /// <returns>Возвращает объект InfoPostsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Информационное сообщество не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
         [HttpGet("info-public/{id}")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult<InfoPostsListViewModel>> GetByInfoPublic(int id)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -67,17 +75,22 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of information posts by a specific study club
+        /// Возвращает список записей, принадлежащих указанному сообществу курса
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /infoposts/study-club/1
         /// </remarks>
-        /// <param name="id">Specific study club id (integer)</param>
-        /// <returns>Returns InfoPostsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <param name="id">id сообщества курса (integer)</param>
+        /// <returns>Возвращает объект InfoPostsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("study-club/{id}")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<InfoPostsListViewModel>> GetByStudyClub(int id)
         {
             GetInfoPostsByStudyClubQuery query = new GetInfoPostsByStudyClubQuery()
@@ -89,19 +102,26 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the information post by id
+        /// Возвращает информационную запись по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:  
         /// GET /infoposts/1
         /// </remarks>
-        /// <param name="id">Information post's id (integer)</param>
-        /// <returns>Returns InfoPostViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id записи (integer)</param>
+        /// <returns>Возвращает объект InfoPostViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Запись не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
         [HttpGet("{id}")]
+        [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         public async Task<ActionResult<InfoPostViewModel>> Get(int id)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -115,10 +135,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the information post
+        /// Создает новую запись
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /infoposts
         /// {
         ///     "textContent": "string",
@@ -129,13 +149,19 @@ namespace MyFaculty.WebApi.Controllers
         ///     "commentsAllowed": true
         /// }
         /// </remarks>
-        /// <param name="createInfoPostDto">CreateInfoPostDto object</param>
-        /// <returns>Retruns InfoPostViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createInfoPostDto">Объект CreateInfoPostDto</param>
+        /// <returns>Возвращает объект InfoPostViewModel</returns>
+        /// <response code="201">Запись успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<InfoPostViewModel>> Create([FromForm] CreateInfoPostDto createInfoPostDto)
         {
@@ -155,26 +181,32 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Likes the information post
+        /// Ставит отметку "Нравится" к записи
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /infoposts/like
         ///     "likedUserId": 1,
         ///     "likedPostId": 1
         /// }
         /// </remarks>
-        /// <param name="likeInfoPostDto">LikeInfoPostDto object</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="500">Server error</response>
+        /// <param name="likeInfoPostDto">Объект LikeInfoPostDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Запись успешно оценена</response>
+        /// <response code="404">Запись не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("like")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Join([FromBody] LikeInfoPostDto likeInfoPostDto)
         {
@@ -187,26 +219,32 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Unlikes the information post
+        /// Снимает отметку "Нравится" с записи
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /infoposts/unlike
         ///     "likedUserId": 1,
         ///     "likedPostId": 1
         /// }
         /// </remarks>
-        /// <param name="unlikeInfoPostDto">UnlikeInfoPostDto object</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="401">Unauthorized</response>
-        /// <response code="403">Forbidden</response>
-        /// <response code="500">Server error</response>
+        /// <param name="unlikeInfoPostDto">Объект UnlikeInfoPostDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Отметка "Нравится" успешно снята</response>
+        /// <response code="404">Запись не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="409">Действие не совместимо с состоянием системы</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost("unlike")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Leave([FromBody] UnlikeInfoPostDto unlikeInfoPostDto)
         {
@@ -219,10 +257,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the information post
+        /// Редактирует информационную запись
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /infoposts
         /// {
         ///     "infoPostId": 1,
@@ -234,15 +272,21 @@ namespace MyFaculty.WebApi.Controllers
         ///     "issuerId": 1
         /// }
         /// </remarks>
-        /// <param name="updateInfoPostDto">UpdateInfoPostDto object</param>
-        /// <returns>Retruns InfoPostViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateInfoPostDto">Объект UpdateInfoPostDto</param>
+        /// <returns>Возвращает объект InfoPostViewModel</returns>
+        /// <response code="200">Запись успешно обновлена</response>
+        /// <response code="404">Запись не найдена</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response>  
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPut]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<InfoPostViewModel>> Update([FromForm] UpdateInfoPostDto updateInfoPostDto)
         {
@@ -269,21 +313,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the information post by id
+        /// Удаляет запись по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /infoposts/1
         /// </remarks>
-        /// <param name="id">Information post id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id записи (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Задание успешно удалено</response>
+        /// <response code="404">Задание не найдено</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

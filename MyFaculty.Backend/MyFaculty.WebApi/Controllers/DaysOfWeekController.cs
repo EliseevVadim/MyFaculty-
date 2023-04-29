@@ -19,14 +19,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of work days of week
+        /// Возвращает список рабочих дней недели
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:  
         /// GET /daysofweek
         /// </remarks>
-        /// <returns>Returns WorkDaysOfWeekListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект WorkDaysOfWeekListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<WorkDaysOfWeekListViewModel>> GetAll()

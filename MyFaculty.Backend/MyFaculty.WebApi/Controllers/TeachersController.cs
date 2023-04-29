@@ -41,14 +41,14 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of teachers
+        /// Возвращает список преподавателей
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /teachers
         /// </remarks>
-        /// <returns>Returns TeachersListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект TeachersListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<TeachersListViewModel>> GetAll()
@@ -59,19 +59,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the teacher by id
+        /// Возвращает информацию о преподавателе по id
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /teachers/1
         /// </remarks>
-        /// <param name="id">Teacher's id (integer)</param>
-        /// <returns>Returns TeacherViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id преподавателя (integer)</param>
+        /// <returns>Возвращает объект TeacherViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Преподаватель не найден</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TeacherViewModel>> Get(int id)
         {
             GetTeacherInfoQuery query = new GetTeacherInfoQuery()
@@ -83,20 +85,26 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Sends the teacher's verification token to teacher's email by id
+        /// Отправляет токен верификации преподавателю
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:
         /// GET /teachers/1/send-verification-token
         /// </remarks>
-        /// <param name="id">Teacher's id (integer)</param>
-        /// <returns>Returns OkResult</returns>
-        /// <response code="200">Success</response>
-        /// <response code="404">Not found</response>
+        /// <param name="id">id преподавателя (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Преподаватель не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response> 
         [HttpGet("{id}/send-verification-token")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SendVerificationToken(int id)
         {
             GetVerificationTokenQuery query = new GetVerificationTokenQuery()
@@ -110,26 +118,31 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Verifies the teacher
+        /// Верифицирует преподавателя
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /teachers/verify
         /// {
         ///     "userId": 1,
         ///     "verificationToken": "guid"
         /// }
         /// </remarks>
-        /// <param name="verifyTeacherDto">VerifyTeacherDto object</param>
-        /// <returns>Retruns OkResult</returns>
-        /// <response code="200">Sucess</response>
-        /// <response code="403">Forbidden</response> 
-        /// <response code="500">Server error</response>
+        /// <param name="verifyTeacherDto">Объект VerifyTeacherDto</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="403">Действие запрещено</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response> 
         [HttpPost("verify")]
         [Authorize(Roles = "User")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Create([FromBody] VerifyTeacherDto verifyTeacherDto)
+        public async Task<IActionResult> Verify([FromBody] VerifyTeacherDto verifyTeacherDto)
         {
             VerifyTeacherCommand command = _mapper.Map<VerifyTeacherCommand>(verifyTeacherDto);
             TeacherVerificationDto verificationDto = await Mediator.Send(command);
@@ -141,10 +154,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Creates the teacher
+        /// Создает новую запись о преподавателе
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// POST /teachers
         /// {
         ///     "fio": "string",
@@ -154,13 +167,17 @@ namespace MyFaculty.WebApi.Controllers
         ///     "scienceRankId": 1
         /// }
         /// </remarks>
-        /// <param name="createTeacherDto">CreateTeacherDto object</param>
-        /// <returns>Retruns TeacherViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="500">Server error</response>
+        /// <param name="createTeacherDto">Объект CreateTeacherDto</param>
+        /// <returns>Возвращает объект TeacherViewModel</returns>
+        /// <response code="201">Запись о преподавателе успешно создана</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TeacherViewModel>> Create([FromForm] CreateTeacherDto createTeacherDto)
         {
@@ -182,10 +199,10 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Updates the teacher
+        /// Редактирует информацию о преподавателе
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// PUT /teachers
         /// {
         ///     "id": 1,
@@ -196,15 +213,19 @@ namespace MyFaculty.WebApi.Controllers
         ///     "scienceRankId": 1
         /// }
         /// </remarks>
-        /// <param name="updateTeacherDto">UpdateTeacherDto object</param>
-        /// <returns>Retruns TeacherViewModel</returns>
-        /// <response code="201">Created</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="updateTeacherDto">Объект UpdateTeacherDto</param>
+        /// <returns>Возвращает объект TeacherViewModel</returns>
+        /// <response code="200">Информация о преподавателе успешно обновлена</response>
+        /// <response code="404">Преподаватель не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>   
         [HttpPut]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<TeacherViewModel>> Update([FromForm] UpdateTeacherDto updateTeacherDto)
         {
@@ -226,21 +247,25 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes the teacher by id
+        /// Удаляет информацию о преподавателе по id
         /// </summary>
         /// <remarks>
-        /// Sample request:
+        /// Пример запроса:
         /// DELETE /teachers/1
         /// </remarks>
-        /// <param name="id">Teacher's id (integer)</param>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
-        /// <response code="404">Not found</response>
-        /// <response code="500">Server error</response>
+        /// <param name="id">id преподавателя (integer)</param>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Информация о преподавателе успешно удалена</response>
+        /// <response code="404">Преподаватель не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response> 
+        /// <response code="500">Внутренняя серверная ошибка</response>
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {

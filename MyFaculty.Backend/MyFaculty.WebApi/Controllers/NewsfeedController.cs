@@ -22,18 +22,23 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of information posts for newsfeed
+        /// Возвращает список записей, отображаемых в новостях текущего пользователя
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /news/posts
         /// </remarks>
-        /// <returns>Returns InfoPostsListViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="401">Unauthorized</response> 
+        /// <returns>Возвращает объект InfoPostsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Пользователь не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("posts")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<InfoPostsListViewModel>> GetInformationPosts()
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -46,18 +51,23 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of club tasks for newsfeed
+        /// Возвращает список заданий, отображаемых в новостях текущего пользователя
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:  
         /// GET /news/tasks
         /// </remarks>
-        /// <returns>Returns ClubTasksListViewModel</returns>
-        /// <response code="200">Success</response>
-        /// <response code="401">Unauthorized</response> 
+        /// <returns>Возвращает объект ClubTasksListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="404">Пользователь не найден</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet("tasks")]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ClubTasksListViewModel>> GetClubTasks()
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);

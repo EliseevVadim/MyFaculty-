@@ -22,17 +22,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Gets the list of notifications for requester
+        /// Возвращает список уведомлений для текущего пользователя
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса: 
         /// GET /notifications
         /// </remarks>
-        /// <returns>Returns NotificationsListViewModel</returns>
-        /// <response code="200">Success</response>
+        /// <returns>Возвращает объект NotificationsListViewModel</returns>
+        /// <response code="200">Успешное выполнение запроса</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpGet]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<NotificationsListViewModel>> GetForRequester()
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -45,17 +49,21 @@ namespace MyFaculty.WebApi.Controllers
         }
 
         /// <summary>
-        /// Deletes all notifications for requester
+        /// Удаляет уведомлении текущего пользователя
         /// </summary>
         /// <remarks>
-        /// Sample request: 
+        /// Пример запроса:  
         /// DELETE /notifications
         /// </remarks>
-        /// <returns>Returns NoContent</returns>
-        /// <response code="204">Success</response>
+        /// <returns>Возвращает пустой ответ</returns>
+        /// <response code="204">Уведомления успешно удалены</response>
+        /// <response code="401">Запрос от неавторизованного пользователя</response>
+        /// <response code="400">Запрос имеет неверный формат</response>
         [HttpDelete]
         [Authorize(Roles = "User")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteForRequester()
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
