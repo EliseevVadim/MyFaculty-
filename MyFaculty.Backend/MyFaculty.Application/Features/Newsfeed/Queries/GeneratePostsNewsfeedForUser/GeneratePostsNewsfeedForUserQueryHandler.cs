@@ -5,10 +5,7 @@ using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -55,7 +52,7 @@ namespace MyFaculty.Application.Features.Newsfeed.Queries.GeneratePostsNewsfeedF
                         .ThenInclude(infoPost => infoPost.Comments)
                 .Include(user => user.StudyClubs)
                     .ThenInclude(club => club.InfoPosts)
-                        .ThenInclude(infoPost => infoPost.LikedUsers)             
+                        .ThenInclude(infoPost => infoPost.LikedUsers)
                 .FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
             if (user == null)
                 throw new EntityNotFoundException(nameof(AppUser), request.UserId);

@@ -8,7 +8,6 @@ using MyFaculty.Application.Features.ScienceRanks.Commands.UpdateScienceRank;
 using MyFaculty.Application.Features.ScienceRanks.Queries.GetScienceRankInfo;
 using MyFaculty.Application.Features.ScienceRanks.Queries.GetScienceRanks;
 using MyFaculty.Application.ViewModels;
-using MyFaculty.Domain.Entities;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
 

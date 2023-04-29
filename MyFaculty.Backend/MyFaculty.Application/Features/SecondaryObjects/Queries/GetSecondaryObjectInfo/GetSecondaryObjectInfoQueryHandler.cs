@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.SecondaryObjects.Queries.GetSecondaryObjectInfo
 {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-using FluentValidation;
 using MyFaculty.Application.Common.Behaviors;
+using System.Reflection;
 
 namespace MyFaculty.Application
 {

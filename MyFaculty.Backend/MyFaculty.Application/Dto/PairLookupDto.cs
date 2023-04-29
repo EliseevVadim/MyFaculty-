@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
 using MyFaculty.Application.Common.Mappings;
-using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Dto
 {

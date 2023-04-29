@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MyFaculty.Application.Dto;
@@ -14,7 +13,6 @@ using MyFaculty.Application.Features.Teachers.Queries.GetTeacherInfo;
 using MyFaculty.Application.Features.Teachers.Queries.GetTeachers;
 using MyFaculty.Application.Features.Teachers.Queries.GetVerificationTokenQuery;
 using MyFaculty.Application.ViewModels;
-using MyFaculty.Domain.Entities;
 using MyFaculty.WebApi.Dto;
 using MyFaculty.WebApi.Services;
 using System;
@@ -191,7 +189,7 @@ namespace MyFaculty.WebApi.Controllers
                 {
                     createTeacherDto.Photo.CopyTo(stream);
                 }
-            }                    
+            }
             CreateTeacherCommand command = _mapper.Map<CreateTeacherCommand>(createTeacherDto);
             command.PhotoPath = String.IsNullOrEmpty(photoPath) ? string.Empty : _appDomain + "uploads/images/teachers/" + photoPath;
             TeacherViewModel teacher = await Mediator.Send(command);

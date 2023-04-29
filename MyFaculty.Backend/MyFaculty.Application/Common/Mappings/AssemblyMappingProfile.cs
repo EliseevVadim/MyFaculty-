@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
 using System.Reflection;
 
 namespace MyFaculty.Application.Common.Mappings

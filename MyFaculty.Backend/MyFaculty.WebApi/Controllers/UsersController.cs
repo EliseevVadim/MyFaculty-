@@ -16,7 +16,6 @@ using MyFaculty.WebApi.Dto;
 using MyFaculty.WebApi.Services;
 using System;
 using System.IO;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -147,7 +146,7 @@ namespace MyFaculty.WebApi.Controllers
             if (requesterId != updateUserDto.Id)
                 return Forbid();
             string photoPath = string.Empty;
-            string savePath = string.Empty;            
+            string savePath = string.Empty;
             if (updateUserDto.Photo != null)
             {
                 photoPath = Guid.NewGuid().ToString() + "_" + updateUserDto.Photo.FileName;

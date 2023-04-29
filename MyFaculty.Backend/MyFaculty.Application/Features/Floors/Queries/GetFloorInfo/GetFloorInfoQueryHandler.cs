@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
-using MyFaculty.Application.Common.Interfaces;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyFaculty.Application.ViewModels;
-using System.Threading;
-using MyFaculty.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
+using MyFaculty.Application.Common.Interfaces;
+using MyFaculty.Application.ViewModels;
+using MyFaculty.Domain.Entities;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.Floors.Queries.GetFloorInfo
 {

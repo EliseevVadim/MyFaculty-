@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -16,9 +15,7 @@ using MyFaculty.WebApi.Hubs;
 using MyFaculty.WebApi.Hubs.Management;
 using MyFaculty.WebApi.Middleware;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -110,7 +107,7 @@ namespace MyFaculty.WebApi
             }
             app.UseStaticFiles(new StaticFileOptions
             {
-                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "uploads")), 
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "uploads")),
                 RequestPath = "/uploads"
             });
             app.UseSwagger();

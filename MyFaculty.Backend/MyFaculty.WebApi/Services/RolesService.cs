@@ -1,5 +1,5 @@
-﻿using MyFaculty.Persistence;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using MyFaculty.Persistence;
 using System.Threading.Tasks;
 
 namespace MyFaculty.WebApi.Services

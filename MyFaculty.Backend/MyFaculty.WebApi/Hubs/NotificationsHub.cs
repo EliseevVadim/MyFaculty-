@@ -38,6 +38,6 @@ namespace MyFaculty.WebApi.Hubs
             string connectionId = _onlineUsers.GetConnectionIdByRealId(userId);
             if (!string.IsNullOrEmpty(connectionId))
                 await Clients.Client(connectionId).SendAsync("loadNotifications");
-        } 
+        }
     }
 }

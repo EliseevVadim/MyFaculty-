@@ -1,5 +1,3 @@
-using System;
-
 namespace MyFaculty.Identity.ViewModels
 {
     public class ErrorViewModel

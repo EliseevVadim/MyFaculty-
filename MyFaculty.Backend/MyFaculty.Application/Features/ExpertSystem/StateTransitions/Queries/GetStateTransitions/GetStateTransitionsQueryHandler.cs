@@ -5,10 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.Dto.ExpertSystemDto;
 using MyFaculty.Application.ViewModels.ExpertSystemViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

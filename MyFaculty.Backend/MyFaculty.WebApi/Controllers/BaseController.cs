@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MediatR;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MyFaculty.WebApi.Controllers

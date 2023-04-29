@@ -21,7 +21,7 @@ namespace MyFaculty.WebApi.Controllers
             return Ok(states);
         }
 
-        
+
         [HttpGet("state-transitions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<StateTransitionsListViewModel>> GetStateTransitions()

@@ -6,9 +6,6 @@ using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +35,7 @@ namespace MyFaculty.Application.Features.StudyClubs.Commands.UpdateStudyClub
             club.ClubName = request.StudyClubName;
             club.Description = request.Description;
             club.ImagePath = String.IsNullOrEmpty(request.ImagePath) ? club.ImagePath : request.ImagePath;
-            club.OwnerId = request.OwnerId;      
+            club.OwnerId = request.OwnerId;
             club.Updated = DateTime.Now;
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<StudyClubViewModel>(club);

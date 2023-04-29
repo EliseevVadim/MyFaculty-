@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using MyFaculty.Application.Dto;
 using MyFaculty.Application.Features.Comments.Commands.CreateComment;
@@ -156,7 +155,7 @@ namespace MyFaculty.WebApi.Controllers
             command.Attachments = commentAttachments.Count > 0 ? JsonConvert.SerializeObject(commentAttachments) : null;
             command.CommentAttachmentsUid = commentAttachmentsUid;
             CommentViewModel comment = await Mediator.Send(command);
-            if (comment.ParentComment != null) 
+            if (comment.ParentComment != null)
                 await _notificationsHub.MakeUserLoadNotificationsAsync(comment.ParentComment.AuthorId);
             return Created(nameof(InfoPostsController), comment);
         }

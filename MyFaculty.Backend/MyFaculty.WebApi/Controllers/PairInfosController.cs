@@ -8,7 +8,6 @@ using MyFaculty.Application.Features.PairInfos.Commands.UpdatePairInfo;
 using MyFaculty.Application.Features.PairInfos.Queries.GetPairInfoDetails;
 using MyFaculty.Application.Features.PairInfos.Queries.GetPairInfos;
 using MyFaculty.Application.ViewModels;
-using MyFaculty.Domain.Entities;
 using MyFaculty.WebApi.Dto;
 using System.Threading.Tasks;
 

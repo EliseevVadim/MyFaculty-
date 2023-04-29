@@ -132,7 +132,7 @@ namespace MyFaculty.Identity.Controllers
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 string callbackUri = Url.Action("ResetPassword", "Auth", new
                 {
-                    userId= user.Id,
+                    userId = user.Id,
                     code = code
                 });
                 EmailService emailService = new EmailService(_configuration);

@@ -23,7 +23,7 @@ namespace MyFaculty.WebApi.Middleware
             {
                 await _next(context);
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 await HandleExceptionAsync(context, exception);
             }

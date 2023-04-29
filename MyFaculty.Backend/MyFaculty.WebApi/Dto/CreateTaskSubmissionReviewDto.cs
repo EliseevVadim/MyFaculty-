@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using MyFaculty.Application.Common.Mappings;
 using MyFaculty.Application.Features.TaskSubmissionReviews.Commands.CreateTaskSubmissionReview;
-using System;
 using System.Collections.Generic;
 
 namespace MyFaculty.WebApi.Dto
@@ -15,7 +14,7 @@ namespace MyFaculty.WebApi.Dto
         public int NewStatus { get; set; }
         public int SubmissionId { get; set; }
         public int ReviewerId { get; set; }
-        
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<CreateTaskSubmissionReviewDto, CreateTaskSubmissionReviewCommand>()

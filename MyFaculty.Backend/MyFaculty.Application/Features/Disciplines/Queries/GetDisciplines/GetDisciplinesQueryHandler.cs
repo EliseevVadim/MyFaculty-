@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.Dto;
 using MyFaculty.Application.ViewModels;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.Disciplines.Queries.GetDisciplines
 {

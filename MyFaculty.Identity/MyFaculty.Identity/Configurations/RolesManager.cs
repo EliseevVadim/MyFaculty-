@@ -16,7 +16,7 @@ namespace MyFaculty.Identity.Configurations
         {
             SeedRoles(services);
             return services;
-        } 
+        }
 
         private static async void SeedRoles(IServiceCollection services)
         {

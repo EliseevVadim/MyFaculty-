@@ -4,9 +4,6 @@ using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Domain.Entities;
 using MyFaculty.Domain.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

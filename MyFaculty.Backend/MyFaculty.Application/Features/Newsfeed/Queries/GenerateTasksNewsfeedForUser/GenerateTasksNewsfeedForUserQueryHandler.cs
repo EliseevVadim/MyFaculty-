@@ -5,10 +5,7 @@ using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,7 +43,7 @@ namespace MyFaculty.Application.Features.Newsfeed.Queries.GenerateTasksNewsfeedF
                 .SelectMany(club => club.ClubTasks)
                 .OrderByDescending(task => task.Created)
                 .Take(TASKS_COUNT_LIMIT)
-                .Select(club => _mapper.Map<ClubTaskViewModel>(club))              
+                .Select(club => _mapper.Map<ClubTaskViewModel>(club))
                 .ToList();
             return new ClubTasksListViewModel()
             {

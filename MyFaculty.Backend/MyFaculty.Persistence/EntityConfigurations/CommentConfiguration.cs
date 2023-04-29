@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MyFaculty.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyFaculty.Persistence.EntityConfigurations
 {
@@ -24,7 +19,7 @@ namespace MyFaculty.Persistence.EntityConfigurations
                 .HasForeignKey(comment => comment.AuthorId);
             builder.HasOne(comment => comment.ParentComment)
                 .WithMany(comment => comment.Replies)
-                .HasForeignKey(comment => comment.ParentCommentId)               
+                .HasForeignKey(comment => comment.ParentCommentId)
                 .OnDelete(DeleteBehavior.SetNull);
             builder.HasOne(comment => comment.Post)
                 .WithMany(post => post.Comments)

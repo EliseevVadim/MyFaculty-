@@ -1,27 +1,27 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using MyFaculty.Application.ViewModels;
-using MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPostsByInformationPublic;
-using System.Threading.Tasks;
-using MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPost;
-using MyFaculty.WebApi.Dto;
-using Microsoft.AspNetCore.Authorization;
-using System;
-using System.IO;
-using System.Collections.Generic;
-using MyFaculty.WebApi.Models;
 using MyFaculty.Application.Features.InfoPosts.Commands.CreateInfoPost;
-using Newtonsoft.Json;
-using System.Security.Claims;
 using MyFaculty.Application.Features.InfoPosts.Commands.DeleteInfoPost;
-using MyFaculty.Application.Features.InfoPosts.Commands.UpdateInfoPost;
-using System.Linq;
 using MyFaculty.Application.Features.InfoPosts.Commands.LikeInfoPost;
 using MyFaculty.Application.Features.InfoPosts.Commands.UnlikeInfoPost;
+using MyFaculty.Application.Features.InfoPosts.Commands.UpdateInfoPost;
+using MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPost;
+using MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPostsByInformationPublic;
 using MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPostsByStudyClub;
+using MyFaculty.Application.ViewModels;
+using MyFaculty.WebApi.Dto;
+using MyFaculty.WebApi.Models;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace MyFaculty.WebApi.Controllers
 {
@@ -168,11 +168,11 @@ namespace MyFaculty.WebApi.Controllers
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             if (requesterId != createInfoPostDto.AuthorId)
                 return Forbid();
-            List<Attachment> postAttachments = new List<Attachment>(); 
+            List<Attachment> postAttachments = new List<Attachment>();
             Guid postAttachmentsUid = Guid.NewGuid();
             List<Attachment> newFiles = ProcessNewFiles(createInfoPostDto.PostAttachments, postAttachmentsUid);
             if (newFiles != null)
-                postAttachments.AddRange(newFiles);          
+                postAttachments.AddRange(newFiles);
             CreateInfoPostCommand command = _mapper.Map<CreateInfoPostCommand>(createInfoPostDto);
             command.Attachments = postAttachments.Count > 0 ? JsonConvert.SerializeObject(postAttachments) : null;
             command.PostAttachmentsUid = postAttachmentsUid;

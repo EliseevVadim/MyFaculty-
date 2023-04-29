@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Domain.Entities;
+using System;
+using System.IO;
 
 namespace MyFaculty.Persistence
 {
     public class MFDbContext : DbContext, IMFDbContext
     {
-        public MFDbContext():
+        public MFDbContext() :
             base()
         { }
 
-        public MFDbContext(DbContextOptions<MFDbContext> options):
+        public MFDbContext(DbContextOptions<MFDbContext> options) :
             base(options)
         { }
 

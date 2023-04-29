@@ -1,16 +1,13 @@
-﻿using MyFaculty.Application.Common.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using MediatR;
-using MyFaculty.Domain.Entities;
-using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using MyFaculty.Application.Common.Exceptions;
+using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.ViewModels;
-using AutoMapper;
+using MyFaculty.Domain.Entities;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyFaculty.Application.Features.Disciplines.Commands.UpdateDiscipline
 {

@@ -2,11 +2,8 @@
 using MyFaculty.Application.Common.Mappings;
 using MyFaculty.Application.Dto;
 using MyFaculty.Domain.Entities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyFaculty.Application.ViewModels
 {
@@ -24,7 +21,7 @@ namespace MyFaculty.Application.ViewModels
                 .IncludeBase<Post, PostViewModel>()
                 .ForMember(vm => vm.StudyClubId, options => options.MapFrom(infoPost => infoPost.StudyClubId))
                 .ForMember(vm => vm.InfoPublicId, options => options.MapFrom(infoPost => infoPost.InfoPublicId))
-                .ForMember(vm => vm.Owner, options => options.MapFrom(infoPost => infoPost.OwningInformationPublic != null ? 
+                .ForMember(vm => vm.Owner, options => options.MapFrom(infoPost => infoPost.OwningInformationPublic != null ?
                 new PostOwnerViewModel()
                 {
                     OwnerName = infoPost.OwningInformationPublic.PublicName,
@@ -32,7 +29,7 @@ namespace MyFaculty.Application.ViewModels
                     OwnerLink = $"public{infoPost.OwningInformationPublic.Id}",
                     IsBanned = infoPost.OwningInformationPublic.IsBanned,
                     OwningUserId = infoPost.OwningInformationPublic.OwnerId
-                } : 
+                } :
                 new PostOwnerViewModel()
                 {
                     OwnerName = infoPost.OwningStudyClub.ClubName,
