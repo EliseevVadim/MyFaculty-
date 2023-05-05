@@ -19,7 +19,10 @@
                                     </span>
                             </v-col>
                             <v-col>
-                                <img :src="teacher.photoPath ? teacher.photoPath : '../img/blank-item.png'" alt="#"/>
+                                <v-img
+                                    max-width="200"
+                                    :src="teacher.photoPath ? teacher.photoPath : '../img/blank-item.png'" alt="#"
+                                />
                             </v-col>
                         </v-row>
                         <v-row d-flex class="mt-3">
