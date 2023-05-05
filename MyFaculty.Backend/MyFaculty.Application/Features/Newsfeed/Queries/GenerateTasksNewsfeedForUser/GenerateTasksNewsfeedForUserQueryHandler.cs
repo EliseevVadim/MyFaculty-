@@ -42,7 +42,6 @@ namespace MyFaculty.Application.Features.Newsfeed.Queries.GenerateTasksNewsfeedF
             var clubTasks = user.StudyClubs
                 .SelectMany(club => club.ClubTasks)
                 .OrderByDescending(task => task.Created)
-                .Take(TASKS_COUNT_LIMIT)
                 .Select(club => _mapper.Map<ClubTaskViewModel>(club))
                 .ToList();
             return new ClubTasksListViewModel()
