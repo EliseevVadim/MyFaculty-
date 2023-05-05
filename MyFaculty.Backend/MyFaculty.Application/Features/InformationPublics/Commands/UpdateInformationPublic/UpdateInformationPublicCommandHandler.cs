@@ -24,7 +24,9 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.UpdateInfor
 
         public async Task<InformationPublicViewModel> Handle(UpdateInformationPublicCommand request, CancellationToken cancellationToken)
         {
-            InformationPublic infoPublic = await _context.InformationPublics.FirstOrDefaultAsync(infoPublic => infoPublic.Id == request.Id, cancellationToken);
+            InformationPublic infoPublic = await _context.InformationPublics
+                .Include(infoPublic => infoPublic.Moderators)
+                .FirstOrDefaultAsync(infoPublic => infoPublic.Id == request.Id, cancellationToken);
             if (infoPublic == null || infoPublic.IsBanned)
                 throw new EntityNotFoundException(nameof(InformationPublic), request.Id);
             AppUser owner = await _context.Users.FirstOrDefaultAsync(user => user.Id == request.OwnerId);
@@ -32,6 +34,8 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.UpdateInfor
                 throw new EntityNotFoundException(nameof(AppUser), request.OwnerId);
             if (infoPublic.OwnerId != request.IssuerId)
                 throw new UnauthorizedActionException("Данное действие Вам запрещено.");
+            if (request.OwnerId != infoPublic.OwnerId && !infoPublic.Moderators.Contains(owner))
+                infoPublic.Moderators.Add(owner);
             infoPublic.PublicName = request.PublicName;
             infoPublic.Description = request.Description;
             infoPublic.ImagePath = String.IsNullOrEmpty(request.ImagePath) ? infoPublic.ImagePath : request.ImagePath;

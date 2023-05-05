@@ -36,6 +36,7 @@ namespace MyFaculty.Application.Features.InformationPublics.Commands.CreateInfor
                 Created = DateTime.Now
             };
             infoPublic.Members.Add(owner);
+            infoPublic.Moderators.Add(owner);
             await _context.InformationPublics.AddAsync(infoPublic, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<InformationPublicViewModel>(infoPublic);
