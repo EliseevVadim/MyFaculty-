@@ -1,3 +1,4 @@
+import './assets/sass/style.scss'
 import Vue from 'vue'
 import VueLoading from "vuejs-loading-plugin";
 import Notifications from "vue-notification";
