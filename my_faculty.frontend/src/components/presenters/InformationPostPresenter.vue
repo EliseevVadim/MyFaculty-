@@ -21,6 +21,7 @@
             v-if="showComments"
             :show="showComments"
             :post-id="post.id"
+            :current-user-can-moderate-comments="currentUserCanModerateComments()"
             @close="showComments = false"
             @load="reloadPosts"
         />
@@ -262,8 +263,10 @@ export default {
             return this.post.likedUsers.find(user => user.id == this.$oidc.currentUserId) !== undefined;
         },
         currentUserCanLoadExcelDumpOfComments() {
-            return this.post.owner.moderatorsIds && this.post.owner.moderatorsIds
-                .indexOf(parseInt(this.$oidc.currentUserId)) !== -1;
+            return this.post.owner.ownerLink.startsWith('club') &&
+                this.post.owner.moderatorsIds &&
+                this.post.owner.moderatorsIds
+                    .indexOf(parseInt(this.$oidc.currentUserId)) !== -1;
         },
         processAttachments() {
             let attachments = JSON.parse(this.post.attachments);
@@ -347,6 +350,12 @@ export default {
         currentUserCanDeleteThePost() {
             return this.post.authorId == this.$oidc.currentUserId ||
                 this.post.owner.owningUserId == this.$oidc.currentUserId;
+        },
+        currentUserCanModerateComments() {
+            console.log(this.post);
+            return this.post
+                .owner
+                .moderatorsIds.indexOf(parseInt(this.$oidc.currentUserId)) !== -1;
         },
         startPostEditing() {
             this.$refs.editingForm.loadPost();

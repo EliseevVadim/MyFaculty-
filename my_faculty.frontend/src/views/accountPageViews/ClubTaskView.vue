@@ -156,6 +156,7 @@
                         :key="comment.id + comment.updated"
                         :comment="comment"
                         :all-comments="comments"
+                        :current-user-can-moderate="currentUserCanModerateComments()"
                         @load="loadComments(watchingTask.id)"
                         @select="setReplyingComment"
                     />
@@ -218,6 +219,11 @@ export default {
                 .then(() => {
                     this.comments = JSON.parse(JSON.stringify(this.COMMENTS.comments));
                 })
+        },
+        currentUserCanModerateComments() {
+            return this.watchingTask
+                .owningStudyClub
+                .moderators.find(user => user.id == this.$oidc.currentUserId) !== undefined;
         },
         jumpToReply() {
             try {

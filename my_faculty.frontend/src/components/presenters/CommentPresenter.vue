@@ -114,6 +114,39 @@
                                 </v-list-item>
                             </v-list>
                         </v-menu>
+                        <v-menu
+                            v-else-if="currentUserCanModerate"
+                            bottom
+                            left
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                    icon
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                    <v-icon>mdi-dots-horizontal</v-icon>
+                                </v-btn>
+                            </template>
+                            <v-list>
+                                <v-list-item ripple>
+                                    <v-list-item-title
+                                        class="comment-context-menu-option"
+                                        @click="deleteComment"
+                                    >
+                                        Удалить комментарий
+                                    </v-list-item-title>
+                                </v-list-item>
+                                <v-list-item ripple>
+                                    <v-list-item-title
+                                        class="comment-context-menu-option"
+                                        @click="selectReplyingComment"
+                                    >
+                                        Ответить
+                                    </v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
                         <p
                             v-else
                             class="reply-option"
@@ -164,7 +197,7 @@ import EditCommentModal from "@/components/AccountComponents/EditCommentModal";
 export default {
     name: "CommentPresenter",
     components: {EditCommentModal, TeacherVerificationMark},
-    props: ['comment', 'allComments'],
+    props: ['comment', 'allComments', 'currentUserCanModerate'],
     data() {
         return {
             showEditingForm: false,

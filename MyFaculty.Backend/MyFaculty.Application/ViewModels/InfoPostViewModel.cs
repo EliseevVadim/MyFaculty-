@@ -27,6 +27,7 @@ namespace MyFaculty.Application.ViewModels
                     OwnerName = infoPost.OwningInformationPublic.PublicName,
                     OwnerAvatar = infoPost.OwningInformationPublic.ImagePath,
                     OwnerLink = $"public{infoPost.OwningInformationPublic.Id}",
+                    ModeratorsIds = infoPost.OwningInformationPublic.Moderators.Select(user => user.Id).ToList(),
                     IsBanned = infoPost.OwningInformationPublic.IsBanned,
                     OwningUserId = infoPost.OwningInformationPublic.OwnerId
                 } :

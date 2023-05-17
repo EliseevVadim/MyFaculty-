@@ -26,6 +26,7 @@
                         :key="comment.id + comment.updated"
                         :comment="comment"
                         :all-comments="comments"
+                        :current-user-can-moderate="currentUserCanModerateComments"
                         @load="loadComments"
                         @select="setReplyingComment"
                     />
@@ -50,7 +51,7 @@ import CommentPresenter from "@/components/presenters/CommentPresenter";
 export default {
     name: "CommentsModal",
     components: {CommentPresenter, CommentForm},
-    props: ['postId', 'show'],
+    props: ['postId', 'show', 'currentUserCanModerateComments'],
     data() {
         return {
             comments: []

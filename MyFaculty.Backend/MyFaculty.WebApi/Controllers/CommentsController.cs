@@ -155,7 +155,7 @@ namespace MyFaculty.WebApi.Controllers
             command.Attachments = commentAttachments.Count > 0 ? JsonConvert.SerializeObject(commentAttachments) : null;
             command.CommentAttachmentsUid = commentAttachmentsUid;
             CommentViewModel comment = await Mediator.Send(command);
-            if (comment.ParentComment != null)
+            if (comment.ParentComment != null && comment.ParentComment.AuthorId != requesterId)
                 await _notificationsHub.MakeUserLoadNotificationsAsync(comment.ParentComment.AuthorId);
             return Created(nameof(InfoPostsController), comment);
         }
@@ -215,6 +215,8 @@ namespace MyFaculty.WebApi.Controllers
                 List<Attachment> filesToDelete = oldFiles.Except(currentFiles).ToList();
                 DeleteAttachments(filesToDelete);
             }
+            if (comment.ParentComment != null && comment.ParentComment.AuthorId != requesterId)
+                await _notificationsHub.MakeUserLoadNotificationsAsync(comment.ParentComment.AuthorId);
             return Ok(comment);
         }
 

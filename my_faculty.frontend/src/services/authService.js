@@ -9,19 +9,19 @@ let oidcClient = new Oidc.UserManager({
     response_type: "code",
     scope: "openid profile MyFacultyWebAPI",
     authority: "https://localhost:44395/",
-    redirect_uri: "http://localhost:8080/signin-oidc",
-    post_logout_redirect_uri: "http://localhost:8080/signout-oidc",
+    redirect_uri: "http://localhost:3000/signin-oidc",
+    post_logout_redirect_uri: "http://localhost:3000/signout-oidc",
     filterProtocolClaims: true,
     loadUserInfo: true,
     automaticSilentRenew: true,
-    silent_redirect_uri: "http://localhost:8080/silent-renew.html",
+    silent_redirect_uri: "http://localhost:3000/silent-renew.html",
     monitorSession: false,
     silentRequestTimeout: 10000000000,
     revokeAccessTokenOnSignout: true
 });
 
 Oidc.Log.logger = console;
-Oidc.Log.level = Oidc.Log.INFO;
+Oidc.Log.level = Oidc.Log.NONE;
 
 oidcClient.events.addUserLoaded((user) => {
     try {
@@ -40,7 +40,6 @@ oidcClient.events.addAccessTokenExpiring(() => {
 });
 
 oidcClient.events.addUserSignedOut(() => {
-    alert('Going out!');
     oidcClient.signoutRedirect()
         .then((response) => {
             console.log(response);

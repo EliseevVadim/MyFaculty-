@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyFaculty.Identity.Configurations;
 using MyFaculty.Identity.Data;
+using MyFaculty.Identity.Middleware;
 using MyFaculty.Identity.Models;
 using MyFaculty.Identity.Services;
 using System;
@@ -77,6 +78,7 @@ namespace MyFaculty.Identity
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseMiddleware<PublicFacingUrlMiddleware>(_configuration.GetValue<string>("BaseUrl"));
             app.UseCors("InitialPolicy");
             app.UseIdentityServer();
 

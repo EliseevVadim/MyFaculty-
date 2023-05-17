@@ -30,13 +30,15 @@ namespace MyFaculty.Application.Features.Comments.Commands.DeleteComment
                 .FirstOrDefaultAsync(comment => comment.Id == request.Id, cancellationToken);
             if (deletingComment == null)
                 throw new EntityNotFoundException(nameof(Comment), request.Id);
-            if (deletingComment.AuthorId != request.IssuerId)
-                throw new UnauthorizedActionException("Данное действие Вам запрещено.");
             if (deletingComment.Post is InfoPost)
             {
                 InfoPost infoPost = await _context.InfoPosts
                     .Include(infoPost => infoPost.OwningInformationPublic)
                         .ThenInclude(infoPublic => infoPublic.BlockedUsers)
+                    .Include(infoPost => infoPost.OwningInformationPublic)
+                        .ThenInclude(infoPublic => infoPublic.Moderators)
+                    .Include(infoPost => infoPost.OwningStudyClub)
+                        .ThenInclude(club => club.Moderators)
                     .FirstOrDefaultAsync(infoPost => infoPost.Id == deletingComment.Post.Id);
                 if (infoPost.OwningInformationPublic != null && infoPost.OwningInformationPublic.IsBanned)
                     throw new EntityNotFoundException(nameof(InfoPost), infoPost.Id);
@@ -46,10 +48,25 @@ namespace MyFaculty.Application.Features.Comments.Commands.DeleteComment
                     && infoPost
                         .OwningInformationPublic
                         .BlockedUsers
-                        .Select(user => user.Id)
-                        .Contains(request.IssuerId))
+                        .Any(user => user.Id == request.IssuerId))
                     throw new DestructiveActionException("Вы не можете удалить комментарий к этой записи, так как были заблокированы " +
                         "в сообществе, содержащем ее");
+                if (deletingComment.AuthorId != request.IssuerId &&
+                        ((infoPost.OwningInformationPublic != null && !infoPost.OwningInformationPublic.Moderators.Any(user => user.Id == request.IssuerId)) ||
+                        (infoPost.OwningStudyClub != null && !infoPost.OwningStudyClub.Moderators.Any(user => user.Id == request.IssuerId))))
+                {
+                    throw new UnauthorizedActionException("Данное действие Вам запрещено.");
+                }
+            }
+            else if (deletingComment.Post is ClubTask)
+            {
+                ClubTask task = await _context.ClubTasks
+                    .Include(clubTask => clubTask.OwningStudyClub)
+                        .ThenInclude(club => club.Moderators)
+                    .FirstOrDefaultAsync(clubTask => clubTask.Id == deletingComment.Post.Id);
+                if (deletingComment.AuthorId != request.IssuerId &&
+                        !task.OwningStudyClub.Moderators.Any(user => user.Id == request.IssuerId))
+                    throw new UnauthorizedActionException("Данное действие Вам запрещено.");
             }
             _context.Comments.Remove(deletingComment);
             await _context.SaveChangesAsync(cancellationToken);

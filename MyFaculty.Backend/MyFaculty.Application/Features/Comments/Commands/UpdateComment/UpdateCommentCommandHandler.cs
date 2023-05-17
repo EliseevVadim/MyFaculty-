@@ -5,6 +5,7 @@ using MyFaculty.Application.Common.Exceptions;
 using MyFaculty.Application.Common.Interfaces;
 using MyFaculty.Application.ViewModels;
 using MyFaculty.Domain.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading;
@@ -26,6 +27,7 @@ namespace MyFaculty.Application.Features.Comments.Commands.UpdateComment
         public async Task<CommentViewModel> Handle(UpdateCommentCommand request, CancellationToken cancellationToken)
         {
             Comment updatingComment = await _context.Comments
+                .Include(comment => comment.Author)
                 .Include(comment => comment.Post)
                 .FirstOrDefaultAsync(comment => comment.Id == request.Id, cancellationToken);
             if (updatingComment == null)
@@ -51,6 +53,7 @@ namespace MyFaculty.Application.Features.Comments.Commands.UpdateComment
                     throw new DestructiveActionException("Вы не можете изменить комментарий к этой записи, так как были заблокированы " +
                         "в сообществе, содержащем ее");
             }
+            DateTime actionsDate = DateTime.Now;
             if (request.ParentCommentId != null)
             {
                 Comment newParent = await _context.Comments.FirstOrDefaultAsync(comment => comment.Id == request.ParentCommentId, cancellationToken);
@@ -62,11 +65,26 @@ namespace MyFaculty.Application.Features.Comments.Commands.UpdateComment
                     throw new DestructiveActionException("Вы не можете ответить на этот же комментарий");
                 if (newParent.Created > updatingComment.Created)
                     throw new DestructiveActionException("Вы не можете ответить на комментарий, написанный позже Вашего");
+                if (newParent.AuthorId != updatingComment.AuthorId)
+                {
+                    Notification notification = new Notification()
+                    {
+                        UserId = newParent.AuthorId,
+                        TextContent = $"{string.Join(" ", new string[] { updatingComment.Author.FirstName, updatingComment.Author.LastName })} ответил на Ваш комментарий...",
+                        ReturnUrl = newParent.Post is ClubTask ? $"/task{newParent.PostId}" : $"/post{newParent.PostId}",
+                        MetaInfo = JsonConvert.SerializeObject(new
+                        {
+                            JumpToId = $"comment_{updatingComment.Id}"
+                        }),
+                        Created = actionsDate
+                    };
+                    await _context.Notifications.AddAsync(notification, cancellationToken);
+                }
             }
             updatingComment.TextContent = request.TextContent;
             updatingComment.Attachments = request.Attachments;
             updatingComment.ParentCommentId = request.ParentCommentId;
-            updatingComment.Updated = DateTime.Now;
+            updatingComment.Updated = actionsDate;
             await _context.SaveChangesAsync(cancellationToken);
             return _mapper.Map<CommentViewModel>(updatingComment);
         }

@@ -11,6 +11,7 @@
             v-if="showComments"
             :show="showComments"
             :post-id="task.id"
+            :current-user-can-moderate-comments="currentUserIsTaskModerator"
             @close="showComments = false"
             @load="reloadTasks"
         />

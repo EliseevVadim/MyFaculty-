@@ -57,7 +57,7 @@
                     resumable="true"
                     deletable="true"
                     max-files="10"
-                    help-text="Прикрепить файлы к комментарию (максимум 10)"
+                    help-text="Прикрепить файлы (максимум 10)"
                     error-text="Произошла ошибка загрузки"
                     theme="list"
                     @beforedelete="fileDeleted($event)"

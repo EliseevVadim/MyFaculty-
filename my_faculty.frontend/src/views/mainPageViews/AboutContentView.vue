@@ -227,6 +227,7 @@ export default {
     }
     .answer {
         & p {
+            text-align: left;
             text-indent: 25px;
             margin: 0;
             padding: 0;

@@ -171,6 +171,7 @@
                         :key="comment.id + comment.updated"
                         :comment="comment"
                         :all-comments="comments"
+                        :current-user-can-moderate="currentUserCanModerateComments()"
                         @load="loadComments(watchingPost.id)"
                         @select="setReplyingComment"
                     />
@@ -362,6 +363,11 @@ export default {
         },
         currentUserIsPostAuthor() {
             return this.watchingPost.authorId == this.$oidc.currentUserId;
+        },
+        currentUserCanModerateComments() {
+            return this.watchingPost
+                .owner
+                .moderatorsIds.indexOf(parseInt(this.$oidc.currentUserId)) !== -1;
         },
         currentUserCanDeleteThePost() {
             return this.watchingPost.authorId == this.$oidc.currentUserId ||

@@ -28,7 +28,10 @@ namespace MyFaculty.Application.Features.InfoPosts.Queries.GetInfoPost
             InfoPost infoPost = await _context.InfoPosts
                 .Include(post => post.OwningInformationPublic)
                     .ThenInclude(infoPublic => infoPublic.BlockedUsers)
+                .Include(post => post.OwningInformationPublic)
+                    .ThenInclude(infoPublic => infoPublic.Moderators)
                 .Include(post => post.OwningStudyClub)
+                    .ThenInclude(club => club.Moderators)
                 .Include(post => post.LikedUsers)
                 .Include(post => post.Author)
                 .FirstOrDefaultAsync(infoPost => infoPost.Id == request.Id, cancellationToken);

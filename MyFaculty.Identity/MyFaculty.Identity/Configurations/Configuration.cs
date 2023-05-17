@@ -54,16 +54,16 @@ namespace MyFaculty.Identity.Configurations
                     RequirePkce = true,
                     RedirectUris =
                     {
-                        "http://localhost:8080/signin-oidc",
-                        "http://localhost:8080/silent-renew.html"
+                        "http://localhost:3000/signin-oidc",
+                        "http://localhost:3000/silent-renew.html"
                     },
                     AllowedCorsOrigins =
                     {
-                        "http://localhost:8080"
+                        "http://localhost:3000"
                     },
                     PostLogoutRedirectUris =
                     {
-                        "http://localhost:8080/signout-oidc"
+                        "http://localhost:3000/signout-oidc"
                     },
                     AllowedScopes =
                     {

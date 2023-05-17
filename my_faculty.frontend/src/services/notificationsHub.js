@@ -6,7 +6,7 @@ function createConnection() {
         .withUrl(config.apiUrl + '/notifications', {
             accessTokenFactory: () => localStorage.getItem('apiKey')
         })
-        .configureLogging(LogLevel.Information)
+        .configureLogging(LogLevel.None)
         .build();
 }
 
@@ -26,10 +26,7 @@ export default {
                 this.initializeListeners();
             })
             .catch((error) => {
-                console.log('cannot connect to the hub', error);
-                console.log('Reconnecting...');
                 return new Promise((resolve, reject) => {
-                    console.log(connection.state);
                     if (connection.state === HubConnectionState.Connected)
                         return;
                     setTimeout(() => {
