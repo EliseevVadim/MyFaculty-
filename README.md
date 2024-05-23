@@ -1,5 +1,7 @@
 # MyFaculty
 
+![image](https://github.com/EliseevVadim/MyFaculty/assets/55801514/4f3e9572-03af-44bf-889d-5df413d1fc48)
+
 MyFaculty is a project that includes a [backend app](https://github.com/EliseevVadim/MyFaculty/tree/main/MyFaculty.Backend) built with ASP.NET Core using Identity Server4 (ASP.NET MVC [project](https://github.com/EliseevVadim/MyFaculty/tree/main/MyFaculty.Identity)) for authorization and authentication of users and a [frontend app](https://github.com/EliseevVadim/MyFaculty/tree/main/my_faculty.frontend) built with Vue.js and Vuetify 2. The project aims to provide a social network with distance learning functionality to every student, teacher, principal or applicant of any interested university in order to make student-teacher and university-applicant communication and interactions as easy as possible.
 
 ## Table of Contents
