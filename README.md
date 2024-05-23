@@ -9,7 +9,7 @@ MyFaculty is a project that includes a [backend app](https://github.com/EliseevV
 - [Features](#features)
 - [Technologies](#technologies)
 - [Contributing](#contributing)
-- [Distributing](#distributing)
+- [Distribution](#distribution)
 - [License](#license)
 - [Contact](#contact)
 
@@ -69,9 +69,9 @@ MyFaculty is a project that includes a [backend app](https://github.com/EliseevV
 
 We welcome contributions! Please see the [CONTRIBUTING.md](CONTRIBUTING.md) file for more details on how to contribute to the project.
 
-## Distributing
+## Distribution
 
-Everyone can easily adapt this platform for their university, etc! Please see the [DISTRIBUTING.md](DISTRIBUTING.md) file for a guide on how to install this project and adapt it for your own purposes.
+Everyone can easily adapt this platform for their university, etc! Please see the [DISTRIBUTION.md](DISTRIBUTION.md) file for a guide on how to install this project and adapt it for your own purposes.
 
 ## License
 
