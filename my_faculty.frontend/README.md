@@ -1,5 +1,9 @@
 # my_faculty.frontend
 
+## The site map
+
+![site_map](https://github.com/EliseevVadim/MyFaculty/assets/55801514/bdb97983-7e34-409c-a838-dc27980eab04)
+
 ## Project setup
 ```
 npm install
